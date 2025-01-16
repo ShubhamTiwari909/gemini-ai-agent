@@ -16,7 +16,7 @@ const Modal = () => {
     }
   }
   return (
-    <div className="fixed top-0 right-1/2 translate-x-1/2 lg:translate-x-0 lg:top-5 lg:right-5">
+    <div className="">
       <button className="btn" onClick={openModal}>
         Themes
       </button>
