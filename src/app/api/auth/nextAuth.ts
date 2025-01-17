@@ -6,19 +6,19 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
   providers: [GitHub, Google],
   secret: process.env.NEXTAUTH_SECRET,
   callbacks: {
-    async session({ session }) {
+    async signIn({ user }) {
       await fetch(`${[process.env.EXPRESS_API_URL]}/users/add`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          name: session?.user?.name,
-          email: session?.user?.email,
+          name: user?.name,
+          email: user?.email,
           userId: Math.floor(Math.random() * 999999099).toString(),
         }),
       });
-      return session;
+      return true;
     },
   },
 });

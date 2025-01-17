@@ -5,6 +5,7 @@ import { FaHamburger } from "react-icons/fa";
 
 const HeaderWrapper = ({ children }: { children: React.ReactNode }) => {
   const [isOpen, setIsOpen] = React.useState(false);
+  const [headerBg, setHeaderBg] = React.useState("bg-transparent");
   const buttonRef = React.useRef<HTMLButtonElement>(null);
 
   const handleClickOutside = (event: MouseEvent) => {
@@ -15,15 +16,26 @@ const HeaderWrapper = ({ children }: { children: React.ReactNode }) => {
       setIsOpen(false);
     }
   };
+  const handleScroll = () => {
+    if (window.scrollY > 100) {
+      setHeaderBg("bg-slate-900");
+    } else {
+      setHeaderBg("bg-transparent");
+    }
+  };
   useEffect(() => {
     document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("scroll", handleScroll);
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("scroll", handleScroll);
     };
   });
 
   return (
-    <header className="relative flex justify-between">
+    <header
+      className={`flex justify-between fixed w-full top-0 z-40 ${headerBg}`}
+    >
       <div className="flex justify-between relative z-50 w-full py-5 lg:px-16 px-5">
         <Image
           src="/gemini-zentauri-logo.png"

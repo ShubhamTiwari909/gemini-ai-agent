@@ -1,14 +1,24 @@
 import React from "react";
 import GeminiAiWrapper from "./components/Gemini/GeminiAiWrapper";
+import History from "./components/History/History";
+import { auth } from "./api/auth/nextAuth";
 
 const page = async () => {
+  const session = await auth();
+
   return (
-    <main className="max-w-7xl mx-auto py-0 px-5 lg:px-0 min-h-screen">
-      <h1 className="text-4xl lg:text-6xl text-center font-bold font-sans mb-10">
-        Gemini AI Text Generator
-      </h1>
-      <GeminiAiWrapper />
-    </main>
+    <section className="min-h-screen px-5 py-0 mx-auto max-w-7xl lg:px-0">
+      <div>
+        <h1 className="mb-10 font-sans text-4xl font-bold text-center lg:text-6xl">
+          Gemini AI Text Generator
+        </h1>
+        <GeminiAiWrapper
+          expires={session?.expires || ""}
+          user={session?.user}
+        />
+      </div>
+      <History />
+    </section>
   );
 };
 
