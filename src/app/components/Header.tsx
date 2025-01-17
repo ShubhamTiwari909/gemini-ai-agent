@@ -7,7 +7,6 @@ import HeaderWrapper from "./HeaderWrapper";
 
 const Header = async () => {
   const session = await auth();
-
   return (
     <HeaderWrapper>
       <Link className="btn btn-primary btn-outline" href="/">

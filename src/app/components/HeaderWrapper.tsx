@@ -1,4 +1,5 @@
 "use client";
+import Image from "next/image";
 import React, { useEffect } from "react";
 import { FaHamburger } from "react-icons/fa";
 
@@ -22,14 +23,25 @@ const HeaderWrapper = ({ children }: { children: React.ReactNode }) => {
   });
 
   return (
-    <header className="relative">
-      <div className="lg:hidden flex justify-end pr-5 pt-3 relative z-50">
-        <button ref={buttonRef} onClick={() => setIsOpen(!isOpen)}>
+    <header className="relative flex justify-between">
+      <div className="flex justify-between relative z-50 w-full py-5 lg:px-16 px-5">
+        <Image
+          src="/gemini-zentauri-logo.png"
+          alt="logo"
+          width={150}
+          height={80}
+          className="w-28 lg:w-40"
+        />
+        <button
+          className="lg:hidden"
+          ref={buttonRef}
+          onClick={() => setIsOpen(!isOpen)}
+        >
           <FaHamburger size="1.5rem" />
         </button>
       </div>
       <div
-        className={`absolute lg:static lg:h-fit lg:py-5 lg:px-10 lg:bg-transparent top-0 z-40 bg-base-300 flex flex-col lg:flex-row lg:justify-end gap-5 h-0 w-full overflow-hidden transition-all duration-100 ease-linear ${isOpen ? "py-14 px-10 h-screen overflow-auto" : ""}`}
+        className={`absolute lg:static lg:h-fit lg:py-5 lg:pr-16 lg:bg-transparent top-0 z-40 bg-base-300 flex flex-col lg:flex-row lg:justify-end gap-5 h-0 w-full overflow-hidden transition-all duration-100 ease-linear ${isOpen ? "pt-28 pb-14 px-10 h-screen overflow-auto" : ""}`}
       >
         {children}
       </div>
