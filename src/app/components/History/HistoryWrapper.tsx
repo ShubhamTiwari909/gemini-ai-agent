@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 
 type History = {
@@ -9,8 +9,33 @@ type History = {
   response: string;
 }[];
 
-const HistoryWrapper = ({ history }: { history: History }) => {
+const HistoryWrapper = ({
+  email,
+  expressUrl,
+}: {
+  email: string | null | undefined;
+  expressUrl: string;
+}) => {
   const [isOpen, setIsOpen] = React.useState(false);
+  const [history, setHistory] = React.useState<History>([]);
+  useEffect(() => {
+    fetch(`${expressUrl}/history/find`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email }),
+    })
+      .then((res) => {
+        return res.json();
+      })
+      .then((data) => {
+        setHistory(data);
+      })
+      .catch((error) => {
+        console.error("Error fetching history:", error);
+      });
+  }, []);
   return (
     <div className="fixed left-0 w-full top-20 lg:top-32 lg:max-w-96">
       {!isOpen ? (
