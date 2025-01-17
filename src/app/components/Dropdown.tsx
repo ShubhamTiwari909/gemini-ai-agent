@@ -16,7 +16,7 @@ const Dropdown = ({
 }) => {
   const dropdownContentRef = React.useRef<HTMLUListElement>(null);
   const handleFocus = () => {
-    console.log("Click")
+    console.log("Click");
     dropdownContentRef.current?.scrollIntoView({
       behavior: "smooth",
       block: "start",
@@ -24,7 +24,12 @@ const Dropdown = ({
   };
   return (
     <div className="dropdown">
-      <button tabIndex={0} role="button" onClick={handleFocus} className="btn btn-outline btn-info m-1">
+      <button
+        tabIndex={0}
+        role="button"
+        onClick={handleFocus}
+        className="btn btn-outline btn-info m-1"
+      >
         {title}
       </button>
       <ul

@@ -1,5 +1,5 @@
 import React from "react";
-import Markdown from "react-markdown";
+import Markdown, { ExtraProps } from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { atomDark } from "react-syntax-highlighter/dist/esm/styles/prism";
@@ -46,7 +46,11 @@ const ResponseRenderer = ({
           <Markdown
             remarkPlugins={[remarkGfm]}
             components={{
-              code(props) {
+              code(
+                props: React.ClassAttributes<HTMLElement> &
+                  React.HTMLAttributes<HTMLElement> &
+                  ExtraProps,
+              ) {
                 const { children, className, ...rest } = props;
                 const match = /language-(\w+)/.exec(className || "");
                 return match ? (
@@ -55,11 +59,17 @@ const ResponseRenderer = ({
                       <button
                         onClick={() =>
                           handleCopyToClipboard(
-                            String(children).replace(/\n$/, "")
+                            String(children).replace(/\n$/, ""),
                           )
                         }
                       >
-                        {copySuccess ? <div className="flex items-center gap-1"><FaCopy size="1.5rem" /> Copied...</div> : <FaRegCopy size="1.5rem" />}
+                        {copySuccess ? (
+                          <div className="flex items-center gap-1">
+                            <FaCopy size="1.5rem" /> Copied...
+                          </div>
+                        ) : (
+                          <FaRegCopy size="1.5rem" />
+                        )}
                       </button>
                     </div>
                     <SyntaxHighlighter

@@ -10,8 +10,16 @@ const Header = async () => {
   return (
     <header className="flex justify-end gap-5 py-5 px-10">
       <Modal />
-      <Link className="btn" href="/">Home</Link>
-      {session?.user ? <Link className="btn" href="/profile">Profile</Link> : <LoginWithGithub />}
+      <Link className="btn" href="/">
+        Home
+      </Link>
+      {session?.user ? (
+        <Link className="btn" href="/profile">
+          Profile
+        </Link>
+      ) : (
+        <LoginWithGithub />
+      )}
     </header>
   );
 };

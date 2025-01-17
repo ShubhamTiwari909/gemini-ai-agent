@@ -14,7 +14,7 @@ const Modal = () => {
     if (modalRef.current) {
       modalRef.current.close();
     }
-  }
+  };
   return (
     <div className="">
       <button className="btn" onClick={openModal}>
