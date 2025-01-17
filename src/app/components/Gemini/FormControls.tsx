@@ -45,7 +45,7 @@ const FormControls = ({
         className="text-pretty textarea textarea-info w-full mb-6 lg:mb-10"
         disabled={loading}
       />
-      <div className="flex justify-between lg:justify-center lg:gap-10">
+      <div className="flex justify-between items-center lg:justify-center lg:gap-10">
         <Dropdown
           onClick={handleSummarize}
           setInputText={setInputText}

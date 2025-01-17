@@ -5,7 +5,13 @@ import FormControls from "./FormControls";
 import ResponseRenderer from "./ResponseRenderer";
 import { Session } from "next-auth";
 
-const GeminiAiWrapper = ({ user, expires }: Session) => {
+const GeminiAiWrapper = ({
+  user,
+  expressUrl,
+}: {
+  user: Session["user"];
+  expressUrl: string;
+}) => {
   const [inputText, setInputText] = useState("");
   const [summary, setSummary] = useState("");
   const [loading, setLoading] = useState(false);
@@ -22,8 +28,8 @@ const GeminiAiWrapper = ({ user, expires }: Session) => {
       });
       const data = await response.json();
       if (data) {
-        console.log(expires);
-        await fetch(`http://localhost:5000/history/add`, {
+        console.log("Express url - ", process.env.EXPRESS_API_URL);
+        await fetch(`${expressUrl}/history/add`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

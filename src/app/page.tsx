@@ -13,7 +13,7 @@ const page = async () => {
           Gemini AI Text Generator
         </h1>
         <GeminiAiWrapper
-          expires={session?.expires || ""}
+          expressUrl={process.env.EXPRESS_API_URL || ""} // passing it from here as it is only available on server
           user={session?.user}
         />
       </div>

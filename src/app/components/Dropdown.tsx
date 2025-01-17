@@ -16,7 +16,6 @@ const Dropdown = ({
 }) => {
   const dropdownContentRef = React.useRef<HTMLUListElement>(null);
   const handleFocus = () => {
-    console.log("Click");
     dropdownContentRef.current?.scrollIntoView({
       behavior: "smooth",
       block: "start",
