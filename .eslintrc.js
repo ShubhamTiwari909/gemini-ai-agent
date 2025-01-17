@@ -1,5 +1,3 @@
-import pluginQuery from "@tanstack/eslint-plugin-query";
-
 export default {
   env: {
     browser: true,
@@ -40,6 +38,5 @@ export default {
     quotes: ["error", "single"],
     semi: ["error", "always"],
     "prefer-const": "error",
-    ...pluginQuery.configs["flat/recommended"],
   },
 };
