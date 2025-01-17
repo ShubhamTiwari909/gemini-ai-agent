@@ -17,7 +17,10 @@ const Modal = () => {
   };
   return (
     <div className="">
-      <button className="btn" onClick={openModal}>
+      <button
+        className="btn btn-secondary btn-outline w-full lg:w-fit"
+        onClick={openModal}
+      >
         Themes
       </button>
       <dialog ref={modalRef} id="my_modal_1" className="modal">

@@ -10,7 +10,7 @@ const LoginWithGithub = () => {
         await signIn("github");
       }}
     >
-      <button type="submit" className="btn">
+      <button type="submit" className="btn btn-ghost btn-outline ">
         Signin with GitHub <FaGithub />
       </button>
     </form>

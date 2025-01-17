@@ -52,4 +52,5 @@ export default {
   daisyui: {
     themes: daisyUIThemes,
   },
+  purge: ["./src/app/**/*.{js,ts,jsx,tsx,mdx}"],
 } satisfies Config;
