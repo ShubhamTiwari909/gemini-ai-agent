@@ -2,7 +2,7 @@ import React from "react";
 import { signIn } from "../api/auth/nextAuth";
 import { FaGithub, FaGoogle } from "react-icons/fa";
 
-const LoginWithGithub = () => {
+const Login = async () => {
   return (
     <div className="flex lg:flex-row flex-col gap-5">
       <form
@@ -35,4 +35,4 @@ const LoginWithGithub = () => {
   );
 };
 
-export default LoginWithGithub;
+export default Login;

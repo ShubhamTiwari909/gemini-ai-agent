@@ -1,6 +1,6 @@
 import React from "react";
 import Modal from "./Modal";
-import LoginWithGithub from "./LoginWithGithub";
+import Login from "./Login";
 import { auth } from "../api/auth/nextAuth";
 import Link from "next/link";
 import HeaderWrapper from "./HeaderWrapper";
@@ -18,7 +18,7 @@ const Header = async () => {
           Profile
         </Link>
       ) : (
-        <LoginWithGithub />
+        <Login />
       )}
     </HeaderWrapper>
   );
