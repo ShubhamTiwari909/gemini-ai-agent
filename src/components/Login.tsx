@@ -1,5 +1,5 @@
 import React from "react";
-import { signIn } from "../api/auth/nextAuth";
+import { signIn } from "../app/api/auth/nextAuth";
 import { FaGithub, FaGoogle } from "react-icons/fa";
 
 const Login = async () => {

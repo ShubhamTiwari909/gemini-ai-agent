@@ -1,6 +1,6 @@
 import React from "react";
-import GeminiAiWrapper from "./components/Gemini/GeminiAiWrapper";
-import History from "./components/History/History";
+import GeminiAiWrapper from ".././components/Gemini/GeminiAiWrapper";
+import History from ".././components/History/History";
 import { auth } from "./api/auth/nextAuth";
 
 const page = async () => {

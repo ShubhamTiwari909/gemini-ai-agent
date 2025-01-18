@@ -37,7 +37,9 @@ const HistoryWrapper = ({
       });
   }, []);
   return (
-    <div className="fixed left-0 w-full top-20 lg:top-32 lg:max-w-96">
+    <div
+      className={`fixed left-0 top-20 lg:top-32 lg:max-w-96 ${isOpen ? "w-full" : "w-0"}`}
+    >
       {!isOpen ? (
         <button
           className="absolute z-30 btn btn-info left-5"

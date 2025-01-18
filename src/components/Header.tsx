@@ -1,7 +1,7 @@
 import React from "react";
 import Modal from "./Modal";
 import Login from "./Login";
-import { auth } from "../api/auth/nextAuth";
+import { auth } from "../app/api/auth/nextAuth";
 import Link from "next/link";
 import HeaderWrapper from "./HeaderWrapper";
 
