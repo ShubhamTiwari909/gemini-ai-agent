@@ -42,14 +42,14 @@ const HeaderWrapper = ({ children }: { children: React.ReactNode }) => {
           alt="logo"
           width={150}
           height={80}
-          className="w-28 lg:w-40"
+          className="w-32 lg:w-40"
         />
         <button
           className="lg:hidden"
           ref={buttonRef}
           onClick={() => setIsOpen(!isOpen)}
         >
-          <FaHamburger size="1.5rem" />
+          <FaHamburger size="1.5rem" className="text-white" />
         </button>
       </div>
       <div

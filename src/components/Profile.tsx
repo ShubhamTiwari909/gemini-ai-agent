@@ -1,5 +1,5 @@
 import React from "react";
-import { auth } from "../api/auth/nextAuth";
+import { auth } from "../app/api/auth/nextAuth";
 import Image from "next/image";
 
 const Profile = async () => {

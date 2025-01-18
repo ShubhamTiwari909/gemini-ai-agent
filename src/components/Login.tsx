@@ -13,7 +13,7 @@ const Login = async () => {
       >
         <button
           type="submit"
-          className="btn bg-gradient-to-r from-pink-500 to-violet-500 text-white hover:!text-white btn-outline w-full"
+          className="btn btn-lg text-2xl bg-gradient-to-r from-pink-500 to-violet-500 text-white hover:!text-white btn-outline w-full"
         >
           Signin with <FaGoogle />
         </button>
@@ -26,7 +26,7 @@ const Login = async () => {
       >
         <button
           type="submit"
-          className="btn bg-gradient-to-r from-slate-600 to-gray-700 text-white hover:!text-white btn-outline w-full"
+          className="btn btn-lg text-2xl bg-gradient-to-r from-slate-600 to-gray-700 text-white hover:!text-white btn-outline w-full"
         >
           Signin with <FaGithub />
         </button>

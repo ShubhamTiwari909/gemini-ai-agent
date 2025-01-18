@@ -2,10 +2,13 @@ import React from "react";
 import GeminiAiWrapper from ".././components/Gemini/GeminiAiWrapper";
 import History from ".././components/History/History";
 import { auth } from "./api/auth/nextAuth";
+import { redirect } from "next/navigation";
 
 const page = async () => {
   const session = await auth();
-
+  if (!session?.user) {
+    redirect("/login");
+  }
   return (
     <section className="min-h-screen px-5 py-0 mx-auto max-w-7xl lg:px-0">
       <div>
