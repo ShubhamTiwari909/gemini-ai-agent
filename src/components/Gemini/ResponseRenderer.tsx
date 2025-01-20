@@ -40,9 +40,7 @@ const ResponseRenderer = ({
             loading ? "select-none" : ""
           }`}
         >
-          {prompt ? (
-            <h2 className="text-3xl lg:text-4xl mb-5">{prompt}</h2>
-          ) : null}
+          {prompt ? <h2 className="text-2xl mb-5">{prompt}</h2> : null}
           <Markdown
             remarkPlugins={[remarkGfm]}
             components={{

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Dropdown from "../Dropdown";
 
 const promptsSample = {
@@ -32,6 +32,12 @@ const FormControls = ({
   className?: string;
 }) => {
   const [inputText, setInputText] = useState("");
+
+  useEffect(() => {
+    if (!loading) {
+      setInputText("");
+    }
+  }, [loading]);
 
   const GenerateButton = () => {
     return (

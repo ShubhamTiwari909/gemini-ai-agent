@@ -103,12 +103,15 @@ const HistoryWrapper = ({ history }: { history: History[] }) => {
       >
         <ButtonClose />
 
-        <ul className="h-full py-5 overflow-auto space-y-5">
+        <ul className="h-full py-5 overflow-auto space-y-7">
           {localHistory.map((item, index) => {
             return (
-              <li key={index}>
+              <li
+                key={index}
+                className="border-b border-solid border-b-base-content pb-2"
+              >
                 <button
-                  className="text-left"
+                  className="text-left line-clamp-2 text-ellipsis"
                   onClick={() => {
                     setIsOpen(false);
                     setActiveHistory(item);
