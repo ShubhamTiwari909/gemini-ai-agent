@@ -1,5 +1,6 @@
 "use client";
 import Image from "next/image";
+import Link from "next/link";
 import React, { useEffect } from "react";
 import { FaHamburger } from "react-icons/fa";
 
@@ -37,13 +38,15 @@ const HeaderWrapper = ({ children }: { children: React.ReactNode }) => {
       className={`flex justify-between fixed w-full top-0 z-40 ${headerBg}`}
     >
       <div className="flex justify-between relative z-50 w-full py-5 lg:px-16 px-5">
-        <Image
-          src="/gemini-zentauri-logo.png"
-          alt="logo"
-          width={150}
-          height={80}
-          className="w-32 lg:w-40"
-        />
+        <Link href="/">
+          <Image
+            src="/gemini-zentauri-logo.png"
+            alt="logo"
+            width={150}
+            height={80}
+            className="w-32 lg:w-40"
+          />
+        </Link>
         <button
           className="lg:hidden"
           ref={buttonRef}

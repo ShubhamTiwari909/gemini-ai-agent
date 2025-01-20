@@ -1,7 +1,6 @@
 "use client";
 import React, { useRef } from "react";
 import ResponseRenderer from "../Gemini/ResponseRenderer";
-import SyntaxHighlighter from "react-syntax-highlighter";
 import { History } from "./HistoryWrapper";
 
 const Modal = ({
@@ -11,7 +10,6 @@ const Modal = ({
   activeHistory: History | null;
   modalRef: React.RefObject<HTMLDialogElement | null>;
 }) => {
-  const syntaxHighlighterRef = useRef<SyntaxHighlighter>(null);
   const summaryRef = useRef<HTMLDivElement>(null);
 
   return (
@@ -30,7 +28,6 @@ const Modal = ({
           </div>
           <ResponseRenderer
             summaryRef={summaryRef}
-            syntaxHighlighterRef={syntaxHighlighterRef}
             summary={activeHistory?.response || ""}
             className="p-3 lg:p-5"
           />

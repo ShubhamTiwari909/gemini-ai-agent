@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import Markdown, { ExtraProps } from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
@@ -6,19 +6,21 @@ import { atomDark } from "react-syntax-highlighter/dist/esm/styles/prism";
 import { FaCopy, FaRegCopy } from "react-icons/fa";
 
 const ResponseRenderer = ({
+  prompt,
   summaryRef,
-  syntaxHighlighterRef,
   summary,
   loading,
   className,
 }: {
+  prompt?: string;
   summaryRef: React.RefObject<HTMLDivElement | null>;
-  syntaxHighlighterRef: React.RefObject<SyntaxHighlighter | null>;
   summary: string;
   loading?: boolean;
   className?: string;
 }) => {
   const [copySuccess, setCopySuccess] = React.useState(false);
+  const syntaxHighlighterRef = useRef<SyntaxHighlighter>(null);
+
   const handleCopyToClipboard = (text: string) => {
     if (text) {
       navigator.clipboard.writeText(text);
@@ -28,21 +30,19 @@ const ResponseRenderer = ({
       }, 2000);
     }
   };
+
   return (
     <section ref={summaryRef} className={`${className} relative`}>
-      {loading && summary && (
-        <div className="absolute inset-0 bg-slate-900/30 lg:grid lg:place-items-center h-full">
-          <p className="text-2xl lg:text-4xl font-bold text-center text-slate-100 pt-20">
-            Refreshing content...
-          </p>
-        </div>
-      )}
+      <Loader loading={loading} summary={summary} />
       {summary && (
         <div
           className={`w-full p-2.5 border border-solid border-cyan-300 rounded-lg ${
             loading ? "select-none" : ""
           }`}
         >
+          {prompt ? (
+            <h2 className="text-3xl lg:text-4xl mb-5">{prompt}</h2>
+          ) : null}
           <Markdown
             remarkPlugins={[remarkGfm]}
             components={{
@@ -101,3 +101,22 @@ const ResponseRenderer = ({
 };
 
 export default ResponseRenderer;
+
+const Loader = ({
+  loading,
+  summary,
+}: {
+  loading: boolean | undefined;
+  summary: string;
+}) => {
+  return (
+    loading &&
+    summary && (
+      <div className="absolute inset-0 bg-slate-900/30 lg:grid lg:place-items-center h-full">
+        <p className="text-2xl lg:text-4xl font-bold text-center text-slate-100 pt-20">
+          Refreshing content...
+        </p>
+      </div>
+    )
+  );
+};

@@ -2,7 +2,7 @@ import React from "react";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import Header from ".././components/Header";
+import Header from "../components/Header/Header";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -16,7 +16,8 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Gemini AI Text Generator",
-  description: "AI Text Generator powered by Google Gemini AI",
+  description:
+    "Gemini: Google's advanced AI model. Experience powerful text generation, code writing, image creation, and more. Unlock creative possibilities and boost your productivity with Gemini's versatile capabilities.",
 };
 
 export default function RootLayout({
