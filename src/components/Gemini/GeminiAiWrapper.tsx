@@ -4,6 +4,7 @@ import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import FormControls from "./FormControls";
 import ResponseRenderer from "./ResponseRenderer";
 import { Session } from "next-auth";
+import { useGlobalStore } from "@/store/global-store";
 
 const GeminiAiWrapper = ({
   user,
@@ -17,6 +18,8 @@ const GeminiAiWrapper = ({
   const [loading, setLoading] = useState(false);
   const syntaxHighlighterRef = useRef<SyntaxHighlighter>(null);
   const summaryRef = useRef<HTMLDivElement>(null);
+  const localHistory = useGlobalStore((state) => state.history);
+  const updateLocalHistory = useGlobalStore((state) => state.updateHistory);
 
   const handleSummarize = async (input: string) => {
     setLoading(true);
@@ -37,9 +40,18 @@ const GeminiAiWrapper = ({
             prompt: input,
             response: data.summary,
             email: user?.email,
-            historyId: Math.floor(Math.random() * 999999099).toString(),
+            historyId: `${input.split(" ").join("-").slice(0, 10)}-${data.summary.split(" ").join("-").slice(0, 10)}-${user?.email}`,
           }),
         });
+        updateLocalHistory([
+          ...localHistory,
+          {
+            historyId: `${input.split(" ").join("-").slice(0, 10)}-${data.summary.split(" ").join("-").slice(0, 10)}-${user?.email}`,
+            email: user?.email || "",
+            prompt: input,
+            response: data.summary,
+          },
+        ]);
       }
       setSummary(data.summary);
     } catch (error) {
