@@ -31,7 +31,7 @@ const FormControls = ({
 }: {
   inputText: string;
   setInputText: (text: string) => void;
-  handleSummarize: () => void;
+  handleSummarize: (item: string) => void;
   loading: boolean;
   className?: string;
 }) => {
@@ -53,7 +53,7 @@ const FormControls = ({
           {...promptsSample}
         />
         <button
-          onClick={handleSummarize}
+          onClick={() => handleSummarize(inputText)}
           disabled={loading || !inputText}
           className="relative inline-flex h-12 overflow-hidden rounded-full p-[1px] focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-50"
         >

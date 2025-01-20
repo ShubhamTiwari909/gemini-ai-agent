@@ -18,24 +18,23 @@ const GeminiAiWrapper = ({
   const syntaxHighlighterRef = useRef<SyntaxHighlighter>(null);
   const summaryRef = useRef<HTMLDivElement>(null);
 
-  const handleSummarize = async () => {
+  const handleSummarize = async (input: string) => {
     setLoading(true);
     try {
       const response = await fetch("/api/summarizer", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ text: inputText }),
+        body: JSON.stringify({ text: input }),
       });
       const data = await response.json();
       if (data) {
-        console.log("Express url - ", process.env.EXPRESS_API_URL);
         await fetch(`${expressUrl}/history/add`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            prompt: inputText,
+            prompt: input,
             response: data.summary,
             email: user?.email,
             historyId: Math.floor(Math.random() * 999999099).toString(),

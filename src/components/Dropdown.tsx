@@ -10,7 +10,7 @@ const Dropdown = ({
 }: {
   title: string;
   itemsList: string[];
-  onClick?: () => void;
+  onClick: (item: string) => void;
   setInputText?: (text: string) => void;
   loading?: boolean;
 }) => {
@@ -41,7 +41,7 @@ const Dropdown = ({
             <button
               onClick={() => {
                 setInputText?.(item);
-                onClick?.();
+                onClick(item);
               }}
               disabled={loading}
             >
