@@ -46,13 +46,16 @@ const ResponseRenderer = ({
           <Markdown
             remarkPlugins={[remarkGfm]}
             components={{
+              // Render a code block with syntax highlighting and a copy button
               code(
                 props: React.ClassAttributes<HTMLElement> &
                   React.HTMLAttributes<HTMLElement> &
                   ExtraProps,
               ) {
                 const { children, className, ...rest } = props;
+                // Extract the language from the className
                 const match = /language-(\w+)/.exec(className || "");
+
                 return match ? (
                   <div className="relative">
                     <div className="absolute top-2 right-2">
@@ -72,6 +75,7 @@ const ResponseRenderer = ({
                         )}
                       </button>
                     </div>
+                    {/* Use SyntaxHighlighter to display the code with styling */}
                     <SyntaxHighlighter
                       {...rest}
                       PreTag="div"
@@ -84,6 +88,7 @@ const ResponseRenderer = ({
                     </SyntaxHighlighter>
                   </div>
                 ) : (
+                  // Render a plain code element if no language is specified
                   <code {...rest} className={className}>
                     {children}
                   </code>

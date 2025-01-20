@@ -1,12 +1,26 @@
 "use client";
 import React from "react";
 
+/**
+ * A dropdown component that displays a list of items.
+ * The user can select an item from the list which will trigger the
+ * `onClick` callback with the selected item as an argument.
+ * The `setInputText` function can be used to update the input text box
+ * with the selected item.
+ * The `loading` prop can be used to disable the dropdown during loading.
+ * @param {string} title - The title of the dropdown.
+ * @param {string[]} itemsList - The list of items to be displayed in the dropdown.
+ * @param {function} onClick - The callback function to be triggered when an item is selected.
+ * @param {function} setInputText - The function to be used to update the input text box.
+ * @param {boolean} loading - Whether the dropdown is loading.
+ * @returns {JSX.Element} The rendered dropdown component.
+ */
 const Dropdown = ({
   title,
   itemsList,
   onClick,
   setInputText,
-  loading,
+  loading = false,
 }: {
   title: string;
   itemsList: string[];
@@ -15,6 +29,9 @@ const Dropdown = ({
   loading?: boolean;
 }) => {
   const dropdownContentRef = React.useRef<HTMLUListElement>(null);
+  /**
+   * Scrolls the dropdown content into view when the user focuses on the dropdown.
+   */
   const handleFocus = () => {
     dropdownContentRef.current?.scrollIntoView({
       behavior: "smooth",

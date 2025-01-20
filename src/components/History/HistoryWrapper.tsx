@@ -11,25 +11,66 @@ export type History = {
   response: string;
 };
 
+/**
+ * A component that displays a list of history items from the local history store.
+ * The list is displayed in a fixed position on the left side of the screen.
+ * The user can click on each item to open a modal dialog with the prompt and response.
+ * The user can also click on the left arrow button to close the list.
+ */
 const HistoryWrapper = ({ history }: { history: History[] }) => {
+  /**
+   * Whether the list of history items is open or closed.
+   * This state is used to control the visibility of the list.
+   */
   const [isOpen, setIsOpen] = React.useState(false);
+
+  /**
+   * The currently active history item.
+   * This state is used to pass the active history item to the Modal component.
+   */
   const [activeHistory, setActiveHistory] = React.useState<History | null>(
     null,
   );
+
+  /**
+   * The local history store.
+   * This store is used to keep track of the user's history of prompts and responses.
+   */
   const localHistory = useGlobalStore((state) => state.history);
+
+  /**
+   * A function to update the local history store.
+   * This function is used to update the local history store with new history items.
+   */
   const updateLocalHistory = useGlobalStore((state) => state.updateHistory);
 
+  /**
+   * A reference to the modal dialog element.
+   * This reference is used to show or hide the modal dialog.
+   */
   const modalRef = React.useRef<HTMLDialogElement>(null);
+
+  /**
+   * A function to open the modal dialog.
+   * This function is used to show the modal dialog when the user clicks on an item in the list.
+   */
   const openModal = () => {
     if (modalRef.current) {
       modalRef.current.showModal();
     }
   };
 
+  /**
+   * When the component mounts, update the local history store with the new history items.
+   */
   useEffect(() => {
     updateLocalHistory(history);
   }, [history]);
 
+  /**
+   * A component to open the list of history items.
+   * This component is displayed in the top-left corner of the screen.
+   */
   const ButtonOpen = () => (
     <button
       className="absolute z-30 btn btn-info left-5"
@@ -39,6 +80,10 @@ const HistoryWrapper = ({ history }: { history: History[] }) => {
     </button>
   );
 
+  /**
+   * A component to close the list of history items.
+   * This component is displayed in the top-right corner of the screen.
+   */
   const ButtonClose = () => (
     <button
       className="absolute z-30 btn btn-info right-5"
