@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Dropdown from "../Dropdown";
+import SpeechRecognitionUI from "./SpeechRecognition";
 
 const promptsSample = {
   title: "Sample Prompts",
@@ -62,7 +63,8 @@ const FormControls = ({
   };
 
   return (
-    <section className={className}>
+    <section className={`${className} relative`}>
+      <SpeechRecognitionUI setInput={setInputText} />
       <textarea
         value={inputText}
         onChange={(e) => setInputText(e.target.value)}
