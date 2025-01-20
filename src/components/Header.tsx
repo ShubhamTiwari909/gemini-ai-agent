@@ -1,5 +1,5 @@
 import React from "react";
-import Modal from "./Modal";
+import Modal from "./Theme/Modal";
 import { auth } from "../app/api/auth/nextAuth";
 import Link from "next/link";
 import HeaderWrapper from "./HeaderWrapper";

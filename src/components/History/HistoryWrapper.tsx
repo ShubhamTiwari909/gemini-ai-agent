@@ -2,18 +2,29 @@
 import { useGlobalStore } from "@/store/global-store";
 import React, { useEffect } from "react";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
+import Modal from "./Modal";
 
-type History = {
+export type History = {
   historyId: string;
   email: string;
   prompt: string;
   response: string;
-}[];
+};
 
-const HistoryWrapper = ({ history }: { history: History }) => {
+const HistoryWrapper = ({ history }: { history: History[] }) => {
   const [isOpen, setIsOpen] = React.useState(false);
+  const [activeHistory, setActiveHistory] = React.useState<History | null>(
+    null,
+  );
   const localHistory = useGlobalStore((state) => state.history);
   const updateLocalHistory = useGlobalStore((state) => state.updateHistory);
+
+  const modalRef = React.useRef<HTMLDialogElement>(null);
+  const openModal = () => {
+    if (modalRef.current) {
+      modalRef.current.showModal();
+    }
+  };
 
   useEffect(() => {
     updateLocalHistory(history);
@@ -40,16 +51,26 @@ const HistoryWrapper = ({ history }: { history: History }) => {
         >
           <FaArrowLeft />
         </button>
-        <ul className="h-full py-5 overflow-auto">
+        <ul className="h-full py-5 overflow-auto space-y-5">
           {localHistory.map((item, index) => {
             return (
               <li key={index}>
-                <p>{item.prompt}</p>
+                <button
+                  className="text-left"
+                  onClick={() => {
+                    setIsOpen(false);
+                    setActiveHistory(item);
+                    openModal();
+                  }}
+                >
+                  {item.prompt}
+                </button>
               </li>
             );
           })}
         </ul>
       </div>
+      <Modal modalRef={modalRef} activeHistory={activeHistory} />
     </div>
   );
 };

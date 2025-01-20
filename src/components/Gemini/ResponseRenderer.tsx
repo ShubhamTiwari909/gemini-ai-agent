@@ -15,7 +15,7 @@ const ResponseRenderer = ({
   summaryRef: React.RefObject<HTMLDivElement | null>;
   syntaxHighlighterRef: React.RefObject<SyntaxHighlighter | null>;
   summary: string;
-  loading: boolean;
+  loading?: boolean;
   className?: string;
 }) => {
   const [copySuccess, setCopySuccess] = React.useState(false);

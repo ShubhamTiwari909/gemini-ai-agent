@@ -1,5 +1,5 @@
 import React from "react";
-import { daisyUIThemes } from "../../tailwind.config";
+import { daisyUIThemes } from "../../../tailwind.config";
 
 const ThemeChanger = ({ closeModal }: { closeModal: () => void }) => {
   return (
