@@ -4,6 +4,7 @@ import remarkGfm from "remark-gfm";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { atomDark } from "react-syntax-highlighter/dist/esm/styles/prism";
 import { FaCopy, FaRegCopy } from "react-icons/fa";
+import TextToSpeech from "../TextToSpeech";
 
 const ResponseRenderer = ({
   prompt,
@@ -32,7 +33,7 @@ const ResponseRenderer = ({
   };
 
   return (
-    <section ref={summaryRef} className={`${className} relative`}>
+    <section ref={summaryRef} className={`${className} relative !pt-8 lg:pt-0`}>
       <Loader loading={loading} summary={summary} />
       {summary && (
         <div
@@ -41,6 +42,7 @@ const ResponseRenderer = ({
           }`}
         >
           {prompt ? <h2 className="text-2xl mb-5">{prompt}</h2> : null}
+          <TextToSpeech text={summary} />
           <Markdown
             remarkPlugins={[remarkGfm]}
             components={{
@@ -93,7 +95,7 @@ const ResponseRenderer = ({
                 );
               },
             }}
-            className="prose prose-base w-full max-w-full"
+            className="prose prose-base w-full max-w-full lg:pr-24 py-5"
           >
             {summary}
           </Markdown>

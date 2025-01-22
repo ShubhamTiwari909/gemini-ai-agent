@@ -64,7 +64,7 @@ const FormControls = ({
 
   return (
     <section className={`${className} relative`}>
-      <SpeechRecognitionUI setInput={setInputText} />
+      <SpeechRecognitionUI loading={loading} setInput={setInputText} />
       <textarea
         value={inputText}
         onChange={(e) => setInputText(e.target.value)}
