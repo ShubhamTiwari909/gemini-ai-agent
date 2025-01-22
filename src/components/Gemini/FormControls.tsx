@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Dropdown from "../Dropdown";
 import SpeechRecognitionUI from "./SpeechRecognition";
+import ImageUpload from "./ImageUpload";
 
 const promptsSample = {
   title: "Sample Prompts",
@@ -26,10 +27,16 @@ const promptsSample = {
 const FormControls = ({
   handleSummarize,
   loading,
+  setFile,
+  file,
+  handleImageResponse,
   className,
 }: {
   handleSummarize: (item: string) => void;
   loading: boolean;
+  setFile: React.Dispatch<React.SetStateAction<File | null>>;
+  file: File | null;
+  handleImageResponse: () => void;
   className?: string;
 }) => {
   const [inputText, setInputText] = useState("");
@@ -43,8 +50,14 @@ const FormControls = ({
   const GenerateButton = () => {
     return (
       <button
-        onClick={() => handleSummarize(inputText)}
-        disabled={loading || !inputText}
+        onClick={() => {
+          if (file?.name) {
+            handleImageResponse();
+          } else {
+            handleSummarize(inputText);
+          }
+        }}
+        disabled={(loading || !inputText) && !file?.name}
         className="relative inline-flex h-12 overflow-hidden rounded-full p-[1px] focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-50"
       >
         <span className="absolute inset-[-1000%] animate-[spin_2s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#E2CBFF_0%,#393BB2_50%,#E2CBFF_100%)]" />
@@ -71,9 +84,9 @@ const FormControls = ({
         placeholder="Paste your prompt here..."
         rows={10}
         className="text-pretty textarea textarea-info w-full mb-6 lg:mb-10"
-        disabled={loading}
+        disabled={loading || !!file}
       />
-      <div className="flex justify-between items-center lg:justify-center lg:gap-10">
+      <div className="flex flex-wrap gap-5 items-center justify-center lg:gap-10">
         <Dropdown
           onClick={handleSummarize}
           setInputText={setInputText}
@@ -81,6 +94,7 @@ const FormControls = ({
           {...promptsSample}
         />
         <GenerateButton />
+        <ImageUpload setFile={setFile} />
       </div>
     </section>
   );

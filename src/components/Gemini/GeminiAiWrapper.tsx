@@ -30,6 +30,8 @@ const GeminiAiWrapper = ({
   // State to store the input prompt text
   const [prompt, setPrompt] = useState("");
 
+  const [file, setFile] = useState<File | null>(null);
+
   /**
    * Handles the summarization of input text by interacting with the Gemini AI model.
    * It updates the summary state and logs the history of prompts and responses.
@@ -95,11 +97,57 @@ const GeminiAiWrapper = ({
     }
   };
 
+  const handleImageResponse = async () => {
+    setLoading(true);
+    try {
+      if (file) {
+        const fileBase64 = await new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onload = () => {
+            if (typeof reader.result === "string") {
+              resolve(reader.result.split(",")[1]); // Extract Base64 string
+            } else {
+              reject(new Error("Invalid file format"));
+            }
+          };
+          reader.onerror = reject;
+          reader.readAsDataURL(file);
+        });
+        // Send POST request to the Gemini AI model API with input text
+        const response = await fetch("/api/gemini-image", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            image: fileBase64,
+            mimeType: file.type,
+            demo: "hello",
+          }),
+        });
+        // Parse the response data
+        const data = await response.json();
+        setSummary(data.summary);
+      }
+    } catch (error) {
+      console.error("Error summarizing content:", error);
+      setSummary("An error occurred while summarizing.");
+    } finally {
+      setLoading(false);
+      // Scroll the summary into view smoothly
+      summaryRef.current?.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    }
+  };
+
   return (
     <div>
       <FormControls
         handleSummarize={handleSummarize}
         loading={loading}
+        file={file}
+        setFile={setFile}
+        handleImageResponse={handleImageResponse}
         className="mb-20"
       />
       <ResponseRenderer
