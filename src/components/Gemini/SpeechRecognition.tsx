@@ -9,9 +9,11 @@ import { FaMicrophone, FaMicrophoneSlash } from "react-icons/fa";
 const SpeechRecognitionUI = ({
   setInput,
   loading,
+  stopSpeech,
 }: {
   setInput: React.Dispatch<React.SetStateAction<string>>;
   loading: boolean;
+  stopSpeech: () => void;
 }) => {
   const { transcript, listening } = useSpeechRecognition();
 
@@ -23,7 +25,10 @@ const SpeechRecognitionUI = ({
     <div className="flex items-center gap-x-5 absolute right-3 top-3 lg:right-5 lg:top-5 bg-base-300 p-2.5 rounded-2xl">
       <button
         className="cursor-pointer"
-        onClick={() => SpeechRecognition.startListening()}
+        onClick={() => {
+          stopSpeech();
+          SpeechRecognition.startListening();
+        }}
         disabled={loading}
       >
         {listening ? (
@@ -35,7 +40,10 @@ const SpeechRecognitionUI = ({
 
       <button
         className="cursor-pointer"
-        onClick={SpeechRecognition.stopListening}
+        onClick={() => {
+          stopSpeech();
+          SpeechRecognition.stopListening();
+        }}
         disabled={loading}
       >
         <FaMicrophoneSlash color="red" size="1.4rem" />

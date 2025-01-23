@@ -31,7 +31,6 @@ export async function POST(req: Request): Promise<Response> {
     },
     "Describe this image in detail and suggest some captions",
   ]);
-  console.log(result);
   /**
    * Return the generated content as a JSON response.
    */

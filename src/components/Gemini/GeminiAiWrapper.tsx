@@ -31,6 +31,46 @@ const GeminiAiWrapper = ({
   const [prompt, setPrompt] = useState("");
 
   const [file, setFile] = useState<File | null>(null);
+  const [filePreview, setFilePreview] = useState<string | null>(null);
+
+  const addHistoryToDb = async (
+    data: { summary: string },
+    input: string,
+    filePreview?: string,
+  ) => {
+    // Generate a unique history ID from input and summary
+    const historyId = `${input.split(" ").join("-").slice(0, 10)}-${data.summary.split(" ").join("-").slice(0, 10)}-${user?.email}`;
+
+    // Save the prompt and its response to the server-side history
+    await fetch(`${expressUrl}/history/add`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        prompt: input,
+        response: data.summary,
+        filePreview: filePreview || "",
+        email: user?.email,
+        historyId: historyId,
+      }),
+    });
+
+    // Update the local history state
+    updateLocalHistory([
+      ...localHistory,
+      {
+        historyId: historyId,
+        email: user?.email || "",
+        prompt: input,
+        response: data.summary,
+        filePreview: filePreview || "",
+      },
+    ]);
+
+    // Set the current prompt
+    setPrompt(input);
+  };
 
   /**
    * Handles the summarization of input text by interacting with the Gemini AI model.
@@ -51,39 +91,10 @@ const GeminiAiWrapper = ({
       // Parse the response data
       const data = await response.json();
       if (data) {
-        // Generate a unique history ID from input and summary
-        const historyId = `${input.split(" ").join("-").slice(0, 10)}-${data.summary.split(" ").join("-").slice(0, 10)}-${user?.email}`;
-
-        // Save the prompt and its response to the server-side history
-        await fetch(`${expressUrl}/history/add`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            prompt: input,
-            response: data.summary,
-            email: user?.email,
-            historyId: historyId,
-          }),
-        });
-
-        // Update the local history state
-        updateLocalHistory([
-          ...localHistory,
-          {
-            historyId: historyId,
-            email: user?.email || "",
-            prompt: input,
-            response: data.summary,
-          },
-        ]);
-
-        // Set the current prompt
-        setPrompt(input);
+        addHistoryToDb(data, input);
+        // Update the summary state with the response
+        setSummary(data.summary);
       }
-      // Update the summary state with the response
-      setSummary(data.summary);
     } catch (error) {
       console.error("Error summarizing content:", error);
       setSummary("An error occurred while summarizing.");
@@ -113,6 +124,10 @@ const GeminiAiWrapper = ({
           reader.onerror = reject;
           reader.readAsDataURL(file);
         });
+
+        const fileDataUrl = `data:${file.type};base64,${fileBase64}`;
+        setFilePreview(fileDataUrl);
+
         // Send POST request to the Gemini AI model API with input text
         const response = await fetch("/api/gemini-image", {
           method: "POST",
@@ -125,7 +140,11 @@ const GeminiAiWrapper = ({
         });
         // Parse the response data
         const data = await response.json();
-        setSummary(data.summary);
+        if (data) {
+          addHistoryToDb(data, file.name, fileDataUrl);
+          // Update the summary state with the response
+          setSummary(data.summary);
+        }
       }
     } catch (error) {
       console.error("Error summarizing content:", error);
@@ -137,6 +156,7 @@ const GeminiAiWrapper = ({
         behavior: "smooth",
         block: "start",
       });
+      setFile(null);
     }
   };
 
@@ -151,6 +171,7 @@ const GeminiAiWrapper = ({
         className="mb-20"
       />
       <ResponseRenderer
+        filePreview={filePreview}
         prompt={prompt}
         summaryRef={summaryRef}
         summary={summary}

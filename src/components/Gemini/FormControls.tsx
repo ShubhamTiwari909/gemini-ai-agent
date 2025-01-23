@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import Dropdown from "../Dropdown";
 import SpeechRecognitionUI from "./SpeechRecognition";
 import ImageUpload from "./ImageUpload";
+import { useGlobalStore } from "@/store/global-store";
 
 const promptsSample = {
   title: "Sample Prompts",
@@ -40,17 +41,29 @@ const FormControls = ({
   className?: string;
 }) => {
   const [inputText, setInputText] = useState("");
+  const fileInputRef = React.useRef<HTMLInputElement>(null);
+  const setIsPaused = useGlobalStore((state) => state.setIsSpeechPaused);
 
   useEffect(() => {
     if (!loading) {
       setInputText("");
+      if (fileInputRef.current) {
+        fileInputRef.current.value = ""; // Reset the file input
+      }
     }
   }, [loading]);
+
+  const stopSpeech = () => {
+    const synth = window.speechSynthesis;
+    synth.cancel();
+    setIsPaused(true);
+  };
 
   const GenerateButton = () => {
     return (
       <button
         onClick={() => {
+          stopSpeech();
           if (file?.name) {
             handleImageResponse();
           } else {
@@ -77,7 +90,11 @@ const FormControls = ({
 
   return (
     <section className={`${className} relative`}>
-      <SpeechRecognitionUI loading={loading} setInput={setInputText} />
+      <SpeechRecognitionUI
+        stopSpeech={stopSpeech}
+        loading={loading}
+        setInput={setInputText}
+      />
       <textarea
         value={inputText}
         onChange={(e) => setInputText(e.target.value)}
@@ -91,10 +108,15 @@ const FormControls = ({
           onClick={handleSummarize}
           setInputText={setInputText}
           loading={loading}
+          stopSpeech={stopSpeech}
           {...promptsSample}
         />
         <GenerateButton />
-        <ImageUpload setFile={setFile} />
+        <ImageUpload
+          stopSpeech={stopSpeech}
+          fileInputRef={fileInputRef}
+          setFile={setFile}
+        />
       </div>
     </section>
   );

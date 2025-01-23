@@ -5,14 +5,17 @@ import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { atomDark } from "react-syntax-highlighter/dist/esm/styles/prism";
 import { FaCopy, FaRegCopy } from "react-icons/fa";
 import TextToSpeech from "../TextToSpeech";
+import Image from "next/image";
 
 const ResponseRenderer = ({
+  filePreview,
   prompt,
   summaryRef,
   summary,
   loading,
   className,
 }: {
+  filePreview?: string | null;
   prompt?: string;
   summaryRef: React.RefObject<HTMLDivElement | null>;
   summary: string;
@@ -33,7 +36,7 @@ const ResponseRenderer = ({
   };
 
   return (
-    <section ref={summaryRef} className={`${className} relative !pt-8 lg:pt-0`}>
+    <section ref={summaryRef} className={`${className} !pt-8 lg:pt-0`}>
       <Loader loading={loading} summary={summary} />
       {summary && (
         <div
@@ -41,8 +44,25 @@ const ResponseRenderer = ({
             loading ? "select-none" : ""
           }`}
         >
-          {prompt ? <h2 className="text-2xl mb-5">{prompt}</h2> : null}
-          <TextToSpeech text={summary} />
+          {filePreview && (
+            <div className="flex justify-center mb-5 border border-solid border-base-content rounded-xl">
+              <Image
+                src={filePreview || ""}
+                alt={prompt || "File preview"}
+                width={400}
+                height={400}
+                className="w-full h-96 object-contain"
+              />
+            </div>
+          )}
+          {!filePreview && prompt ? (
+            <h2 className="text-3xl mb-5 bg-clip-text text-transparent bg-gradient-to-r from-pink-500 to-violet-500">
+              {prompt}
+            </h2>
+          ) : null}
+          <div className="relative">
+            <TextToSpeech text={summary} />
+          </div>
           <Markdown
             remarkPlugins={[remarkGfm]}
             components={{
@@ -95,7 +115,7 @@ const ResponseRenderer = ({
                 );
               },
             }}
-            className="prose prose-base w-full max-w-full lg:pr-24 py-5"
+            className="prose prose-base w-full max-w-full lg:pr-28 py-5"
           >
             {summary}
           </Markdown>

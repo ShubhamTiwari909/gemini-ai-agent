@@ -21,18 +21,21 @@ const Dropdown = ({
   onClick,
   setInputText,
   loading = false,
+  stopSpeech,
 }: {
   title: string;
   itemsList: string[];
   onClick: (item: string) => void;
   setInputText?: (text: string) => void;
   loading?: boolean;
+  stopSpeech?: () => void;
 }) => {
   const dropdownContentRef = React.useRef<HTMLUListElement>(null);
   /**
    * Scrolls the dropdown content into view when the user focuses on the dropdown.
    */
   const handleFocus = () => {
+    stopSpeech?.();
     dropdownContentRef.current?.scrollIntoView({
       behavior: "smooth",
       block: "start",

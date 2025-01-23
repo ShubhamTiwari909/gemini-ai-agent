@@ -6,11 +6,14 @@ type History = {
   email: string;
   prompt: string;
   response: string;
+  filePreview?: string;
 };
 
 interface BearState {
   history: History[];
   updateHistory: (history: History[]) => void;
+  isSpeechPaused: boolean;
+  setIsSpeechPaused: (isPaused: boolean) => void;
 }
 
 export const useGlobalStore = create<BearState>()(
@@ -19,6 +22,8 @@ export const useGlobalStore = create<BearState>()(
       (set) => ({
         history: [],
         updateHistory: (history) => set({ history }),
+        isSpeechPaused: true,
+        setIsSpeechPaused: (isPaused) => set({ isSpeechPaused: isPaused }),
       }),
       {
         name: "global-storage",

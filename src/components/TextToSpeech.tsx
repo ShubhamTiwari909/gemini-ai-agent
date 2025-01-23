@@ -1,3 +1,4 @@
+import { useGlobalStore } from "@/store/global-store";
 import React, { useState, useEffect, JSX } from "react";
 import { GiSpeaker, GiSpeakerOff } from "react-icons/gi";
 import { PiSpeakerSlashFill } from "react-icons/pi";
@@ -9,7 +10,9 @@ import { PiSpeakerSlashFill } from "react-icons/pi";
  * @returns {JSX.Element} A div containing three buttons: Play, Pause, and Stop.
  */
 const TextToSpeech = ({ text }: { text: string }): JSX.Element => {
-  const [isPaused, setIsPaused] = useState(true);
+  // const [isPaused, setIsPaused] = useState(true);
+  const isPaused = useGlobalStore((state) => state.isSpeechPaused);
+  const setIsPaused = useGlobalStore((state) => state.setIsSpeechPaused);
   const [utterance, setUtterance] = useState<SpeechSynthesisUtterance | null>(
     null,
   );
@@ -31,7 +34,6 @@ const TextToSpeech = ({ text }: { text: string }): JSX.Element => {
 
   const handlePlayPause = () => {
     const synth = window.speechSynthesis;
-    console.log(isPaused);
 
     if (isPaused) {
       setIsPaused(false);
@@ -50,7 +52,7 @@ const TextToSpeech = ({ text }: { text: string }): JSX.Element => {
   };
 
   return (
-    <div className="absolute lg:right-8 lg:top-12 right-0 -top-7 flex items-center gap-x-5 p-2.5 bg-white rounded-xl">
+    <div className="absolute lg:right-2 lg:top-0 right-0 -top-7 flex items-center gap-x-5 p-2.5 bg-white rounded-xl">
       <button onClick={handlePlayPause}>
         {isPaused ? (
           <GiSpeaker className="text-green-500" size="1.75rem" />

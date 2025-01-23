@@ -9,6 +9,7 @@ export type History = {
   email: string;
   prompt: string;
   response: string;
+  filePreview?: string;
 };
 
 /**
@@ -45,6 +46,12 @@ const HistoryWrapper = ({ history }: { history: History[] }) => {
   const updateLocalHistory = useGlobalStore((state) => state.updateHistory);
 
   /**
+   * A function to set the speech synthesis pause state.
+   * This function is used to pause or resume the speech synthesis when the user interacts with the history list.
+   */
+  const setIsPaused = useGlobalStore((state) => state.setIsSpeechPaused);
+
+  /**
    * A reference to the modal dialog element.
    * This reference is used to show or hide the modal dialog.
    */
@@ -74,7 +81,12 @@ const HistoryWrapper = ({ history }: { history: History[] }) => {
   const ButtonOpen = () => (
     <button
       className="absolute z-30 btn btn-info left-5"
-      onClick={() => setIsOpen(true)}
+      onClick={() => {
+        const synth = window.speechSynthesis;
+        synth.cancel();
+        setIsPaused(true);
+        setIsOpen(true);
+      }}
     >
       <FaArrowRight />
     </button>
