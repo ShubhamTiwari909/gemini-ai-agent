@@ -1,5 +1,6 @@
 "use client";
 import React from "react";
+import * as motion from "motion/react-client";
 
 /**
  * A dropdown component that displays a list of items.
@@ -43,14 +44,18 @@ const Dropdown = ({
   };
   return (
     <div className="dropdown">
-      <button
+      <motion.button
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.4, ease: "easeInOut" }}
         tabIndex={0}
         role="button"
         onClick={handleFocus}
         className="btn btn-outline btn-info m-1"
+        disabled={loading}
       >
         {title}
-      </button>
+      </motion.button>
       <ul
         ref={dropdownContentRef}
         tabIndex={0}

@@ -2,8 +2,10 @@
 import { useGlobalStore } from "@/store/global-store";
 import React, { useEffect } from "react";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
+import * as motion from "motion/react-client";
 import Modal from "./Modal";
 import Search from "./Search";
+import { AnimatePresence } from "motion/react";
 
 export type History = {
   historyId: string;
@@ -114,18 +116,19 @@ const HistoryWrapper = ({
    * A component to open the list of history items.
    * This component is displayed in the top-left corner of the screen.
    */
+  const handleButtonOpen = () => {
+    const synth = window.speechSynthesis;
+    synth.cancel();
+    setIsPaused(true);
+    setIsOpen(true);
+    if (window.innerWidth < 1024) {
+      document.body.style.overflow = "hidden";
+    }
+  };
   const ButtonOpen = () => (
     <button
       className="absolute z-30 btn btn-info left-5"
-      onClick={() => {
-        const synth = window.speechSynthesis;
-        synth.cancel();
-        setIsPaused(true);
-        setIsOpen(true);
-        if (window.innerWidth < 1024) {
-          document.body.style.overflow = "hidden";
-        }
-      }}
+      onClick={handleButtonOpen}
     >
       <FaArrowRight />
     </button>
@@ -135,17 +138,15 @@ const HistoryWrapper = ({
    * A component to close the list of history items.
    * This component is displayed in the top-right corner of the screen.
    */
+  const handleButtonClosec = () => {
+    setIsOpen(false);
+    setSearch("");
+    if (window.innerWidth < 1024) {
+      document.body.style.overflow = "auto";
+    }
+  };
   const ButtonClose = () => (
-    <button
-      className="btn btn-info"
-      onClick={() => {
-        setIsOpen(false);
-        setSearch("");
-        if (window.innerWidth < 1024) {
-          document.body.style.overflow = "auto";
-        }
-      }}
-    >
+    <button className="btn btn-info" onClick={handleButtonClosec}>
       <FaArrowLeft />
     </button>
   );
@@ -176,7 +177,12 @@ const HistoryWrapper = ({
         ) : (
           filterSearchHistory.map((item, index) => {
             return (
-              <li
+              <motion.li
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.3, delay: index * 0.1 }}
+                whileInView={{ opacity: 1 }}
                 key={index}
                 className="border-b border-solid border-b-base-content pb-2"
               >
@@ -190,7 +196,7 @@ const HistoryWrapper = ({
                 >
                   {item.prompt}
                 </button>
-              </li>
+              </motion.li>
             );
           })
         )}
@@ -200,23 +206,48 @@ const HistoryWrapper = ({
 
   return (
     <div
-      className={`fixed left-0 top-20 lg:top-32 lg:max-w-96 ${isOpen ? "w-full" : "w-0"}`}
+      className={`fixed left-0 top-20 lg:top-32 ${isOpen ? "w-full" : "w-0"}`}
     >
       {!isOpen ? <ButtonOpen /> : null}
-      <div
-        className={`h-[500px] 2xl:h-[800px] pb-20 2xl:pb-52 bg-base-300 rounded-xl transition-all duration-150 ease-in-out p-5 ${isOpen ? "translate-x-0" : "-translate-x-full"}`}
+      <motion.div
+        initial={{ translateX: "-100%" }}
+        animate={{
+          translateX: isOpen ? 0 : "-100%",
+        }}
+        exit={{ translateX: "-100%" }}
+        transition={{
+          duration: 0.4,
+          scale: { type: "spring", visualDuration: 0.4, bounce: 0.5 },
+          when: "afterChildren",
+        }}
+        className="lg:max-w-96"
       >
-        {isOpen ? (
-          <div className="flex items-center justify-between mb-5 lg:mb-8">
-            <Search setSearch={setSearch} />
-            <ButtonClose />
-          </div>
-        ) : null}
+        <AnimatePresence initial={false}>
+          <motion.div
+            initial={{ translateX: "-100%" }}
+            animate={{ translateX: isOpen ? 0 : "-100%" }}
+            exit={{ translateX: "-100%" }}
+            transition={{
+              duration: 0.4,
+              scale: { type: "spring", visualDuration: 0.4, bounce: 0.5 },
+              when: "afterChildren",
+            }}
+            className={`h-[500px] 2xl:h-[800px] pb-20 2xl:pb-52 bg-base-300 rounded-xl p-5`}
+          >
+            {isOpen ? (
+              <div className="flex items-center justify-between mb-5 lg:mb-8">
+                <Search setSearch={setSearch} />
+                <ButtonClose />
+              </div>
+            ) : null}
 
-        <LocationHistory />
-      </div>
-      <Modal modalRef={modalRef} activeHistory={activeHistory} />
-      {rateLimitMessage !== "" ? <RateLimitMessage /> : null}
+            <LocationHistory />
+          </motion.div>
+        </AnimatePresence>
+
+        <Modal modalRef={modalRef} activeHistory={activeHistory} />
+        {rateLimitMessage !== "" ? <RateLimitMessage /> : null}
+      </motion.div>
     </div>
   );
 };

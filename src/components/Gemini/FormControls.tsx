@@ -3,6 +3,7 @@ import Dropdown from "../Dropdown";
 import SpeechRecognitionUI from "./SpeechRecognition";
 import ImageUpload from "./ImageUpload";
 import { useGlobalStore } from "@/store/global-store";
+import * as motion from "motion/react-client";
 
 const promptsSample = {
   title: "Sample Prompts",
@@ -61,7 +62,10 @@ const FormControls = ({
 
   const GenerateButton = () => {
     return (
-      <button
+      <motion.button
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.4, ease: "easeInOut" }}
         onClick={() => {
           stopSpeech();
           if (file?.name) {
@@ -84,7 +88,7 @@ const FormControls = ({
             "Generate"
           )}
         </span>
-      </button>
+      </motion.button>
     );
   };
 
@@ -95,12 +99,19 @@ const FormControls = ({
         loading={loading}
         setInput={setInputText}
       />
-      <textarea
+      <motion.textarea
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{
+          duration: 0.5,
+          ease: "easeInOut",
+          scale: { type: "spring", visualDuration: 0.4, bounce: 0.5 },
+        }}
         value={inputText}
         onChange={(e) => setInputText(e.target.value)}
         placeholder="Paste your prompt here..."
         rows={10}
-        className="text-pretty textarea textarea-info w-full mb-6 lg:mb-10"
+        className="text-pretty textarea textarea-info w-full mt-10 lg:mt-0 mb-6 lg:mb-10"
         disabled={loading || !!file}
       />
       <div className="flex flex-wrap gap-5 items-center justify-center lg:gap-10">
