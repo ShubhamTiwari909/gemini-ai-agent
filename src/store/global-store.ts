@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { devtools, persist } from "zustand/middleware";
+import { createJSONStorage, devtools, persist } from "zustand/middleware";
 
 type History = {
   historyId: string;
@@ -31,6 +31,7 @@ export const useGlobalStore = create<BearState>()(
       }),
       {
         name: "global-storage",
+        storage: createJSONStorage(() => sessionStorage),
       },
     ),
   ),
