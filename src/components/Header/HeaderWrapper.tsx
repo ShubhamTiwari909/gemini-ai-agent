@@ -49,13 +49,17 @@ const HeaderWrapper = ({ children }: { children: React.ReactNode }) => {
 
   // Set up event listeners for outside clicks and scrolling
   useEffect(() => {
-    document.addEventListener("mousedown", handleClickOutside);
-    document.addEventListener("scroll", handleScroll);
+    const controller = new AbortController();
+    document.addEventListener("mousedown", handleClickOutside, {
+      signal: controller.signal,
+    });
+    document.addEventListener("scroll", handleScroll, {
+      signal: controller.signal,
+    });
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-      document.removeEventListener("scroll", handleScroll);
+      controller.abort();
     };
-  });
+  }, []);
 
   return (
     <header
