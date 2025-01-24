@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { createJSONStorage, devtools, persist } from "zustand/middleware";
+import { devtools } from "zustand/middleware";
 
 type History = {
   historyId: string;
@@ -16,23 +16,19 @@ interface BearState {
   setIsSpeechPaused: (isPaused: boolean) => void;
   rateLimitMessage: string;
   setRateLimitMessage: (message: string) => void;
+  fileName: string;
+  setFileName: (fileName: string) => void;
 }
 
 export const useGlobalStore = create<BearState>()(
-  devtools(
-    persist(
-      (set) => ({
-        history: [],
-        updateHistory: (history) => set({ history }),
-        isSpeechPaused: true,
-        setIsSpeechPaused: (isPaused) => set({ isSpeechPaused: isPaused }),
-        rateLimitMessage: "",
-        setRateLimitMessage: (message) => set({ rateLimitMessage: message }),
-      }),
-      {
-        name: "global-storage",
-        storage: createJSONStorage(() => sessionStorage),
-      },
-    ),
-  ),
+  devtools((set) => ({
+    history: [],
+    updateHistory: (history) => set({ history }),
+    isSpeechPaused: true,
+    setIsSpeechPaused: (isPaused) => set({ isSpeechPaused: isPaused }),
+    rateLimitMessage: "",
+    setRateLimitMessage: (message) => set({ rateLimitMessage: message }),
+    fileName: "",
+    setFileName: (fileName) => set({ fileName: fileName }),
+  })),
 );

@@ -27,6 +27,8 @@ const GeminiAiWrapper = ({
   // Function to update the local history in the global store
   const updateLocalHistory = useGlobalStore((state) => state.updateHistory);
 
+  const setFileName = useGlobalStore((state) => state.setFileName);
+
   // State to store the input prompt text
   const [prompt, setPrompt] = useState("");
 
@@ -94,6 +96,7 @@ const GeminiAiWrapper = ({
         addHistoryToDb(data, input);
         // Update the summary state with the response
         setSummary(data.summary);
+        setFileName("");
       }
     } catch (error) {
       console.error("Error summarizing content:", error);
@@ -144,6 +147,7 @@ const GeminiAiWrapper = ({
           addHistoryToDb(data, file.name, fileDataUrl);
           // Update the summary state with the response
           setSummary(data.summary);
+          setFileName("");
         }
       }
     } catch (error) {

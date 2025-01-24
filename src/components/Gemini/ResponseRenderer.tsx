@@ -36,7 +36,7 @@ const ResponseRenderer = ({
   };
 
   return (
-    <section ref={summaryRef} className={`${className} !pt-8 lg:pt-0`}>
+    <section ref={summaryRef} className={`${className} relative !pt-8 lg:pt-0`}>
       <Loader loading={loading} summary={summary} />
       {summary && (
         <div
