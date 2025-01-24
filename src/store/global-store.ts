@@ -14,6 +14,8 @@ interface BearState {
   updateHistory: (history: History[]) => void;
   isSpeechPaused: boolean;
   setIsSpeechPaused: (isPaused: boolean) => void;
+  rateLimitMessage: string;
+  setRateLimitMessage: (message: string) => void;
 }
 
 export const useGlobalStore = create<BearState>()(
@@ -24,6 +26,8 @@ export const useGlobalStore = create<BearState>()(
         updateHistory: (history) => set({ history }),
         isSpeechPaused: true,
         setIsSpeechPaused: (isPaused) => set({ isSpeechPaused: isPaused }),
+        rateLimitMessage: "",
+        setRateLimitMessage: (message) => set({ rateLimitMessage: message }),
       }),
       {
         name: "global-storage",

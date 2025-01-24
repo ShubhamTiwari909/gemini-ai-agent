@@ -18,7 +18,11 @@ export type History = {
  * The user can click on each item to open a modal dialog with the prompt and response.
  * The user can also click on the left arrow button to close the list.
  */
-const HistoryWrapper = ({ history }: { history: History[] }) => {
+const HistoryWrapper = ({
+  history,
+}: {
+  history: History[] | { message: string };
+}) => {
   /**
    * Whether the list of history items is open or closed.
    * This state is used to control the visibility of the list.
@@ -51,6 +55,12 @@ const HistoryWrapper = ({ history }: { history: History[] }) => {
    */
   const setIsPaused = useGlobalStore((state) => state.setIsSpeechPaused);
 
+  const rateLimitMessage = useGlobalStore((state) => state.rateLimitMessage);
+
+  const setRateLimitMessage = useGlobalStore(
+    (state) => state.setRateLimitMessage,
+  );
+
   /**
    * A reference to the modal dialog element.
    * This reference is used to show or hide the modal dialog.
@@ -71,7 +81,12 @@ const HistoryWrapper = ({ history }: { history: History[] }) => {
    * When the component mounts, update the local history store with the new history items.
    */
   useEffect(() => {
-    updateLocalHistory(history);
+    if ("message" in history) {
+      setRateLimitMessage(history.message);
+      updateLocalHistory([]);
+    } else {
+      updateLocalHistory(history);
+    }
   }, [history]);
 
   /**
@@ -104,6 +119,21 @@ const HistoryWrapper = ({ history }: { history: History[] }) => {
       <FaArrowLeft />
     </button>
   );
+
+  const RateLimitMessage = () => {
+    useEffect(() => {
+      setTimeout(() => {
+        setRateLimitMessage("");
+      }, 2000);
+    }, [rateLimitMessage]);
+    return (
+      <div className="fixed w-[500px] mx-auto top-0 left-0 right-0 bottom-0 flex items-center justify-center">
+        <div className="alert alert-error">
+          <span>{rateLimitMessage}</span>
+        </div>
+      </div>
+    );
+  };
 
   return (
     <div
@@ -138,6 +168,7 @@ const HistoryWrapper = ({ history }: { history: History[] }) => {
         </ul>
       </div>
       <Modal modalRef={modalRef} activeHistory={activeHistory} />
+      {rateLimitMessage !== "" ? <RateLimitMessage /> : null}
     </div>
   );
 };

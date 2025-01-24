@@ -6,16 +6,21 @@ export const fetchHistory = async (
   expressUrl: string,
   email: string | null | undefined,
 ) => {
-  const response = await fetch(`${expressUrl}/history/find`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ email }),
-  });
+  try {
+    const response = await fetch(`${expressUrl}/history/find`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email }),
+    });
 
-  const data = await response.json();
-  return data;
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error fetching history:", error);
+    return [];
+  }
 };
 
 const History = async () => {
