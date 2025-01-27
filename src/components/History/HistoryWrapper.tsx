@@ -158,9 +158,9 @@ const HistoryWrapper = ({
       }, 2000);
     }, [rateLimitMessage]);
     return (
-      <div className="fixed w-[500px] mx-auto top-0 left-0 right-0 bottom-0 flex items-center justify-center">
-        <div className="alert alert-error">
-          <span>{rateLimitMessage}</span>
+      <div className="z-50 fixed w-full mx-auto top-0 left-0 right-0 bottom-0 flex items-center justify-center bg-slate-900/50">
+        <div className="alert alert-error max-w-2xl grid-cols-none justify-center">
+          <p className="text-center">{rateLimitMessage}</p>
         </div>
       </div>
     );
@@ -246,8 +246,8 @@ const HistoryWrapper = ({
         </AnimatePresence>
 
         <Modal modalRef={modalRef} activeHistory={activeHistory} />
-        {rateLimitMessage !== "" ? <RateLimitMessage /> : null}
       </motion.div>
+      {rateLimitMessage !== "" ? <RateLimitMessage /> : null}
     </div>
   );
 };
