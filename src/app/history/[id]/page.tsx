@@ -1,4 +1,5 @@
 import HistoryPageWrapper from "@/components/History/HistoryPageWrapper";
+import { notFound } from "next/navigation";
 import React from "react";
 
 const fetchHistoryById = async (
@@ -27,6 +28,10 @@ const page = async ({ params }: { params: Promise<{ id: string }> }) => {
     process.env.EXPRESS_API_URL || "",
     id,
   );
+
+  if (activeHistory.message) {
+    notFound();
+  }
 
   return <HistoryPageWrapper activeHistory={activeHistory} />;
 };
