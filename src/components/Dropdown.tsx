@@ -50,7 +50,7 @@ const Dropdown = ({
         tabIndex={0}
         role="button"
         onClick={handleFocus}
-        className="btn btn-outline m-1"
+        className="btn btn-outline m-1 !pointer-events-auto"
         disabled={loading}
       >
         {title}
@@ -58,7 +58,7 @@ const Dropdown = ({
       <ul
         ref={dropdownContentRef}
         tabIndex={0}
-        className="dropdown-content menu bg-slate-100 text-slate-900 mt-5 rounded-box z-[1] w-80 p-2 shadow h-80 overflow-scroll flex-nowrap"
+        className="snap-y dropdown-content menu bg-slate-100 text-slate-900 mt-5 rounded-box z-[1] w-80 p-2 shadow h-80 overflow-scroll flex-nowrap"
       >
         {itemsList.map((item) => (
           <li key={item}>
