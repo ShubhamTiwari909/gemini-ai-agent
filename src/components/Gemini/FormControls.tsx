@@ -111,7 +111,7 @@ const FormControls = ({
         onChange={(e) => setInputText(e.target.value)}
         placeholder="Paste your prompt here..."
         rows={10}
-        className="text-pretty textarea textarea-info w-full mt-10 lg:mt-0 mb-6 lg:mb-10"
+        className="text-pretty textarea textarea-info w-full mb-6 lg:mb-10"
         disabled={loading || !!file}
       />
       <div className="flex flex-wrap gap-5 items-center justify-center lg:gap-10">

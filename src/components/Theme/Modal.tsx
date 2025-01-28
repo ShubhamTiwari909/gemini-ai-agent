@@ -45,7 +45,7 @@ const Modal = () => {
       {/* The dialog element. */}
       <dialog ref={modalRef} id="theme-modal" className="modal">
         {/* The dialog box. */}
-        <div className="modal-box">
+        <div className="modal-box !h-120 lg:!h-156">
           {/* The header of the dialog. */}
           <div className="flex items-center justify-between mb-5">
             {/* The title of the dialog. */}

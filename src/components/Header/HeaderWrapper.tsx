@@ -80,7 +80,7 @@ const HeaderWrapper = ({ children }: { children: React.ReactNode }) => {
           ref={buttonRef}
           onClick={() => setIsOpen(!isOpen)}
         >
-          <FaHamburger size="1.5rem" className="text-white" />
+          <FaHamburger size="1.5rem" className="text-base-content" />
         </button>
       </div>
       <div

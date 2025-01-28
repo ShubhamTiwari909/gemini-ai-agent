@@ -14,7 +14,6 @@ import * as motion from "motion/react-client";
  * @param {function} onClick - The callback function to be triggered when an item is selected.
  * @param {function} setInputText - The function to be used to update the input text box.
  * @param {boolean} loading - Whether the dropdown is loading.
- * @returns {JSX.Element} The rendered dropdown component.
  */
 const Dropdown = ({
   title,
@@ -51,7 +50,7 @@ const Dropdown = ({
         tabIndex={0}
         role="button"
         onClick={handleFocus}
-        className="btn btn-outline btn-info m-1"
+        className="btn btn-outline m-1"
         disabled={loading}
       >
         {title}

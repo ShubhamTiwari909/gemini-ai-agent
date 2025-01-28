@@ -235,7 +235,7 @@ const HistoryWrapper = ({
             className={`h-[500px] 2xl:h-[800px] pb-20 2xl:pb-52 bg-base-300 rounded-xl p-5`}
           >
             {isOpen ? (
-              <div className="flex items-center justify-between mb-5 lg:mb-8">
+              <div className="flex items-center justify-between gap-x-8 mb-5 lg:mb-8">
                 <Search setSearch={setSearch} />
                 <ButtonClose />
               </div>
