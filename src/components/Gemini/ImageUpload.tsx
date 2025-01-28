@@ -43,7 +43,7 @@ const ImageUpload = ({
       animate={{
         opacity: 1,
         scale: focused ? 1.1 : 1,
-        borderColor: focused ? "#0ea5e9" : "",
+        borderColor: focused ? "var(--color-blue-500)" : "",
       }}
       transition={{ duration: 0.4, ease: "easeInOut" }}
       onDragOver={(e) => e.preventDefault()}
@@ -53,7 +53,7 @@ const ImageUpload = ({
       <motion.label
         initial={{ color: "" }}
         animate={{
-          color: focused ? "#0ea5e9" : "",
+          color: focused ? "var(--color-blue-500)" : "",
         }}
         transition={{ duration: 0.4, ease: "easeInOut" }}
         className="text-base text-base-content font-semibold mb-2 block"
@@ -75,7 +75,7 @@ const ImageUpload = ({
           <motion.p
             initial={{ color: "" }}
             animate={{
-              color: focused ? "#0ea5e9" : "",
+              color: focused ? "var(--color-blue-500)" : "",
             }}
             transition={{ duration: 0.4, ease: "easeInOut" }}
             className="absolute top-0 right-0 text-sm text-slate-800 w-52 py-3 pl-2 h-full text-ellipsis overflow-hidden text-nowrap bg-white z-10"
@@ -87,7 +87,7 @@ const ImageUpload = ({
       <motion.p
         initial={{ color: "" }}
         animate={{
-          color: focused ? "#0ea5e9" : "",
+          color: focused ? "var(--color-blue-500)" : "",
         }}
         transition={{ duration: 0.4, ease: "easeInOut" }}
         className="text-xs text-base-content mt-2"
