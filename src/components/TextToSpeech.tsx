@@ -52,7 +52,7 @@ const TextToSpeech = ({ text }: { text: string }): JSX.Element => {
   };
 
   return (
-    <div className="absolute lg:right-2 lg:top-0 right-0 -top-7 flex items-center gap-x-5 p-2.5 bg-white rounded-xl">
+    <div className="absolute lg:right-2 lg:top-0 right-0 -top-18 w-fit flex justify-center items-center gap-x-5 p-2.5 bg-white rounded-xl">
       <button onClick={handlePlayPause}>
         {isPaused ? (
           <GiSpeaker className="text-green-500" size="1.75rem" />

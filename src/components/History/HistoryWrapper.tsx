@@ -8,6 +8,7 @@ import Search from "./Search";
 import { AnimatePresence } from "motion/react";
 
 export type History = {
+  _id: string;
   historyId: string;
   email: string;
   prompt: string;
@@ -138,7 +139,7 @@ const HistoryWrapper = ({
    * A component to close the list of history items.
    * This component is displayed in the top-right corner of the screen.
    */
-  const handleButtonClosec = () => {
+  const handleButtonClose = () => {
     setIsOpen(false);
     setSearch("");
     if (window.innerWidth < 1024) {
@@ -146,7 +147,7 @@ const HistoryWrapper = ({
     }
   };
   const ButtonClose = () => (
-    <button className="btn btn-info" onClick={handleButtonClosec}>
+    <button className="btn btn-info" onClick={handleButtonClose}>
       <FaArrowLeft />
     </button>
   );

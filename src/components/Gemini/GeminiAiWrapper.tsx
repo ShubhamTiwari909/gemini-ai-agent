@@ -41,10 +41,10 @@ const GeminiAiWrapper = ({
     filePreview?: string,
   ) => {
     // Generate a unique history ID from input and summary
-    const historyId = `${input.split(" ").join("-").slice(0, 10)}-${data.summary.split(" ").join("-").slice(0, 10)}-${user?.email}`;
+    const historyId = `${input.split(" ").join("-").slice(0, 10)}-${data.summary.split(" ").join("-").slice(0, 10)}-${user?.email}/${Date.now()}`;
 
     // Save the prompt and its response to the server-side history
-    await fetch(`${expressUrl}/history/add`, {
+    const result = await fetch(`${expressUrl}/history/add`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -57,11 +57,13 @@ const GeminiAiWrapper = ({
         historyId: historyId,
       }),
     });
+    const response = await result.json();
 
     // Update the local history state
     updateLocalHistory([
       ...localHistory,
       {
+        _id: response.newHistory._id,
         historyId: historyId,
         email: user?.email || "",
         prompt: input,
