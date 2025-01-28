@@ -2,7 +2,7 @@ import { create } from "zustand";
 import { devtools, persist } from "zustand/middleware";
 
 type History = {
-  _id?: string;
+  _id?: string | undefined;
   historyId: string;
   email: string;
   prompt: string;

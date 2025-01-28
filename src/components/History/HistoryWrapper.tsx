@@ -8,7 +8,7 @@ import Search from "./Search";
 import { AnimatePresence } from "motion/react";
 
 export type History = {
-  _id: string;
+  _id?: string | undefined;
   historyId: string;
   email: string;
   prompt: string;
