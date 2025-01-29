@@ -61,7 +61,6 @@ const GeminiAiWrapper = ({
 
     // Update the local history state
     updateLocalHistory([
-      ...localHistory,
       {
         _id: response.newHistory._id,
         historyId: historyId,
@@ -70,6 +69,7 @@ const GeminiAiWrapper = ({
         response: data.summary,
         filePreview: filePreview || "",
       },
+      ...localHistory,
     ]);
 
     // Set the current prompt
@@ -174,7 +174,7 @@ const GeminiAiWrapper = ({
         file={file}
         setFile={setFile}
         handleImageResponse={handleImageResponse}
-        className="mb-20"
+        className="lg:mb-20"
       />
       <ResponseRenderer
         filePreview={filePreview}

@@ -1,10 +1,16 @@
 "use client";
 import ResponseRenderer from "@/components/Gemini/ResponseRenderer";
-import React, { useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { History } from "./HistoryWrapper";
 
 const HistoryPageWrapper = ({ activeHistory }: { activeHistory: History }) => {
   const summaryRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (window.innerWidth < 1024) {
+      document.body.style.overflow = "auto";
+    }
+  }, []);
 
   return (
     <ResponseRenderer
@@ -12,7 +18,7 @@ const HistoryPageWrapper = ({ activeHistory }: { activeHistory: History }) => {
       prompt={activeHistory?.prompt || ""}
       summaryRef={summaryRef}
       summary={activeHistory?.response || ""}
-      className="p-3 lg:p-5 !pt-0"
+      className="p-3 lg:p-5 lg:mt-0 !pt-5"
     />
   );
 };

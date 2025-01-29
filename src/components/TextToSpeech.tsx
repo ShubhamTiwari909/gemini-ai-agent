@@ -9,7 +9,13 @@ import { PiSpeakerSlashFill } from "react-icons/pi";
  * @param {{ text: string }} props The text to be spoken.
  * @returns {JSX.Element} A div containing three buttons: Play, Pause, and Stop.
  */
-const TextToSpeech = ({ text }: { text: string }): JSX.Element => {
+const TextToSpeech = ({
+  text,
+  className,
+}: {
+  text: string;
+  className?: string;
+}): JSX.Element => {
   // const [isPaused, setIsPaused] = useState(true);
   const isPaused = useGlobalStore((state) => state.isSpeechPaused);
   const setIsPaused = useGlobalStore((state) => state.setIsSpeechPaused);
@@ -52,7 +58,9 @@ const TextToSpeech = ({ text }: { text: string }): JSX.Element => {
   };
 
   return (
-    <div className="absolute lg:right-2 lg:top-0 right-0 -top-18 w-fit flex justify-center items-center gap-x-5 p-2.5 bg-white rounded-xl">
+    <div
+      className={`w-fit flex justify-center items-center gap-x-5 p-2.5 bg-white rounded-xl ${className}`}
+    >
       <button onClick={handlePlayPause}>
         {isPaused ? (
           <GiSpeaker className="text-green-500" size="1.75rem" />

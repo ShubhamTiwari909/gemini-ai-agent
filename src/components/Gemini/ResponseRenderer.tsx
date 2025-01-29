@@ -38,7 +38,7 @@ const ResponseRenderer = ({
   return (
     <section
       ref={summaryRef}
-      className={`relative !pt-16 lg:pt-0 !overflow-auto ${className} `}
+      className={`relative pt-16 lg:pt-0 !overflow-auto ${className} `}
     >
       <Loader loading={loading} summary={summary} />
       {summary && (
@@ -59,13 +59,14 @@ const ResponseRenderer = ({
             </div>
           )}
           {!filePreview && prompt ? (
-            <h2 className="text-3xl mb-5 bg-clip-text text-transparent bg-gradient-to-r from-pink-500 to-violet-500">
+            <h2 className="text-3xl my-5 bg-clip-text text-transparent bg-gradient-to-r from-pink-500 to-violet-500">
               {prompt}
             </h2>
           ) : null}
-          <div className="relative">
-            <TextToSpeech text={summary} />
-          </div>
+          <TextToSpeech
+            text={summary}
+            className="absolute lg:right-8 lg:top-8 right-3 top-0"
+          />
           <Markdown
             remarkPlugins={[remarkGfm]}
             components={{

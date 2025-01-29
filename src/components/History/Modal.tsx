@@ -83,7 +83,7 @@ const Modal = ({
             filePreview={activeHistory?.filePreview || ""}
             summaryRef={summaryRef}
             summary={activeHistory?.response || ""}
-            className="p-3 lg:p-5 mt-10 lg:mt-0"
+            className="p-3 lg:p-5 lg:mt-0 !pt-5"
           />
         </div>
       </dialog>

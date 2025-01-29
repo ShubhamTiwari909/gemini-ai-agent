@@ -26,6 +26,23 @@ const promptsSample = {
   ],
 };
 
+type GenerateButtonProps = {
+  stopSpeech: () => void;
+  loading: boolean;
+  handleSummarize: (item: string) => void;
+  handleImageResponse: () => void;
+  inputText: string;
+  file: File | null;
+};
+type FormControlsProps = {
+  handleSummarize: (item: string) => void;
+  loading: boolean;
+  setFile: React.Dispatch<React.SetStateAction<File | null>>;
+  file: File | null;
+  handleImageResponse: () => void;
+  className?: string;
+};
+
 const FormControls = ({
   handleSummarize,
   loading,
@@ -33,14 +50,7 @@ const FormControls = ({
   file,
   handleImageResponse,
   className,
-}: {
-  handleSummarize: (item: string) => void;
-  loading: boolean;
-  setFile: React.Dispatch<React.SetStateAction<File | null>>;
-  file: File | null;
-  handleImageResponse: () => void;
-  className?: string;
-}) => {
+}: FormControlsProps) => {
   const [inputText, setInputText] = useState("");
   const fileInputRef = React.useRef<HTMLInputElement>(null);
   const setIsPaused = useGlobalStore((state) => state.setIsSpeechPaused);
@@ -58,38 +68,6 @@ const FormControls = ({
     const synth = window.speechSynthesis;
     synth.cancel();
     setIsPaused(true);
-  };
-
-  const GenerateButton = () => {
-    return (
-      <motion.button
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.4, ease: "easeInOut" }}
-        onClick={() => {
-          stopSpeech();
-          if (file?.name) {
-            handleImageResponse();
-          } else {
-            handleSummarize(inputText);
-          }
-        }}
-        disabled={(loading || !inputText) && !file?.name}
-        className="relative inline-flex h-12 overflow-hidden rounded-full p-[1px] focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-50"
-      >
-        <span className="absolute inset-[-1000%] animate-[spin_2s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#E2CBFF_0%,#393BB2_50%,#E2CBFF_100%)]" />
-        <span className="inline-flex h-full w-full cursor-pointer items-center justify-center rounded-full bg-slate-800 px-10 py-3 text-lg font-medium text-white backdrop-blur-3xl">
-          {loading ? (
-            <p className="text-white flex items-center gap-x-3">
-              Generating
-              <span className="inline-block size-5 animate-spin rounded-full border-4 border-r-transparent border-solid border-current"></span>
-            </p>
-          ) : (
-            "Generate"
-          )}
-        </span>
-      </motion.button>
-    );
   };
 
   return (
@@ -122,7 +100,14 @@ const FormControls = ({
           stopSpeech={stopSpeech}
           {...promptsSample}
         />
-        <GenerateButton />
+        <GenerateButton
+          stopSpeech={stopSpeech}
+          loading={loading}
+          handleSummarize={handleSummarize}
+          handleImageResponse={handleImageResponse}
+          inputText={inputText}
+          file={file}
+        />
         <ImageUpload
           stopSpeech={stopSpeech}
           fileInputRef={fileInputRef}
@@ -134,3 +119,42 @@ const FormControls = ({
 };
 
 export default FormControls;
+
+const GenerateButton = ({
+  stopSpeech,
+  loading,
+  handleSummarize,
+  handleImageResponse,
+  inputText,
+  file,
+}: GenerateButtonProps) => {
+  return (
+    <motion.button
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.4, ease: "easeInOut", times: 1 }}
+      onClick={() => {
+        stopSpeech();
+        if (file?.name) {
+          handleImageResponse();
+        } else {
+          handleSummarize(inputText);
+        }
+      }}
+      disabled={(loading || !inputText) && !file?.name}
+      className="relative inline-flex h-12 overflow-hidden rounded-full p-[1px] focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-50"
+    >
+      <span className="absolute inset-[-1000%] animate-[spin_2s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#E2CBFF_0%,#393BB2_50%,#E2CBFF_100%)]" />
+      <span className="inline-flex h-full w-full cursor-pointer items-center justify-center rounded-full bg-slate-800 px-10 py-3 text-lg font-medium text-white backdrop-blur-3xl">
+        {loading ? (
+          <p className="text-white flex items-center gap-x-3">
+            Generating
+            <span className="inline-block size-5 animate-spin rounded-full border-4 border-r-transparent border-solid border-current"></span>
+          </p>
+        ) : (
+          "Generate"
+        )}
+      </span>
+    </motion.button>
+  );
+};

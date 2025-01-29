@@ -128,7 +128,7 @@ const HistoryWrapper = ({
   };
   const ButtonOpen = () => (
     <button
-      className="absolute z-30 btn btn-info left-5"
+      className="absolute z-30 btn btn-info left-5 top-5"
       onClick={handleButtonOpen}
     >
       <FaArrowRight />
@@ -182,7 +182,7 @@ const HistoryWrapper = ({
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                transition={{ duration: 0.3, delay: index * 0.1 }}
+                transition={{ duration: 0.3, delay: 0.3 }}
                 whileInView={{ opacity: 1 }}
                 key={index}
                 className="border-b border-solid border-b-base-content pb-2"
