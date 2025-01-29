@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Suspense } from "react";
 import GeminiAiWrapper from ".././components/Gemini/GeminiAiWrapper";
 import History from ".././components/History/History";
 import { auth } from "./api/auth/nextAuth";
@@ -35,7 +35,18 @@ const page = async () => {
           user={session?.user}
         />
       </div>
-      <History />
+      <Suspense
+        fallback={
+          <div className="fixed left-0 top-20 lg:top-32 px-5">
+            <p className="flex items-center">
+              Loading history...
+              <span className="animate-spin inline-block size-5 rounded-full border border-r-transparent border-solid border-current"></span>
+            </p>
+          </div>
+        }
+      >
+        <History />
+      </Suspense>
     </section>
   );
 };

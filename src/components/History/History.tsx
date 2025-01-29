@@ -29,11 +29,7 @@ const History = async () => {
     process.env.EXPRESS_API_URL || "",
     session?.user?.email,
   );
-  return (
-    <div>
-      <HistoryWrapper history={history} />
-    </div>
-  );
+  return <HistoryWrapper history={history} />;
 };
 
 export default History;
