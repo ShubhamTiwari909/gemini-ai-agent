@@ -1,20 +1,11 @@
 "use client";
-import { useGlobalStore } from "@/store/global-store";
+import { History, useGlobalStore } from "@/store/global-store";
 import React, { useEffect } from "react";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import * as motion from "motion/react-client";
 import Modal from "./Modal";
 import Search from "./Search";
 import { AnimatePresence } from "motion/react";
-
-export type History = {
-  _id?: string | undefined;
-  historyId: string;
-  email: string;
-  prompt: string;
-  response: string;
-  filePreview?: string;
-};
 
 /**
  * A component that displays a list of history items from the local history store.
@@ -128,10 +119,10 @@ const HistoryWrapper = ({
   };
   const ButtonOpen = () => (
     <button
-      className="absolute z-30 btn btn-info left-5 top-5"
+      className="absolute z-30 btn btn-sm lg:btn-md btn-info left-5 top-5"
       onClick={handleButtonOpen}
     >
-      <FaArrowRight />
+      <FaArrowRight className="size-4 lg:size-6" />
     </button>
   );
 
@@ -148,7 +139,7 @@ const HistoryWrapper = ({
   };
   const ButtonClose = () => (
     <button className="btn btn-info" onClick={handleButtonClose}>
-      <FaArrowLeft />
+      <FaArrowLeft className="size-4 lg:size-6" />
     </button>
   );
 

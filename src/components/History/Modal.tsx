@@ -1,8 +1,7 @@
 "use client";
 import React, { useRef } from "react";
 import ResponseRenderer from "../Gemini/ResponseRenderer";
-import { History } from "./HistoryWrapper";
-import { useGlobalStore } from "@/store/global-store";
+import { History, useGlobalStore } from "@/store/global-store";
 import {
   MdArrowOutward,
   MdClose,

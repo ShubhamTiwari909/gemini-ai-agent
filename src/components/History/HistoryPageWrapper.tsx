@@ -1,7 +1,9 @@
 "use client";
-import ResponseRenderer from "@/components/Gemini/ResponseRenderer";
+import ResponseRenderer, {
+  childClassses,
+} from "@/components/Gemini/ResponseRenderer";
 import React, { useEffect, useRef } from "react";
-import { History } from "./HistoryWrapper";
+import { History } from "@/store/global-store";
 
 const HistoryPageWrapper = ({ activeHistory }: { activeHistory: History }) => {
   const summaryRef = useRef<HTMLDivElement>(null);
@@ -18,7 +20,14 @@ const HistoryPageWrapper = ({ activeHistory }: { activeHistory: History }) => {
       prompt={activeHistory?.prompt || ""}
       summaryRef={summaryRef}
       summary={activeHistory?.response || ""}
+      createdAt={activeHistory?.createdAt || ""}
       className="p-3 lg:p-5 lg:mt-0 !pt-5"
+      childClassNames={{
+        ...childClassses,
+        container: "w-full p-2.5 lg:p-5",
+        heading: "text-3xl lg:text-5xl my-5 bg-clip-text text-base-content",
+        markdown: `${childClassses.markdown} pt-0 lg:pt-10`,
+      }}
     />
   );
 };

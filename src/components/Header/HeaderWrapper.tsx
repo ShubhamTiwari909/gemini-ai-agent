@@ -40,7 +40,7 @@ const HeaderWrapper = ({ children }: { children: React.ReactNode }) => {
    * Handles scroll events to update the header background color.
    */
   const handleScroll = () => {
-    if (window.scrollY > 100) {
+    if (window.scrollY > 50) {
       setHeaderBg("bg-slate-900");
     } else {
       setHeaderBg("bg-transparent");

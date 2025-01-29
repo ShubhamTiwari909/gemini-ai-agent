@@ -6,6 +6,17 @@ import { atomDark } from "react-syntax-highlighter/dist/esm/styles/prism";
 import { FaCopy, FaRegCopy } from "react-icons/fa";
 import TextToSpeech from "../TextToSpeech";
 import Image from "next/image";
+import { formatDate } from "@/lib/utls";
+
+export const childClassses = {
+  container: "w-full p-2.5 border border-solid border-cyan-300 rounded-lg",
+  imageContainer:
+    "flex justify-center mb-5 border border-solid border-base-content rounded-xl",
+  heading:
+    "text-3xl my-5 bg-clip-text text-transparent bg-gradient-to-r from-pink-500 to-violet-500",
+  textToSpeech: "absolute lg:right-8 lg:top-8 right-3 top-0 ",
+  markdown: "prose prose-base w-full max-w-full lg:pr-28 py-5",
+};
 
 const ResponseRenderer = ({
   filePreview,
@@ -13,17 +24,30 @@ const ResponseRenderer = ({
   summaryRef,
   summary,
   loading,
+  createdAt,
   className,
+  childClassNames = childClassses,
 }: {
   filePreview?: string | null;
   prompt?: string;
   summaryRef: React.RefObject<HTMLDivElement | null>;
   summary: string;
   loading?: boolean;
+  createdAt?: string;
   className?: string;
+  childClassNames?: {
+    container?: string;
+    imageContainer?: string;
+    heading?: string;
+    textToSpeech?: string;
+    markdown?: string;
+  };
 }) => {
   const [copySuccess, setCopySuccess] = React.useState(false);
   const syntaxHighlighterRef = useRef<SyntaxHighlighter>(null);
+
+  const { container, imageContainer, heading, textToSpeech, markdown } =
+    childClassNames;
 
   const handleCopyToClipboard = (text: string) => {
     if (text) {
@@ -42,13 +66,9 @@ const ResponseRenderer = ({
     >
       <Loader loading={loading} summary={summary} />
       {summary && (
-        <div
-          className={`w-full p-2.5 border border-solid border-cyan-300 rounded-lg ${
-            loading ? "select-none" : ""
-          }`}
-        >
+        <div className={`${loading ? "select-none" : ""} ${container}`}>
           {filePreview && (
-            <div className="flex justify-center mb-5 border border-solid border-base-content rounded-xl">
+            <div className={imageContainer}>
               <Image
                 src={filePreview || ""}
                 alt={prompt || "File preview"}
@@ -59,14 +79,16 @@ const ResponseRenderer = ({
             </div>
           )}
           {!filePreview && prompt ? (
-            <h2 className="text-3xl my-5 bg-clip-text text-transparent bg-gradient-to-r from-pink-500 to-violet-500">
-              {prompt}
-            </h2>
+            <div className="mb-10 lg:mb-0">
+              <h2 className={heading}>{prompt}</h2>
+              {createdAt && (
+                <p className="text-sm lg:text-lg text-base-content font-bold">
+                  Created at - {formatDate(createdAt || "")}
+                </p>
+              )}
+            </div>
           ) : null}
-          <TextToSpeech
-            text={summary}
-            className="absolute lg:right-8 lg:top-8 right-3 top-0"
-          />
+          <TextToSpeech text={summary} className={textToSpeech} />
           <Markdown
             remarkPlugins={[remarkGfm]}
             components={{
@@ -118,8 +140,20 @@ const ResponseRenderer = ({
                   </code>
                 );
               },
+              a: ({ className, children, ...props }) => {
+                return (
+                  <a
+                    {...props}
+                    className={className}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {children}
+                  </a>
+                );
+              },
             }}
-            className="prose prose-base w-full max-w-full lg:pr-28 py-5"
+            className={markdown}
           >
             {summary}
           </Markdown>

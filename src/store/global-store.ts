@@ -1,13 +1,14 @@
 import { create } from "zustand";
 import { devtools, persist } from "zustand/middleware";
 
-type History = {
+export type History = {
   _id?: string | undefined;
   historyId: string;
   email: string;
   prompt: string;
   response: string;
   filePreview?: string;
+  createdAt?: string;
 };
 
 interface BearState {
