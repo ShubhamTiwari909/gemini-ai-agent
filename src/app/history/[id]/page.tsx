@@ -18,7 +18,7 @@ const fetchHistoryById = async (
     const data = await response.json();
     return data;
   } catch (error) {
-    console.error("Error fetching history:", error);
+    console.error("Error fetching history by ID:", error);
     return [];
   }
 };
