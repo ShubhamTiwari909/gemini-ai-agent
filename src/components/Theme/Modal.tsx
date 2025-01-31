@@ -44,13 +44,9 @@ const Modal = () => {
       </button>
       {/* The dialog element. */}
       <dialog ref={modalRef} id="theme-modal" className="modal">
-        {/* The dialog box. */}
         <div className="modal-box !h-120 lg:!h-156">
-          {/* The header of the dialog. */}
           <div className="flex items-center justify-between mb-5">
-            {/* The title of the dialog. */}
             <h3 className="font-bold text-lg">Select a Theme</h3>
-            {/* The close button of the dialog. */}
             <div className="modal-action mt-0">
               <form method="dialog">
                 <button className="btn btn-error btn-sm">Close</button>

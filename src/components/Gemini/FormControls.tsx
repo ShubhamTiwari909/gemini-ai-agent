@@ -4,6 +4,7 @@ import SpeechRecognitionUI from "./SpeechRecognition";
 import ImageUpload from "./ImageUpload";
 import { useGlobalStore } from "@/store/global-store";
 import * as motion from "motion/react-client";
+import { FormControlsProps, GenerateButtonProps } from "@/types/form";
 
 const promptsSample = {
   title: "Sample Prompts",
@@ -26,26 +27,8 @@ const promptsSample = {
   ],
 };
 
-type GenerateButtonProps = {
-  stopSpeech: () => void;
-  loading: boolean;
-  handleSummarize: (item: string) => void;
-  handleImageResponse: () => void;
-  inputText: string;
-  file: File | null;
-};
-type FormControlsProps = {
-  handleSummarize: (item: string) => void;
-  loading: boolean;
-  setFile: React.Dispatch<React.SetStateAction<File | null>>;
-  file: File | null;
-  handleImageResponse: () => void;
-  className?: string;
-};
-
 const FormControls = ({
   handleSummarize,
-  loading,
   setFile,
   file,
   handleImageResponse,
@@ -54,6 +37,7 @@ const FormControls = ({
   const [inputText, setInputText] = useState("");
   const fileInputRef = React.useRef<HTMLInputElement>(null);
   const setIsPaused = useGlobalStore((state) => state.setIsSpeechPaused);
+  const loading = useGlobalStore((state) => state.loading);
 
   useEffect(() => {
     if (!loading) {

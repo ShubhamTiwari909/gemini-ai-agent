@@ -1,7 +1,7 @@
 "use client";
 import React, { useRef } from "react";
 import ResponseRenderer from "../Gemini/ResponseRenderer";
-import { History, useGlobalStore } from "@/store/global-store";
+import { useGlobalStore } from "@/store/global-store";
 import {
   MdArrowOutward,
   MdClose,
@@ -9,6 +9,7 @@ import {
   MdOutlineFileCopy,
 } from "react-icons/md";
 import Link from "next/link";
+import { History } from "@/types/response-handlers";
 
 const Modal = ({
   activeHistory,

@@ -1,4 +1,4 @@
-import NextAuth from "next-auth";
+import NextAuth, { User } from "next-auth";
 import GitHub from "next-auth/providers/github";
 import Google from "next-auth/providers/google";
 
@@ -25,19 +25,23 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
      * @returns true if sign-in is successful
      */
     async signIn({ user }) {
-      await fetch(`${process.env.EXPRESS_API_URL}/users/add`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          name: user?.name, // User's name
-          email: user?.email, // User's email
-          userId: Math.floor(Math.random() * 999999099).toString(), // Randomly generated user ID
-        }),
-      });
+      await addUsingUserToDb(user);
       return true;
     },
   },
   trustHost: true,
 });
+
+const addUsingUserToDb = async (user: User) => {
+  await fetch(`${process.env.EXPRESS_API_URL}/users/add`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      name: user?.name, // User's name
+      email: user?.email, // User's email
+      userId: Math.floor(Math.random() * 999999099).toString(), // Randomly generated user ID
+    }),
+  });
+};

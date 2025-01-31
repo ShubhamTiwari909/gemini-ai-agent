@@ -6,7 +6,7 @@ import { atomDark } from "react-syntax-highlighter/dist/esm/styles/prism";
 import { FaCopy, FaRegCopy } from "react-icons/fa";
 import TextToSpeech from "../TextToSpeech";
 import Image from "next/image";
-import { formatDate } from "@/lib/utls";
+import { formatDate } from "@/lib/utils";
 
 export const childClassses = {
   container: "w-full p-2.5 border border-solid border-cyan-300 rounded-lg",

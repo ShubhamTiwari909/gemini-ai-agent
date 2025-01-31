@@ -2,8 +2,8 @@
 import ResponseRenderer, {
   childClassses,
 } from "@/components/Gemini/ResponseRenderer";
+import { History } from "@/types/response-handlers";
 import React, { useEffect, useRef } from "react";
-import { History } from "@/store/global-store";
 
 const HistoryPageWrapper = ({ activeHistory }: { activeHistory: History }) => {
   const summaryRef = useRef<HTMLDivElement>(null);
