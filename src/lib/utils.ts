@@ -119,12 +119,16 @@ export const handleImageResponse = async (
         setSummary(data.summary);
         setFileName("");
       }
-      return data;
+      return {
+        data,
+        filePreview: fileDataUrl,
+      };
     }
     return null;
   } catch (error) {
     console.error("Error summarizing content:", error);
     setSummary("An error occurred while summarizing.");
+    return null;
   } finally {
     setLoading(false);
     // Scroll the summary into view smoothly

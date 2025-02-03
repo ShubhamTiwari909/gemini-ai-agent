@@ -68,15 +68,22 @@ const ResponseRenderer = ({
       {summary && (
         <div className={`${loading ? "select-none" : ""} ${container}`}>
           {filePreview && (
-            <div className={imageContainer}>
-              <Image
-                src={filePreview || ""}
-                alt={prompt || "File preview"}
-                width={400}
-                height={400}
-                className="w-full h-96 object-contain"
-              />
-            </div>
+            <>
+              <div className={imageContainer}>
+                <Image
+                  src={filePreview || ""}
+                  alt={prompt || "File preview"}
+                  width={400}
+                  height={400}
+                  className="w-full h-96 object-contain"
+                />
+              </div>
+              {createdAt && (
+                <p className="text-sm lg:text-lg text-base-content font-bold">
+                  Created at - {formatDate(createdAt || "")}
+                </p>
+              )}
+            </>
           )}
           {!filePreview && prompt ? (
             <div className="mb-10 lg:mb-0">

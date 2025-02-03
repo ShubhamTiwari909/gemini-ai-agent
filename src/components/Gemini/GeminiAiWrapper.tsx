@@ -92,14 +92,14 @@ const GeminiAiWrapper = ({
     })
       .then((data) => {
         addHistoryToDb({
-          data,
+          data: data?.data,
           input: file?.name || "",
           user,
           expressUrl,
           setPrompt,
           updateLocalHistory,
           localHistory,
-          filePreview,
+          filePreview: data?.filePreview,
         });
       })
       .catch((error) => {
