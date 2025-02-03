@@ -160,6 +160,7 @@ export const addHistoryToDb = async (addHistoryToDb: AddHistoryToDB) => {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
+      username: user?.name,
       prompt: input,
       response: data.summary,
       filePreview: filePreview || "",

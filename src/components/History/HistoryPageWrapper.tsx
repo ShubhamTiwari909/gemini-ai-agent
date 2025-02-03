@@ -16,6 +16,7 @@ const HistoryPageWrapper = ({ activeHistory }: { activeHistory: History }) => {
 
   return (
     <ResponseRenderer
+      username={activeHistory.username || ""}
       filePreview={activeHistory?.filePreview || ""}
       prompt={activeHistory?.prompt || ""}
       summaryRef={summaryRef}

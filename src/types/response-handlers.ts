@@ -31,6 +31,7 @@ export type AddHistoryToDB = {
 
 export type History = {
   _id?: string | undefined;
+  username?: string;
   historyId: string;
   email: string;
   prompt: string;

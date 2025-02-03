@@ -19,6 +19,7 @@ export const childClassses = {
 };
 
 const ResponseRenderer = ({
+  username,
   filePreview,
   prompt,
   summaryRef,
@@ -28,6 +29,7 @@ const ResponseRenderer = ({
   className,
   childClassNames = childClassses,
 }: {
+  username?: string;
   filePreview?: string | null;
   prompt?: string;
   summaryRef: React.RefObject<HTMLDivElement | null>;
@@ -78,21 +80,13 @@ const ResponseRenderer = ({
                   className="w-full h-96 object-contain"
                 />
               </div>
-              {createdAt && (
-                <p className="text-sm lg:text-lg text-base-content font-bold">
-                  Created at - {formatDate(createdAt || "")}
-                </p>
-              )}
+              <CreatedAtByUsername createdAt={createdAt} username={username} />
             </>
           )}
           {!filePreview && prompt ? (
             <div className="mb-10 lg:mb-0">
               <h2 className={heading}>{prompt}</h2>
-              {createdAt && (
-                <p className="text-sm lg:text-lg text-base-content font-bold">
-                  Created at - {formatDate(createdAt || "")}
-                </p>
-              )}
+              <CreatedAtByUsername createdAt={createdAt} username={username} />
             </div>
           ) : null}
           <TextToSpeech text={summary} className={textToSpeech} />
@@ -187,6 +181,29 @@ const Loader = ({
           Refreshing content...
         </p>
       </div>
+    )
+  );
+};
+
+const CreatedAtByUsername = ({
+  createdAt,
+  username,
+}: {
+  createdAt: string | undefined;
+  username: string | undefined;
+}) => {
+  return (
+    createdAt && (
+      <p className="text-sm lg:text-lg text-base-content font-semibold">
+        Created - {formatDate(createdAt || "")} {username ? "by " : ""}
+        {username ? (
+          <span className="font-bold py-2 px-4 rounded-full bg-base-content text-base-100 ml-2">
+            {username}
+          </span>
+        ) : (
+          ""
+        )}
+      </p>
     )
   );
 };
