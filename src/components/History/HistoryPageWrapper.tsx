@@ -5,7 +5,13 @@ import ResponseRenderer, {
 import { History } from "@/types/response-handlers";
 import React, { useEffect, useRef } from "react";
 
-const HistoryPageWrapper = ({ activeHistory }: { activeHistory: History }) => {
+const HistoryPageWrapper = ({
+  activeHistory,
+  usermail,
+}: {
+  activeHistory: History;
+  usermail: string | undefined | null;
+}) => {
   const summaryRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -16,6 +22,7 @@ const HistoryPageWrapper = ({ activeHistory }: { activeHistory: History }) => {
 
   return (
     <ResponseRenderer
+      usermail={usermail}
       username={activeHistory.username || ""}
       filePreview={activeHistory?.filePreview || ""}
       prompt={activeHistory?.prompt || ""}

@@ -1,3 +1,4 @@
+import { auth } from "@/app/api/auth/nextAuth";
 import HistoryPageWrapper from "@/components/History/HistoryPageWrapper";
 import { notFound } from "next/navigation";
 import React from "react";
@@ -24,6 +25,7 @@ const fetchHistoryById = async (
 };
 const page = async ({ params }: { params: Promise<{ id: string }> }) => {
   const { id } = await params;
+  const session = await auth();
   const activeHistory = await fetchHistoryById(
     process.env.EXPRESS_API_URL || "",
     id,
@@ -33,7 +35,12 @@ const page = async ({ params }: { params: Promise<{ id: string }> }) => {
     notFound();
   }
 
-  return <HistoryPageWrapper activeHistory={activeHistory} />;
+  return (
+    <HistoryPageWrapper
+      usermail={session?.user?.email}
+      activeHistory={activeHistory}
+    />
+  );
 };
 
 export default page;

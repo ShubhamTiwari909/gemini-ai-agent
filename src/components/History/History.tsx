@@ -5,6 +5,7 @@ import { auth } from "@/app/api/auth/nextAuth";
 export const fetchHistory = async (
   expressUrl: string,
   email: string | null | undefined,
+  limit?: number,
 ) => {
   try {
     const response = await fetch(`${expressUrl}/history/find`, {
@@ -12,7 +13,7 @@ export const fetchHistory = async (
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ email }),
+      body: JSON.stringify({ email, limit }),
     });
 
     const data = await response.json();

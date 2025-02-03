@@ -42,6 +42,7 @@ const addUsingUserToDb = async (user: User) => {
       name: user?.name, // User's name
       email: user?.email, // User's email
       userId: Math.floor(Math.random() * 999999099).toString(), // Randomly generated user ID
+      image: user?.image, // User's image
     }),
   });
 };

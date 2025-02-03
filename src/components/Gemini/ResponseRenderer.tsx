@@ -7,6 +7,7 @@ import { FaCopy, FaRegCopy } from "react-icons/fa";
 import TextToSpeech from "../TextToSpeech";
 import Image from "next/image";
 import { formatDate } from "@/lib/utils";
+import Link from "next/link";
 
 export const childClassses = {
   container: "w-full p-2.5 border border-solid border-cyan-300 rounded-lg",
@@ -19,6 +20,7 @@ export const childClassses = {
 };
 
 const ResponseRenderer = ({
+  usermail,
   username,
   filePreview,
   prompt,
@@ -29,6 +31,7 @@ const ResponseRenderer = ({
   className,
   childClassNames = childClassses,
 }: {
+  usermail?: string | undefined | null;
   username?: string;
   filePreview?: string | null;
   prompt?: string;
@@ -80,13 +83,21 @@ const ResponseRenderer = ({
                   className="w-full h-96 object-contain"
                 />
               </div>
-              <CreatedAtByUsername createdAt={createdAt} username={username} />
+              <CreatedAtByUsername
+                usermail={usermail}
+                createdAt={createdAt}
+                username={username}
+              />
             </>
           )}
           {!filePreview && prompt ? (
             <div className="mb-10 lg:mb-0">
               <h2 className={heading}>{prompt}</h2>
-              <CreatedAtByUsername createdAt={createdAt} username={username} />
+              <CreatedAtByUsername
+                usermail={usermail}
+                createdAt={createdAt}
+                username={username}
+              />
             </div>
           ) : null}
           <TextToSpeech text={summary} className={textToSpeech} />
@@ -188,18 +199,23 @@ const Loader = ({
 const CreatedAtByUsername = ({
   createdAt,
   username,
+  usermail,
 }: {
   createdAt: string | undefined;
   username: string | undefined;
+  usermail: string | undefined | null;
 }) => {
   return (
     createdAt && (
       <p className="text-sm lg:text-lg text-base-content font-semibold">
         Created - {formatDate(createdAt || "")} {username ? "by " : ""}
         {username ? (
-          <span className="font-bold py-2 px-4 rounded-full bg-base-content text-base-100 ml-2">
+          <Link
+            href={`/users/${usermail}`}
+            className="font-bold py-2 px-4 rounded-full bg-base-content text-base-100 ml-2"
+          >
             {username}
-          </span>
+          </Link>
         ) : (
           ""
         )}
