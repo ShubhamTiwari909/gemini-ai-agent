@@ -30,7 +30,7 @@ export const formatDate = (dateString: string) => {
  *   - addHistoryToDb: A function to add the history to the database
  */
 export const handleSummarize = async (handleSummarize: HandleSummarize) => {
-  const { input, setLoading, setSummary, summaryRef, setFileName } =
+  const { input, setLoading, setSummary, summaryRef, setFileName, csrfToken } =
     handleSummarize;
   setLoading(true);
   try {
@@ -38,7 +38,7 @@ export const handleSummarize = async (handleSummarize: HandleSummarize) => {
     const response = await fetch("/api/gemini-model", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ text: input }),
+      body: JSON.stringify({ text: input, csrfToken }),
     });
 
     // Parse the response data
@@ -82,6 +82,7 @@ export const handleImageResponse = async (
     setSummary,
     summaryRef,
     setFileName,
+    csrfToken,
   } = handleImageResponse;
   setLoading(true);
   try {
@@ -109,7 +110,7 @@ export const handleImageResponse = async (
         body: JSON.stringify({
           image: fileBase64,
           mimeType: file.type,
-          demo: "hello",
+          csrfToken,
         }),
       });
       // Parse the response data

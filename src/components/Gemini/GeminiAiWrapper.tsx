@@ -1,5 +1,5 @@
 "use client";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import FormControls from "./FormControls";
 import ResponseRenderer from "./ResponseRenderer";
 import { Session } from "next-auth";
@@ -56,6 +56,22 @@ const GeminiAiWrapper = ({
   // State to store the input file preview
   const [filePreview, setFilePreview] = useState<string | null>(null);
 
+  const [csrfToken, setCsrfToken] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchCsrfToken = async () => {
+      try {
+        const response = await fetch("/api/csrf");
+        const data = await response.json();
+        setCsrfToken(data.csrfToken);
+      } catch (error) {
+        console.error("Failed to fetch CSRF token:", error);
+      }
+    };
+
+    fetchCsrfToken();
+  }, []);
+
   const handleSummarizeFromAi = async (input: string) => {
     await handleSummarize({
       input,
@@ -63,6 +79,7 @@ const GeminiAiWrapper = ({
       setSummary,
       summaryRef,
       setFileName,
+      csrfToken,
     })
       .then((data) => {
         addHistoryToDb({
@@ -89,6 +106,7 @@ const GeminiAiWrapper = ({
       setSummary,
       summaryRef,
       setFileName,
+      csrfToken,
     })
       .then((data) => {
         addHistoryToDb({

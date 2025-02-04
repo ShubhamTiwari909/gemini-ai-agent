@@ -1,7 +1,12 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
+import csrf from "csrf";
+import { NextResponse } from "next/server";
 
 const genAI = new GoogleGenerativeAI(process.env.GOOGLE_GEMINI_API || "");
 const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+
+const tokens = new csrf();
+const secret = process.env.CSRF_SECRET || tokens.secretSync();
 
 /**
  * API route for generating content using Gemini AI model.
@@ -12,6 +17,14 @@ export async function POST(req: Request): Promise<Response> {
    */
   const data = await req.json();
   const prompt = data.text || "Explain how AI works";
+  const token = data.csrfToken || "";
+
+  console.log(token);
+
+  // Validate CSRF token
+  if (!tokens.verify(secret, token)) {
+    return NextResponse.json({ error: "Invalid CSRF token" }, { status: 403 });
+  }
 
   /**
    * Use the Gemini AI model to generate content from the prompt.
