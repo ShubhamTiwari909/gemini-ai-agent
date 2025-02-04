@@ -50,7 +50,7 @@ const Dropdown = ({
         tabIndex={0}
         role="button"
         onClick={handleFocus}
-        className="btn btn-outline m-1 !pointer-events-auto disabled:cursor-not-allowed"
+        className="btn btn-primary btn-outline m-1 !pointer-events-auto disabled:cursor-not-allowed"
         disabled={loading}
       >
         {title}

@@ -10,10 +10,10 @@ const Header = async () => {
     <HeaderWrapper>
       {session?.user ? (
         <>
-          <Link className="btn btn-primary btn-outline" href="/">
+          <Link className="btn" href="/">
             Home
           </Link>
-          <Link className="btn btn-info btn-outline" href="/profile">
+          <Link className="btn" href="/profile">
             Profile
           </Link>
         </>

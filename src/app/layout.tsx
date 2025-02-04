@@ -26,12 +26,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" data-theme="sunset">
+    <html lang="en" data-theme="synthwave">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <Header />
-        <main className="mt-28">{children}</main>
+        <main className="mt-17 lg:mt-20">{children}</main>
       </body>
     </html>
   );

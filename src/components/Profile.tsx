@@ -1,4 +1,3 @@
-"use client";
 import React from "react";
 import Image from "next/image";
 import { User } from "next-auth";
@@ -9,7 +8,7 @@ const Profile = async ({ user }: { user: User | undefined }) => {
       <div className="m-2.5 overflow-hidden rounded-md h-80 flex justify-center items-center">
         <Image
           className="w-full h-full object-cover"
-          src={user?.image || ""}
+          src={user?.image?.replace("s96", "s400") || ""}
           alt="profile-picture"
           width={500}
           height={500}

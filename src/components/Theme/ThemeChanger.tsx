@@ -35,8 +35,10 @@ export const daisyUIThemes = [
 ];
 
 const ThemeChanger = ({ closeModal }: { closeModal: () => void }) => {
+  const [selected, setSelected] = React.useState<string | null>("");
   useEffect(() => {
     themeChange(false);
+    setSelected(localStorage.getItem("theme") || "synthwave");
     // 👆 false parameter is required for react project
   }, []);
   return (
@@ -52,6 +54,8 @@ const ThemeChanger = ({ closeModal }: { closeModal: () => void }) => {
               data-set-theme={theme}
               value={theme}
               onClick={closeModal}
+              onChange={(e) => setSelected(e.target.value)}
+              checked={selected === theme}
             />
           </label>
         </div>

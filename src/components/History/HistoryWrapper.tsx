@@ -198,7 +198,7 @@ export default HistoryWrapper;
 
 const ButtonOpen = ({ handleButtonOpen }: { handleButtonOpen: () => void }) => (
   <button
-    className="absolute z-30 btn btn-sm lg:btn-md btn-info left-5 top-5"
+    className="absolute z-30 btn btn-sm lg:btn-md btn-outline left-5 top-5"
     onClick={handleButtonOpen}
   >
     <FaArrowRight className="size-4 lg:size-6" />
@@ -210,7 +210,7 @@ const ButtonClose = ({
 }: {
   handleButtonClose: () => void;
 }) => (
-  <button className="btn btn-info" onClick={handleButtonClose}>
+  <button className="btn btn-outline" onClick={handleButtonClose}>
     <FaArrowLeft className="size-4 lg:size-6" />
   </button>
 );

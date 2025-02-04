@@ -16,9 +16,6 @@ const HeaderWrapper = ({ children }: { children: React.ReactNode }) => {
   // State to track if the navigation menu is open
   const [isOpen, setIsOpen] = React.useState(false);
 
-  // State to control the background color of the header based on scroll position
-  const [headerBg, setHeaderBg] = React.useState("bg-transparent");
-
   // Reference to the button element to detect outside clicks
   const buttonRef = React.useRef<HTMLButtonElement>(null);
 
@@ -36,24 +33,10 @@ const HeaderWrapper = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
-  /**
-   * Handles scroll events to update the header background color.
-   */
-  const handleScroll = () => {
-    if (window.scrollY > 50) {
-      setHeaderBg("bg-slate-900");
-    } else {
-      setHeaderBg("bg-transparent");
-    }
-  };
-
   // Set up event listeners for outside clicks and scrolling
   useEffect(() => {
     const controller = new AbortController();
     document.addEventListener("mousedown", handleClickOutside, {
-      signal: controller.signal,
-    });
-    document.addEventListener("scroll", handleScroll, {
       signal: controller.signal,
     });
     return () => {
@@ -62,17 +45,15 @@ const HeaderWrapper = ({ children }: { children: React.ReactNode }) => {
   }, []);
 
   return (
-    <header
-      className={`flex justify-between fixed w-full top-0 z-40 ${headerBg}`}
-    >
+    <header className="flex justify-between fixed w-full top-0 z-40 bg-base-content">
       <div className="flex justify-between relative z-50 w-full py-5 lg:px-16 px-5">
         <Link href="/">
           <Image
             src="/gemini-zentauri-logo.png"
             alt="logo"
-            width={150}
-            height={80}
-            className="w-32 lg:w-40"
+            width={100}
+            height={50}
+            className="w-20 lg:w-24"
           />
         </Link>
         <button
@@ -80,7 +61,7 @@ const HeaderWrapper = ({ children }: { children: React.ReactNode }) => {
           ref={buttonRef}
           onClick={() => setIsOpen(!isOpen)}
         >
-          <FaHamburger size="1.5rem" className="text-base-content" />
+          <FaHamburger size="1.5rem" className="text-base-100" />
         </button>
       </div>
       <div

@@ -17,7 +17,7 @@ const page = async () => {
     redirect("/login");
   }
   return (
-    <section className="min-h-screen px-5 py-0 mx-auto max-w-7xl lg:px-0">
+    <section className="min-h-screen px-5 py-0 mx-auto max-w-7xl lg:px-0 pt-10">
       <div>
         <h1 className="mb-10 font-sans text-4xl font-bold text-center lg:text-6xl">
           Gemini AI Text Generator

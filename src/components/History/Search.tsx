@@ -8,7 +8,7 @@ const Search = ({
   return (
     <input
       type="text"
-      className="input input-info input-bordered"
+      className="input input-bordered"
       onChange={(e) => setSearch(e.target.value)}
       placeholder="Search history..."
     />

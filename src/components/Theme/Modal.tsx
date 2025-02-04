@@ -36,10 +36,7 @@ const Modal = () => {
   return (
     <div className="flex justify-center">
       {/* A button to open the dialog. */}
-      <button
-        className="btn btn-secondary btn-outline w-full lg:w-fit"
-        onClick={openModal}
-      >
+      <button className="btn w-full lg:w-fit" onClick={openModal}>
         Themes
       </button>
       {/* The dialog element. */}

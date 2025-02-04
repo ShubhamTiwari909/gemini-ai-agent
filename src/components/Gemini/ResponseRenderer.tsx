@@ -212,7 +212,7 @@ const CreatedAtByUsername = ({
         {username ? (
           <Link
             href={`/users/${usermail}`}
-            className="font-bold py-2 px-4 rounded-full bg-base-content text-base-100 ml-2"
+            className="mt-2 lg:mt-0 inline-block font-bold py-2 px-4 rounded-full bg-base-content text-base-100 lg:ml-2"
           >
             {username}
           </Link>
