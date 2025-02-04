@@ -15,6 +15,7 @@ const ImageUpload = ({
   const fileName = useGlobalStore((state) => state.fileName);
   const setFileName = useGlobalStore((state) => state.setFileName);
   const [focused, setFocused] = React.useState(false);
+  const loading = useGlobalStore((state) => state.loading);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files?.[0];
@@ -48,7 +49,7 @@ const ImageUpload = ({
       transition={{ duration: 0.4, ease: "easeInOut" }}
       onDragOver={(e) => e.preventDefault()}
       onDrop={handleDragAndDrop}
-      className="p-4 rounded-xl border border-solid border-base-content"
+      className={`p-4 rounded-xl border border-solid border-base-content ${loading ? "cursor-not-allowed" : ""}`}
     >
       <motion.label
         initial={{ color: "" }}
@@ -69,7 +70,8 @@ const ImageUpload = ({
           onDragOver={(e) => e.preventDefault()}
           onDrop={handleDragAndDrop}
           type="file"
-          className="w-full text-slate-800 font-semibold text-sm bg-sky-100 border file:cursor-pointer cursor-pointer file:border-0 file:py-3 file:px-4 file:mr-4 file:bg-sky-500 file:hover:bg-sky-800 file:text-gray-100 rounded"
+          disabled={loading}
+          className="w-full text-slate-800 font-semibold text-sm bg-sky-100 border file:cursor-pointer cursor-pointer disabled:cursor-not-allowed disabled:file:cursor-not-allowed file:border-0 file:py-3 file:px-4 file:mr-4 file:bg-sky-500 file:hover:bg-sky-800 file:text-gray-100 rounded"
         />
         {fileName ? (
           <motion.p
