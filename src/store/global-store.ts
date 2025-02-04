@@ -3,6 +3,8 @@ import { create } from "zustand";
 import { devtools } from "zustand/middleware";
 
 interface BearState {
+  inputText: string;
+  setInputText: (text: string) => void;
   history: History[];
   updateHistory: (history: History[]) => void;
   isSpeechPaused: boolean;
@@ -19,6 +21,8 @@ interface BearState {
 
 export const useGlobalStore = create<BearState>()(
   devtools((set) => ({
+    inputText: "",
+    setInputText: (text) => set({ inputText: text }),
     history: [],
     updateHistory: (history) => set({ history }),
     isSpeechPaused: true,

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import Dropdown from "../Dropdown";
 import SpeechRecognitionUI from "./SpeechRecognition";
 import ImageUpload from "./ImageUpload";
@@ -34,10 +34,10 @@ const FormControls = ({
   handleImageResponse,
   className,
 }: FormControlsProps) => {
-  const [inputText, setInputText] = useState("");
   const fileInputRef = React.useRef<HTMLInputElement>(null);
   const setIsPaused = useGlobalStore((state) => state.setIsSpeechPaused);
   const loading = useGlobalStore((state) => state.loading);
+  const setInputText = useGlobalStore((state) => state.setInputText);
 
   useEffect(() => {
     if (!loading) {
@@ -56,22 +56,8 @@ const FormControls = ({
 
   return (
     <section className={`${className} relative`}>
-      <SpeechRecognitionUI stopSpeech={stopSpeech} setInput={setInputText} />
-      <motion.textarea
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{
-          duration: 0.5,
-          ease: "easeInOut",
-          scale: { type: "spring", visualDuration: 0.4, bounce: 0.5 },
-        }}
-        value={inputText}
-        onChange={(e) => setInputText(e.target.value)}
-        placeholder="Paste your prompt here..."
-        rows={10}
-        className="text-pretty textarea textarea-info w-full mb-6 lg:mb-10"
-        disabled={loading || !!file}
-      />
+      <SpeechRecognitionUI stopSpeech={stopSpeech} />
+      <Textarea file={file} />
       <div className="flex flex-wrap gap-5 items-center justify-center lg:gap-10">
         <Dropdown
           onClick={handleSummarize}
@@ -85,7 +71,6 @@ const FormControls = ({
           loading={loading}
           handleSummarize={handleSummarize}
           handleImageResponse={handleImageResponse}
-          inputText={inputText}
           file={file}
         />
         <ImageUpload
@@ -105,9 +90,9 @@ const GenerateButton = ({
   loading,
   handleSummarize,
   handleImageResponse,
-  inputText,
   file,
 }: GenerateButtonProps) => {
+  const inputText = useGlobalStore((state) => state.inputText);
   return (
     <motion.button
       initial={{ opacity: 0 }}
@@ -136,5 +121,28 @@ const GenerateButton = ({
         )}
       </span>
     </motion.button>
+  );
+};
+
+const Textarea = ({ file }: { file: File | null }) => {
+  const inputText = useGlobalStore((state) => state.inputText);
+  const setInputText = useGlobalStore((state) => state.setInputText);
+  const loading = useGlobalStore((state) => state.loading);
+  return (
+    <motion.textarea
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{
+        duration: 0.5,
+        ease: "easeInOut",
+        scale: { type: "spring", visualDuration: 0.4, bounce: 0.5 },
+      }}
+      value={inputText}
+      onChange={(e) => setInputText(e.target.value)}
+      placeholder="Paste your prompt here..."
+      rows={10}
+      className="text-pretty textarea textarea-info w-full mb-6 lg:mb-10"
+      disabled={loading || !!file}
+    />
   );
 };

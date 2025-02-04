@@ -3,7 +3,6 @@ export type GenerateButtonProps = {
   loading: boolean;
   handleSummarize: (item: string) => void;
   handleImageResponse: () => void;
-  inputText: string;
   file: File | null;
 };
 export type FormControlsProps = {
