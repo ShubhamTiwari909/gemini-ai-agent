@@ -1,9 +1,16 @@
+"use client";
 import React, { useRef } from "react";
 import Markdown, { ExtraProps } from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { atomDark } from "react-syntax-highlighter/dist/esm/styles/prism";
 import { FaCopy, FaRegCopy } from "react-icons/fa";
+import { Viewer } from "@react-pdf-viewer/core";
+import { defaultLayoutPlugin } from "@react-pdf-viewer/default-layout";
+import "@react-pdf-viewer/core/lib/styles/index.css";
+import "@react-pdf-viewer/default-layout/lib/styles/index.css";
+import { Worker } from "@react-pdf-viewer/core";
+
 import TextToSpeech from "../TextToSpeech";
 import Image from "next/image";
 import { formatDate } from "@/lib/utils";
@@ -51,6 +58,8 @@ const ResponseRenderer = ({
   const [copySuccess, setCopySuccess] = React.useState(false);
   const syntaxHighlighterRef = useRef<SyntaxHighlighter>(null);
 
+  const defaultLayoutPluginInstance = defaultLayoutPlugin();
+
   const { container, imageContainer, heading, textToSpeech, markdown } =
     childClassNames;
 
@@ -75,13 +84,22 @@ const ResponseRenderer = ({
           {filePreview && (
             <>
               <div className={imageContainer}>
-                <Image
-                  src={filePreview || ""}
-                  alt={prompt || "File preview"}
-                  width={400}
-                  height={400}
-                  className="w-full h-96 object-contain"
-                />
+                {filePreview.includes("application/pdf") ? (
+                  <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.4.120/build/pdf.worker.min.js">
+                    <Viewer
+                      fileUrl={filePreview}
+                      plugins={[defaultLayoutPluginInstance]}
+                    />
+                  </Worker>
+                ) : (
+                  <Image
+                    src={filePreview || ""}
+                    alt={prompt || "File preview"}
+                    width={400}
+                    height={400}
+                    className="w-full h-96 object-contain"
+                  />
+                )}
               </div>
               <CreatedAtByUsername
                 usermail={usermail}

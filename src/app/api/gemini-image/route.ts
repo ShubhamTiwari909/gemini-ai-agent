@@ -40,7 +40,9 @@ export async function POST(req: Request): Promise<Response> {
         mimeType: mimeType,
       },
     },
-    "Describe this image in detail and suggest some captions",
+    mimeType.includes("application/pdf")
+      ? "Describe this image in detail and suggest some captions"
+      : "Summarize this document",
   ]);
   /**
    * Return the generated content as a JSON response.

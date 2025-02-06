@@ -64,7 +64,7 @@ const ImageUpload = ({
       <div className="relative overflow-hidden">
         <input
           ref={fileInputRef}
-          accept="image/*"
+          accept="image/*, .pdf"
           onChange={handleFileChange}
           onClick={() => stopSpeech()}
           onDragOver={(e) => e.preventDefault()}
@@ -80,7 +80,7 @@ const ImageUpload = ({
               color: focused ? "var(--color-blue-500)" : "",
             }}
             transition={{ duration: 0.4, ease: "easeInOut" }}
-            className="absolute top-0 right-0 text-sm text-slate-800 w-52 py-3 pl-2 h-full text-ellipsis overflow-hidden text-nowrap bg-white z-10"
+            className="absolute top-0 right-0 text-sm text-slate-800 w-110 py-3 pl-2 mt-0.5 h-[calc(100%-4px)] align-middle text-ellipsis overflow-hidden text-nowrap bg-white z-10"
           >
             {fileName}
           </motion.p>
@@ -92,9 +92,27 @@ const ImageUpload = ({
           color: focused ? "var(--color-blue-500)" : "",
         }}
         transition={{ duration: 0.4, ease: "easeInOut" }}
-        className="text-xs text-base-content mt-2"
+        className="text-xs text-base-content mt-2 mb-4"
       >
-        PNG, JPG SVG, WEBP, and GIF are Allowed.
+        PNG, JPG, SVG, WEBP, GIF and PDFs are Allowed.
+      </motion.p>
+      <motion.p
+        initial={{ color: "" }}
+        animate={{
+          color: focused ? "var(--color-blue-500)" : "",
+        }}
+        transition={{ duration: 0.4, ease: "easeInOut" }}
+        className="text-xs text-base-content mt-2 leading-8"
+      >
+        NOTE: For{" "}
+        <strong className="bg-base-content text-base-100 py-1 px-2 rounded-full text-xs">
+          Images
+        </strong>{" "}
+        , it will provide description and captions and for{" "}
+        <strong className="bg-base-content text-base-100 py-1 px-2 rounded-full text-xs">
+          PDF
+        </strong>
+        , it will summarize it.
       </motion.p>
     </motion.div>
   );
