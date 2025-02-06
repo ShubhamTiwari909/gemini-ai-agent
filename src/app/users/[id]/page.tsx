@@ -52,7 +52,9 @@ const page = async ({ params }: { params: Promise<{ id: string }> }) => {
           className="rounded-full mb-5 border-4 border-base-100"
         />
         <h2 className="mb-2 text-2xl">{data.name}</h2>
-        <p className="break-words max-w-40 lg:max-w-full">{data.email}</p>
+        <p className="break-words lg:max-xl:max-w-40 lg:max-w-full">
+          {data.email}
+        </p>
       </div>
       <div className="w-full px-5 lg:col-span-9">
         <h2 className="text-2xl font-semibold mb-4 p-3 rounded-2xl bg-base-content text-base-100 w-fit">

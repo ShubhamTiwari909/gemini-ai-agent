@@ -91,7 +91,7 @@ const ResponseRenderer = ({
             </>
           )}
           {!filePreview && prompt ? (
-            <div className="mb-10 lg:mb-0">
+            <div className="pt-5 lg:pt-0 mb-10 lg:mb-0">
               <h2 className={heading}>{prompt}</h2>
               <CreatedAtByUsername
                 usermail={usermail}
