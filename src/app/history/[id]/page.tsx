@@ -14,6 +14,7 @@ const fetchHistoryById = async (
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ id }),
+      next: { revalidate: 60 * 60 },
     });
 
     const data = await response.json();
