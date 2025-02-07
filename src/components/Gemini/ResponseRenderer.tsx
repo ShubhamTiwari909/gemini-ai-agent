@@ -13,10 +13,10 @@ import { Worker } from "@react-pdf-viewer/core";
 
 import TextToSpeech from "../TextToSpeech";
 import Image from "next/image";
-import { formatDate } from "@/lib/utils";
+import { base64ToText, formatDate } from "@/lib/utils";
 import Link from "next/link";
 
-export const childClassses = {
+export const childClasses = {
   container: "w-full p-2.5 border border-solid border-cyan-300 rounded-lg",
   imageContainer:
     "flex justify-center mb-5 border border-solid border-base-content rounded-xl",
@@ -24,6 +24,18 @@ export const childClassses = {
     "text-3xl my-5 bg-clip-text text-transparent bg-gradient-to-r from-pink-500 to-violet-500",
   textToSpeech: "absolute lg:right-8 lg:top-8 right-3 top-0 ",
   markdown: "prose prose-base w-full max-w-full lg:pr-28 py-5",
+};
+
+const extractLanguage = (filePreview: string) => {
+  const contentType = filePreview.split(";")[0];
+  const languageType = {
+    "data:text/html": "html",
+    "data:text/css": "css",
+    "data:text/javascript": "javascript",
+    "data:text/typescript": "typescript",
+    "data:text/python": "python",
+  };
+  return languageType[contentType as keyof typeof languageType];
 };
 
 const ResponseRenderer = ({
@@ -36,7 +48,7 @@ const ResponseRenderer = ({
   loading,
   createdAt,
   className,
-  childClassNames = childClassses,
+  childClassNames = childClasses,
 }: {
   usermail?: string | undefined | null;
   username?: string;
@@ -84,14 +96,15 @@ const ResponseRenderer = ({
           {filePreview && (
             <>
               <div className={imageContainer}>
-                {filePreview.includes("application/pdf") ? (
-                  <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.4.120/build/pdf.worker.min.js">
+                {filePreview.includes("application/pdf") && (
+                  <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.min.js">
                     <Viewer
                       fileUrl={filePreview}
                       plugins={[defaultLayoutPluginInstance]}
                     />
                   </Worker>
-                ) : (
+                )}
+                {filePreview.includes("image") && (
                   <Image
                     src={filePreview || ""}
                     alt={prompt || "File preview"}
@@ -100,6 +113,18 @@ const ResponseRenderer = ({
                     className="w-full h-96 object-contain"
                   />
                 )}
+                <div className="[&_div]:!w-full w-full">
+                  <SyntaxHighlighter
+                    language={extractLanguage(filePreview)}
+                    PreTag="div"
+                    style={atomDark}
+                    ref={syntaxHighlighterRef}
+                    wrapLongLines
+                    showLineNumbers
+                  >
+                    {base64ToText(filePreview)}
+                  </SyntaxHighlighter>
+                </div>
               </div>
               <CreatedAtByUsername
                 usermail={usermail}
@@ -109,7 +134,7 @@ const ResponseRenderer = ({
             </>
           )}
           {!filePreview && prompt ? (
-            <div className="pt-5 lg:pt-0 mb-10 lg:mb-0">
+            <div className="lg:pt-0 mb-10 lg:mb-0 lg:mr-30">
               <h2 className={heading}>{prompt}</h2>
               <CreatedAtByUsername
                 usermail={usermail}

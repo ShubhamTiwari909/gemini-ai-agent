@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useRef, useState } from "react";
 import FormControls from "./FormControls";
-import ResponseRenderer from "./ResponseRenderer";
+import ResponseRenderer, { childClasses } from "./ResponseRenderer";
 import { Session } from "next-auth";
 import { useGlobalStore } from "@/store/global-store";
 import {
@@ -140,6 +140,10 @@ const GeminiAiWrapper = ({
         filePreview={filePreview}
         prompt={prompt}
         summaryRef={summaryRef}
+        childClassNames={{
+          ...childClasses,
+          textToSpeech: `${childClasses.textToSpeech} top-2`,
+        }}
       />
     </div>
   );

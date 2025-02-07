@@ -64,7 +64,7 @@ const ImageUpload = ({
       <div className="relative overflow-hidden">
         <input
           ref={fileInputRef}
-          accept="image/*, .pdf"
+          accept="image/*,.pdf,.html,.css,.js,.ts,.tsx,.py"
           onChange={handleFileChange}
           onClick={() => stopSpeech()}
           onDragOver={(e) => e.preventDefault()}

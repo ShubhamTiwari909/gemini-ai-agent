@@ -18,6 +18,16 @@ export const formatDate = (dateString: string) => {
   return date.toLocaleDateString("en-US", options);
 };
 
+export const base64ToText = (base64Data: string) => {
+  // Remove the "data:text/html;base64," prefix
+  const base64String = base64Data.split(",")[1];
+
+  // Decode Base64 to plain text
+  const decodedText = atob(base64String);
+
+  return decodedText;
+};
+
 /**
  * Handles summarizing content using the Gemini AI model.
  *
@@ -33,6 +43,7 @@ export const handleSummarize = async (handleSummarize: HandleSummarize) => {
   const { input, setLoading, setSummary, summaryRef, setFileName, csrfToken } =
     handleSummarize;
   setLoading(true);
+  setSummary("");
   try {
     // Send POST request to the Gemini AI model API with input text
     const response = await fetch("/api/gemini-model", {
@@ -85,6 +96,8 @@ export const handleImageResponse = async (
     csrfToken,
   } = handleImageResponse;
   setLoading(true);
+  setSummary("");
+  setFilePreview(null);
   try {
     if (file) {
       const fileBase64 = await new Promise((resolve, reject) => {

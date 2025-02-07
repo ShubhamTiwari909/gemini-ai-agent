@@ -1,6 +1,6 @@
 "use client";
 import ResponseRenderer, {
-  childClassses,
+  childClasses,
 } from "@/components/Gemini/ResponseRenderer";
 import { History } from "@/types/response-handlers";
 import React, { useEffect, useRef } from "react";
@@ -31,12 +31,12 @@ const HistoryPageWrapper = ({
       createdAt={activeHistory?.createdAt || ""}
       className="p-3 lg:p-5 lg:mt-0 !pt-5"
       childClassNames={{
-        ...childClassses,
-        container: "w-full p-2.5 lg:p-5",
+        ...childClasses,
+        container: "w-full lg:p-5",
         heading: "text-3xl lg:text-5xl my-5 bg-clip-text text-base-content",
-        markdown: `${childClassses.markdown} pt-0 lg:pt-10`,
-        textToSpeech: `${childClassses.textToSpeech} top-2`,
-        imageContainer: `${childClassses.imageContainer} lg:w-[calc(100%-10rem)] mt-10 lg:mt-0`,
+        markdown: `${childClasses.markdown} pt-0 lg:pt-10`,
+        textToSpeech: `${childClasses.textToSpeech} top-2`,
+        imageContainer: `${childClasses.imageContainer} lg:w-[calc(100%-10rem)] mt-10 lg:mt-0`,
       }}
     />
   );

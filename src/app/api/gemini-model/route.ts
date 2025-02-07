@@ -3,7 +3,14 @@ import csrf from "csrf";
 import { NextResponse } from "next/server";
 
 const genAI = new GoogleGenerativeAI(process.env.GOOGLE_GEMINI_API || "");
-const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+const model = genAI.getGenerativeModel({
+  model: "gemini-2.0-flash-001",
+  tools: [
+    {
+      codeExecution: {},
+    },
+  ],
+});
 
 const tokens = new csrf();
 const secret = process.env.CSRF_SECRET || tokens.secretSync();
