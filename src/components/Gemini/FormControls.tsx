@@ -32,6 +32,7 @@ const FormControls = ({
   setFile,
   file,
   handleImageResponse,
+  setFilePreview,
   className,
 }: FormControlsProps) => {
   const fileInputRef = React.useRef<HTMLInputElement>(null);
@@ -67,6 +68,7 @@ const FormControls = ({
           {...promptsSample}
         />
         <GenerateButton
+          setPreview={setFilePreview}
           stopSpeech={stopSpeech}
           loading={loading}
           handleSummarize={handleSummarize}
@@ -90,9 +92,11 @@ const GenerateButton = ({
   loading,
   handleSummarize,
   handleImageResponse,
+  setPreview,
   file,
 }: GenerateButtonProps) => {
   const inputText = useGlobalStore((state) => state.inputText);
+
   return (
     <motion.button
       initial={{ opacity: 0 }}
@@ -100,6 +104,9 @@ const GenerateButton = ({
       transition={{ duration: 0.4, ease: "easeInOut", times: 1 }}
       onClick={() => {
         stopSpeech();
+        if (inputText !== "") {
+          setPreview(null);
+        }
         if (file?.name) {
           handleImageResponse();
         } else {

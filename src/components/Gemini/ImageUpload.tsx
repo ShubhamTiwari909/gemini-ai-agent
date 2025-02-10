@@ -16,8 +16,10 @@ const ImageUpload = ({
   const setFileName = useGlobalStore((state) => state.setFileName);
   const [focused, setFocused] = React.useState(false);
   const loading = useGlobalStore((state) => state.loading);
+  const setInputText = useGlobalStore((state) => state.setInputText);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInputText("");
     const selectedFile = e.target.files?.[0];
     if (selectedFile) {
       setFile(selectedFile);
@@ -28,6 +30,7 @@ const ImageUpload = ({
     e.preventDefault();
     const droppedFile = e.dataTransfer.files?.[0];
     if (droppedFile) {
+      setInputText("");
       setFile(droppedFile);
       setFileName(droppedFile.name);
       stopSpeech();

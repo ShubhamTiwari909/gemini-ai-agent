@@ -130,6 +130,7 @@ const GeminiAiWrapper = ({
         file={file}
         setFile={setFile}
         handleImageResponse={handleImageResponseFromAi}
+        setFilePreview={setFilePreview}
         className="lg:mb-20"
       />
       <ResponseRenderer
