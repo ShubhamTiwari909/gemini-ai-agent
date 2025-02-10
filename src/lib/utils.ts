@@ -172,6 +172,7 @@ export const addHistoryToDb = async (addHistoryToDb: AddHistoryToDB) => {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      Authorization: `Bearer ${process.env.NEXT_PUBLIC_API_AUTH_TOKEN}`,
     },
     body: JSON.stringify({
       username: user?.name,
@@ -183,6 +184,7 @@ export const addHistoryToDb = async (addHistoryToDb: AddHistoryToDB) => {
     }),
   });
   const response = await result.json();
+  console.log(response);
 
   // Update the local history state
   updateLocalHistory([

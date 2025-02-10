@@ -37,6 +37,7 @@ const addUsingUserToDb = async (user: User) => {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      Authorization: `Bearer ${process.env.API_AUTH_TOKEN}`,
     },
     body: JSON.stringify({
       name: user?.name, // User's name

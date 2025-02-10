@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import FormControls from "./FormControls";
 import ResponseRenderer, { childClasses } from "./ResponseRenderer";
 import { Session } from "next-auth";
@@ -56,73 +56,71 @@ const GeminiAiWrapper = ({
   // State to store the input file preview
   const [filePreview, setFilePreview] = useState<string | null>(null);
 
-  const [csrfToken, setCsrfToken] = useState<string | null>(null);
-
-  useEffect(() => {
-    const fetchCsrfToken = async () => {
-      try {
-        const response = await fetch("/api/csrf");
-        const data = await response.json();
-        setCsrfToken(data.csrfToken);
-      } catch (error) {
-        console.error("Failed to fetch CSRF token:", error);
-      }
-    };
-
-    fetchCsrfToken();
-  }, []);
-
   const handleSummarizeFromAi = async (input: string) => {
-    await handleSummarize({
-      input,
-      setLoading,
-      setSummary,
-      summaryRef,
-      setFileName,
-      csrfToken,
-    })
-      .then((data) => {
-        addHistoryToDb({
-          data,
-          input,
-          user,
-          expressUrl,
-          setPrompt,
-          updateLocalHistory,
-          localHistory,
-        });
+    const response = await fetch("/api/csrf");
+    const token = await response.json();
+
+    if (token) {
+      const csrfToken = token.csrfToken;
+      await handleSummarize({
+        input,
+        setLoading,
+        setSummary,
+        summaryRef,
+        setFileName,
+        csrfToken,
       })
-      .catch((error) => {
-        console.error(error);
-      });
+        .then((data) => {
+          addHistoryToDb({
+            data,
+            input,
+            user,
+            expressUrl,
+            setPrompt,
+            updateLocalHistory,
+            localHistory,
+          });
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    } else {
+      console.error("Failed to fetch CSRF token:");
+    }
   };
 
   const handleImageResponseFromAi = async () => {
-    await handleImageResponse({
-      setLoading,
-      file,
-      setFilePreview,
-      setFile,
-      setSummary,
-      summaryRef,
-      setFileName,
-      csrfToken,
-    })
-      .then((data) => {
-        addHistoryToDb({
-          data: data?.data,
-          input: file?.name || "",
-          user,
-          expressUrl,
-          setPrompt,
-          updateLocalHistory,
-          localHistory,
-          filePreview: data?.filePreview,
-        });
+    const response = await fetch("/api/csrf");
+    const token = await response.json();
+
+    if (token) {
+      const csrfToken = token.csrfToken;
+      await handleImageResponse({
+        setLoading,
+        file,
+        setFilePreview,
+        setFile,
+        setSummary,
+        summaryRef,
+        setFileName,
+        csrfToken,
       })
-      .catch((error) => {
-        console.error(error);
-      });
+        .then((data) => {
+          addHistoryToDb({
+            data: data?.data,
+            input: file?.name || "",
+            user,
+            expressUrl,
+            setPrompt,
+            updateLocalHistory,
+            localHistory,
+            filePreview: data?.filePreview,
+          });
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    }
   };
 
   return (

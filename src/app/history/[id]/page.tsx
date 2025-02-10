@@ -12,6 +12,7 @@ const fetchHistoryById = async (
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${process.env.API_AUTH_TOKEN}`,
       },
       body: JSON.stringify({ id }),
       next: { revalidate: 60 * 60 },

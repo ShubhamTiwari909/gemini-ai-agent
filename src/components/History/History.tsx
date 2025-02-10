@@ -12,6 +12,7 @@ export const fetchHistory = async (
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${process.env.API_AUTH_TOKEN}`,
       },
       body: JSON.stringify({ email, limit }),
     });
