@@ -113,18 +113,20 @@ const ResponseRenderer = ({
                     className="w-full h-96 object-contain"
                   />
                 )}
-                <div className="[&_div]:!w-full w-full">
-                  <SyntaxHighlighter
-                    language={extractLanguage(filePreview)}
-                    PreTag="div"
-                    style={atomDark}
-                    ref={syntaxHighlighterRef}
-                    wrapLongLines
-                    showLineNumbers
-                  >
-                    {base64ToText(filePreview)}
-                  </SyntaxHighlighter>
-                </div>
+                {filePreview.includes("text") && (
+                  <div className="[&_div]:!w-full w-full">
+                    <SyntaxHighlighter
+                      language={extractLanguage(filePreview)}
+                      PreTag="div"
+                      style={atomDark}
+                      ref={syntaxHighlighterRef}
+                      wrapLongLines
+                      showLineNumbers
+                    >
+                      {base64ToText(filePreview)}
+                    </SyntaxHighlighter>
+                  </div>
+                )}
               </div>
               <CreatedAtByUsername
                 usermail={usermail}

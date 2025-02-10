@@ -184,7 +184,6 @@ export const addHistoryToDb = async (addHistoryToDb: AddHistoryToDB) => {
     }),
   });
   const response = await result.json();
-  console.log(response);
 
   // Update the local history state
   updateLocalHistory([

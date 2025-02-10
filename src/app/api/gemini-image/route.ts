@@ -43,6 +43,15 @@ export async function POST(req: Request): Promise<Response> {
     });
   }
 
+  let revampedMimeType = mimeType;
+
+  if (mimeType.includes("application")) {
+    revampedMimeType = mimeType.replace("application/", "");
+  }
+  if (mimeType.includes("image")) {
+    revampedMimeType = "image";
+  }
+
   /**
    * Use the Gemini AI model to generate content from the prompt.
    */
@@ -53,7 +62,7 @@ export async function POST(req: Request): Promise<Response> {
         mimeType: mimeType,
       },
     },
-    mimeTypePrompt[mimeType as keyof typeof mimeTypePrompt],
+    mimeTypePrompt[revampedMimeType as keyof typeof mimeTypePrompt],
   ]);
   /**
    * Return the generated content as a JSON response.
