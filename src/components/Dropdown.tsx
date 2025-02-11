@@ -22,6 +22,7 @@ const Dropdown = ({
   setInputText,
   loading = false,
   stopSpeech,
+  setFilePreview,
 }: {
   title: string;
   itemsList: string[];
@@ -29,6 +30,7 @@ const Dropdown = ({
   setInputText?: (text: string) => void;
   loading?: boolean;
   stopSpeech?: () => void;
+  setFilePreview?: React.Dispatch<React.SetStateAction<string | null>>;
 }) => {
   const dropdownContentRef = React.useRef<HTMLUListElement>(null);
   /**
@@ -66,6 +68,7 @@ const Dropdown = ({
               onClick={() => {
                 setInputText?.(item);
                 onClick(item);
+                setFilePreview?.(null);
               }}
               disabled={loading}
             >

@@ -17,6 +17,7 @@ export type HandleImageResponse = SharedHandlerProps & {
   file: File | null;
   setFilePreview: (filePreview: string | null) => void;
   setFile: (file: File | null) => void;
+  language: string;
 };
 
 export type AddHistoryToDB = {

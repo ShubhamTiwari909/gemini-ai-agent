@@ -137,7 +137,12 @@ const ResponseRenderer = ({
           )}
           {!filePreview && prompt ? (
             <div className="lg:pt-0 mb-10 lg:mb-0 lg:mr-30">
-              <h2 className={heading}>{prompt}</h2>
+              <h2 className={heading}>
+                {prompt.slice(
+                  0,
+                  prompt.indexOf("- Generate the entire response in"),
+                )}
+              </h2>
               <CreatedAtByUsername
                 usermail={usermail}
                 createdAt={createdAt}

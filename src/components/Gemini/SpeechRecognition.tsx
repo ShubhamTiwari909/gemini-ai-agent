@@ -17,7 +17,7 @@ const SpeechRecognitionUI = ({ stopSpeech }: { stopSpeech: () => void }) => {
   }, [transcript]);
 
   return (
-    <div className="flex items-center gap-x-5 absolute z-10 right-3 top-44 lg:right-5 lg:top-5 bg-base-300 p-2.5 rounded-2xl">
+    <div className="flex items-center gap-x-5 absolute z-10 right-3 top-28 lg:right-5 lg:top-5 bg-base-300 p-2.5 rounded-2xl">
       <button
         className="cursor-pointer disabled:cursor-not-allowed"
         onClick={() => {

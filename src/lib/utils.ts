@@ -94,6 +94,7 @@ export const handleImageResponse = async (
     summaryRef,
     setFileName,
     csrfToken,
+    language,
   } = handleImageResponse;
   setLoading(true);
   setSummary("");
@@ -124,6 +125,7 @@ export const handleImageResponse = async (
           image: fileBase64,
           mimeType: file.type,
           csrfToken,
+          language,
         }),
       });
       // Parse the response data

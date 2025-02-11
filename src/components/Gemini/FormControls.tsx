@@ -65,8 +65,10 @@ const FormControls = ({
           setInputText={setInputText}
           loading={loading}
           stopSpeech={stopSpeech}
+          setFilePreview={setFilePreview}
           {...promptsSample}
         />
+        <LanguageDropdown stopSpeech={stopSpeech} />
         <GenerateButton
           setPreview={setFilePreview}
           stopSpeech={stopSpeech}
@@ -96,38 +98,43 @@ const GenerateButton = ({
   file,
 }: GenerateButtonProps) => {
   const inputText = useGlobalStore((state) => state.inputText);
+  const language = useGlobalStore((state) => state.language);
 
   return (
-    <motion.button
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.4, ease: "easeInOut", times: 1 }}
-      onClick={() => {
-        stopSpeech();
-        if (inputText !== "") {
-          setPreview(null);
-        }
-        if (file?.name) {
-          handleImageResponse();
-        } else {
-          handleSummarize(inputText);
-        }
-      }}
-      disabled={(loading || !inputText) && !file?.name}
-      className="relative inline-flex h-12 overflow-hidden rounded-full p-[1px] focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-50 disabled:cursor-not-allowed"
-    >
-      <span className="absolute inset-[-1000%] animate-[spin_2s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#E2CBFF_0%,#393BB2_50%,#E2CBFF_100%)]" />
-      <span className="inline-flex h-full w-full items-center justify-center rounded-full bg-slate-800 px-10 py-3 text-lg font-medium text-white backdrop-blur-3xl">
-        {loading ? (
-          <p className="text-white flex items-center gap-x-3">
-            Generating
-            <span className="inline-block size-5 animate-spin rounded-full border-4 border-r-transparent border-solid border-current"></span>
-          </p>
-        ) : (
-          "Generate"
-        )}
-      </span>
-    </motion.button>
+    <>
+      <motion.button
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.4, ease: "easeInOut", times: 1 }}
+        onClick={() => {
+          stopSpeech();
+          if (inputText !== "") {
+            setPreview(null);
+          }
+          if (file?.name) {
+            handleImageResponse();
+          } else {
+            handleSummarize(
+              `${inputText} - Generate the entire response in ${language} language`,
+            );
+          }
+        }}
+        disabled={(loading || !inputText) && !file?.name}
+        className="relative inline-flex h-12 overflow-hidden rounded-full p-[1px] focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-50 disabled:cursor-not-allowed"
+      >
+        <span className="absolute inset-[-1000%] animate-[spin_2s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#E2CBFF_0%,#393BB2_50%,#E2CBFF_100%)]" />
+        <p className="inline-flex h-full w-full items-center justify-center rounded-full bg-slate-800 px-5 lg:px-10 py-3 text-lg font-medium text-white backdrop-blur-3xl">
+          {loading ? (
+            <span className="text-white flex items-center gap-x-1">
+              Generating
+              <span className="inline-block size-5 animate-spin rounded-full border-4 border-r-transparent border-solid border-current"></span>
+            </span>
+          ) : (
+            "Generate"
+          )}
+        </p>
+      </motion.button>
+    </>
   );
 };
 
@@ -147,9 +154,80 @@ const Textarea = ({ file }: { file: File | null }) => {
       value={inputText}
       onChange={(e) => setInputText(e.target.value)}
       placeholder="Paste your prompt here..."
-      rows={10}
+      rows={7}
       className="text-pretty textarea textarea-info w-full mb-6 lg:mb-10"
       disabled={loading || !!file}
     />
+  );
+};
+
+const languages = [
+  "English",
+  "Spanish",
+  "French",
+  "German",
+  "Mandarin Chinese",
+  "Hindi",
+  "Arabic",
+  "Portuguese",
+  "Bengali",
+  "Russian",
+  "Japanese",
+  "Italian",
+  "Turkish",
+  "Korean",
+  "Vietnamese",
+].sort((a, b) => a.localeCompare(b));
+
+const LanguageDropdown = ({ stopSpeech }: { stopSpeech?: () => void }) => {
+  const language = useGlobalStore((state) => state.language);
+  const setLanguage = useGlobalStore((state) => state.setLanguage);
+  const loading = useGlobalStore((state) => state.loading);
+
+  const dropdownContentRef = React.useRef<HTMLUListElement>(null);
+
+  const handleFocus = () => {
+    stopSpeech?.();
+    dropdownContentRef.current?.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    });
+  };
+
+  return (
+    <div className="dropdown">
+      <motion.button
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.4, ease: "easeInOut", times: 1 }}
+        tabIndex={0}
+        role="button"
+        className="btn btn-primary btn-outline m-1 !pointer-events-auto"
+        disabled={loading}
+        onClick={handleFocus}
+      >
+        Generate in {language.toLocaleUpperCase()}
+      </motion.button>
+      <ul
+        ref={dropdownContentRef}
+        tabIndex={0}
+        className="dropdown-content scroll-mt-20 menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow max-h-62 flex-col overflow-auto flex-nowrap"
+      >
+        {languages.map((lang) => (
+          <li key={lang}>
+            <button
+              className={
+                language.toLocaleUpperCase() === lang.toLocaleUpperCase()
+                  ? "border border-solid border-primary"
+                  : ""
+              }
+              onClick={() => setLanguage(lang.toLocaleLowerCase())}
+            >
+              {lang.toLocaleUpperCase()}
+            </button>
+          </li>
+        ))}
+      </ul>
+    </div>
   );
 };

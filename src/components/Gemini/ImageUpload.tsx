@@ -97,7 +97,7 @@ const ImageUpload = ({
         transition={{ duration: 0.4, ease: "easeInOut" }}
         className="text-xs text-base-content mt-2 mb-4"
       >
-        PNG, JPG, SVG, WEBP, GIF and PDFs are Allowed.
+        PNG, JPG, SVG, WEBP, GIF, PDFs, HTML, CSS, JS, TS and Py are Allowed.
       </motion.p>
       <motion.p
         initial={{ color: "" }}

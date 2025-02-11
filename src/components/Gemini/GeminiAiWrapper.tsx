@@ -46,6 +46,8 @@ const GeminiAiWrapper = ({
   // Update the loading state in the global store
   const setLoading = useGlobalStore((state) => state.setLoading);
 
+  const language = useGlobalStore((state) => state.language);
+
   // LOCAL STATES
   // State to store the input prompt text
   const [prompt, setPrompt] = useState("");
@@ -104,6 +106,7 @@ const GeminiAiWrapper = ({
         summaryRef,
         setFileName,
         csrfToken,
+        language,
       })
         .then((data) => {
           addHistoryToDb({
