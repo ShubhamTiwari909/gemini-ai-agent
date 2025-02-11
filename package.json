@@ -22,7 +22,7 @@
     "motion": "^12.0.3",
     "next": "15.1.4",
     "next-auth": "^5.0.0-beta.25",
-    "pdfjs-dist": "^3.4.120",
+    "pdfjs-dist": "^3.11.174",
     "postcss": "^8.5.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
