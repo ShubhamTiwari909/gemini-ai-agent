@@ -26,8 +26,6 @@ export async function POST(req: Request): Promise<Response> {
   const prompt = data.text || "Explain how AI works";
   const token = data.csrfToken || "";
 
-  console.log(token);
-
   // Validate CSRF token
   if (!tokens.verify(secret, token)) {
     return NextResponse.json({ error: "Invalid CSRF token" }, { status: 403 });

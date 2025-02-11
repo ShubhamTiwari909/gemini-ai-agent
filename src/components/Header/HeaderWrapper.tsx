@@ -1,6 +1,7 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import React, { useEffect } from "react";
 import { FaHamburger } from "react-icons/fa";
 
@@ -18,6 +19,8 @@ const HeaderWrapper = ({ children }: { children: React.ReactNode }) => {
 
   // Reference to the button element to detect outside clicks
   const buttonRef = React.useRef<HTMLButtonElement>(null);
+
+  const pathname = usePathname();
 
   /**
    * Handles clicks outside the button to close the menu.
@@ -45,7 +48,9 @@ const HeaderWrapper = ({ children }: { children: React.ReactNode }) => {
   }, []);
 
   return (
-    <header className="flex justify-between fixed w-full top-0 z-40 bg-base-content">
+    <header
+      className={`flex justify-between fixed w-full top-0 z-40 ${pathname !== "/login" ? "bg-base-content" : ""}`}
+    >
       <div className="flex justify-between relative z-50 w-full py-5 lg:px-16 px-5">
         <Link href="/">
           <Image
