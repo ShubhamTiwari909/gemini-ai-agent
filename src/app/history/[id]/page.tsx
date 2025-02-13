@@ -34,6 +34,13 @@ const page = async ({ params }: { params: Promise<{ id: string }> }) => {
   );
 
   if (activeHistory.message) {
+    if (activeHistory.message.includes("domain")) {
+      return (
+        <div className="w-full h-screen grid place-items-center text-4xl">
+          {activeHistory.message}
+        </div>
+      );
+    }
     notFound();
   }
 

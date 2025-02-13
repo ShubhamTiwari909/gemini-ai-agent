@@ -13,9 +13,11 @@ import {
 const GeminiAiWrapper = ({
   user,
   expressUrl,
+  apiAuthToken,
 }: {
   user: Session["user"];
   expressUrl: string;
+  apiAuthToken: string;
 }) => {
   // REFS
   // Reference to the DOM element that will display the summary
@@ -81,6 +83,7 @@ const GeminiAiWrapper = ({
             setPrompt,
             updateLocalHistory,
             localHistory,
+            apiAuthToken,
           });
         })
         .catch((error) => {
@@ -92,37 +95,42 @@ const GeminiAiWrapper = ({
   };
 
   const handleImageResponseFromAi = async () => {
-    const response = await fetch("/api/csrf");
-    const token = await response.json();
+    try {
+      const response = await fetch("/api/csrf");
+      const token = await response.json();
 
-    if (token) {
-      const csrfToken = token.csrfToken;
-      await handleImageResponse({
-        setLoading,
-        file,
-        setFilePreview,
-        setFile,
-        setSummary,
-        summaryRef,
-        setFileName,
-        csrfToken,
-        language,
-      })
-        .then((data) => {
-          addHistoryToDb({
-            data: data?.data,
-            input: file?.name || "",
-            user,
-            expressUrl,
-            setPrompt,
-            updateLocalHistory,
-            localHistory,
-            filePreview: data?.filePreview,
-          });
+      if (token) {
+        const csrfToken = token.csrfToken;
+        await handleImageResponse({
+          setLoading,
+          file,
+          setFilePreview,
+          setFile,
+          setSummary,
+          summaryRef,
+          setFileName,
+          csrfToken,
+          language,
         })
-        .catch((error) => {
-          console.error(error);
-        });
+          .then((data) => {
+            addHistoryToDb({
+              data: data?.data,
+              input: file?.name || "",
+              user,
+              expressUrl,
+              setPrompt,
+              updateLocalHistory,
+              localHistory,
+              filePreview: data?.filePreview,
+              apiAuthToken,
+            });
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      }
+    } catch (error) {
+      console.error("Failed to fetch CSRF token:", error);
     }
   };
 

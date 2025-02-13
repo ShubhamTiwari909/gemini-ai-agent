@@ -16,6 +16,7 @@ const page = async () => {
     // If the user is not logged in, redirect to the login page.
     redirect("/login");
   }
+  const apiAuthToken = process.env.API_AUTH_TOKEN;
   return (
     <section className="min-h-screen px-5 py-0 mx-auto max-w-7xl lg:px-0 pt-10">
       <div>
@@ -33,6 +34,7 @@ const page = async () => {
            * This is only available if the user is logged in.
            */
           user={session?.user}
+          apiAuthToken={apiAuthToken || ""}
         />
       </div>
       <Suspense

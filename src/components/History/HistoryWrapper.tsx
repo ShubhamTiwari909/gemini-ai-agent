@@ -137,7 +137,7 @@ const HistoryWrapper = ({
 
   return (
     <div
-      className={`fixed left-0 top-20 lg:top-32 ${isOpen ? "w-full" : "w-0"}`}
+      className={`fixed left-0 top-20 lg:top-32 z-99 ${isOpen ? "w-full" : "w-0"}`}
     >
       {!isOpen ? <ButtonOpen handleButtonOpen={handleButtonOpen} /> : null}
       <motion.div

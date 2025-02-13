@@ -257,7 +257,7 @@ const CreatedAtByUsername = ({
 }) => {
   return (
     createdAt && (
-      <p className="text-sm lg:text-lg text-base-content font-semibold">
+      <p className="text-sm lg:text-lg text-base-content font-semibold mb-5">
         Created - {formatDate(createdAt || "")} {username ? "by " : ""}
         {username ? (
           <Link

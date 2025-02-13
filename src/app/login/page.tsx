@@ -21,6 +21,7 @@ const page = async () => {
         fill
         className="-z-10 object-cover"
       />
+      <div className="absolute inset-0 -z-1 bg-slate-950/40"></div>
       <Login />
     </div>
   );

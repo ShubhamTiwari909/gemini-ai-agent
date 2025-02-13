@@ -157,49 +157,54 @@ export const handleImageResponse = async (
 };
 
 export const addHistoryToDb = async (addHistoryToDb: AddHistoryToDB) => {
-  const {
-    data,
-    input,
-    updateLocalHistory,
-    localHistory,
-    expressUrl,
-    setPrompt,
-    user,
-    filePreview,
-  } = addHistoryToDb;
-  // Generate a unique history ID from input and summary
-  const historyId = `${input.split(" ").join("-").slice(0, 10)}-${data.summary.split(" ").join("-").slice(0, 10)}-${user?.email}/${Date.now()}`;
-  // Save the prompt and its response to the server-side history
-  const result = await fetch(`${expressUrl}/history/add`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${process.env.NEXT_PUBLIC_API_AUTH_TOKEN}`,
-    },
-    body: JSON.stringify({
-      username: user?.name,
-      prompt: input,
-      response: data.summary,
-      filePreview: filePreview || "",
-      email: user?.email,
-      historyId: historyId,
-    }),
-  });
-  const response = await result.json();
+  try {
+    const {
+      data,
+      input,
+      updateLocalHistory,
+      localHistory,
+      expressUrl,
+      setPrompt,
+      user,
+      filePreview,
+      apiAuthToken,
+    } = addHistoryToDb;
+    // Generate a unique history ID from input and summary
+    const historyId = `${input.split(" ").join("-").slice(0, 10)}-${data.summary.split(" ").join("-").slice(0, 10)}-${user?.email}/${Date.now()}`;
+    // Save the prompt and its response to the server-side history
+    const result = await fetch(`${expressUrl}/history/add`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${apiAuthToken}`,
+      },
+      body: JSON.stringify({
+        username: user?.name,
+        prompt: input,
+        response: data.summary,
+        filePreview: filePreview || "",
+        email: user?.email,
+        historyId: historyId,
+      }),
+    });
+    const response = await result.json();
 
-  // Update the local history state
-  updateLocalHistory([
-    {
-      _id: response.newHistory._id,
-      historyId: historyId,
-      email: user?.email || "",
-      prompt: input,
-      response: data.summary,
-      filePreview: filePreview || "",
-    },
-    ...localHistory,
-  ]);
+    // Update the local history state
+    updateLocalHistory([
+      {
+        _id: response.newHistory._id,
+        historyId: historyId,
+        email: user?.email || "",
+        prompt: input,
+        response: data.summary,
+        filePreview: filePreview || "",
+      },
+      ...localHistory,
+    ]);
 
-  // Set the current prompt
-  setPrompt(input);
+    // Set the current prompt
+    setPrompt(input);
+  } catch (error) {
+    console.error("Error adding history to database:", error);
+  }
 };

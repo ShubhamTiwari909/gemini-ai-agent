@@ -7,22 +7,27 @@ import { notFound } from "next/navigation";
 import React from "react";
 
 const fetchUser = async (expressUrl: string, email: string) => {
-  const response = await fetch(`${expressUrl}/users/find`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${process.env.API_AUTH_TOKEN}`,
-    },
-    body: JSON.stringify({ email }),
-  });
+  try {
+    const response = await fetch(`${expressUrl}/users/find`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${process.env.API_AUTH_TOKEN}`,
+      },
+      body: JSON.stringify({ email }),
+    });
 
-  const data = await response.json();
+    const data = await response.json();
 
-  if (data.error) {
+    if (data.error) {
+      notFound();
+    }
+
+    return data;
+  } catch (error) {
+    console.error("Error fetching user:", error);
     notFound();
   }
-
-  return data;
 };
 
 const page = async ({ params }: { params: Promise<{ id: string }> }) => {
@@ -34,6 +39,14 @@ const page = async ({ params }: { params: Promise<{ id: string }> }) => {
     fetchUser(expressUrl, email),
     fetchHistory(expressUrl, email, 10),
   ]);
+
+  if (data.message || history.message) {
+    return (
+      <div className="w-full h-screen grid place-items-center text-4xl">
+        {data.message || history.message}
+      </div>
+    );
+  }
 
   return (
     <section className="grid grid-cols-1 lg:grid-cols-12 items-start gap-10 min-h-[calc(100vh-64px)] px-5 relative pt-10">

@@ -29,6 +29,7 @@ export type AddHistoryToDB = {
   setPrompt: Dispatch<React.SetStateAction<string>>;
   user?: User;
   filePreview?: string | null;
+  apiAuthToken: string;
 };
 
 export type History = {
