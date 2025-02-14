@@ -83,7 +83,7 @@ const ImageUpload = ({
               color: focused ? "var(--color-blue-500)" : "",
             }}
             transition={{ duration: 0.4, ease: "easeInOut" }}
-            className="absolute top-0 right-0 text-sm text-slate-800 w-110 py-3 pl-2 mt-0.5 h-[calc(100%-4px)] align-middle text-ellipsis overflow-hidden text-nowrap bg-white z-10"
+            className="absolute top-0 right-0 text-sm text-slate-800 w-[calc(100%-7rem)] pointer-events-none rounded-tr rounded-br lg:w-110 py-3 pl-2 mt-0.5 h-[calc(100%-4px)] align-middle text-ellipsis overflow-hidden text-nowrap bg-white z-10"
           >
             {fileName}
           </motion.p>
