@@ -3,6 +3,7 @@ import GeminiAiWrapper from ".././components/Gemini/GeminiAiWrapper";
 import History from ".././components/History/History";
 import { auth } from "./api/auth/nextAuth";
 import { redirect } from "next/navigation";
+import { fetchUserId } from "@/lib/utils";
 
 /**
  * The main page of the application.
@@ -16,6 +17,7 @@ const page = async () => {
     // If the user is not logged in, redirect to the login page.
     redirect("/login");
   }
+  const userId = await fetchUserId(session?.user?.email || "");
   const apiAuthToken = process.env.API_AUTH_TOKEN;
   return (
     <section className="min-h-screen px-5 py-0 mx-auto max-w-7xl lg:px-0 pt-10">
@@ -35,6 +37,7 @@ const page = async () => {
            */
           user={session?.user}
           apiAuthToken={apiAuthToken || ""}
+          userId={userId || ""}
         />
       </div>
       <Suspense

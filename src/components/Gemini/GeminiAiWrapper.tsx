@@ -14,10 +14,12 @@ const GeminiAiWrapper = ({
   user,
   expressUrl,
   apiAuthToken,
+  userId,
 }: {
   user: Session["user"];
   expressUrl: string;
   apiAuthToken: string;
+  userId: string;
 }) => {
   // REFS
   // Reference to the DOM element that will display the summary
@@ -84,6 +86,7 @@ const GeminiAiWrapper = ({
             updateLocalHistory,
             localHistory,
             apiAuthToken,
+            userId,
           });
         })
         .catch((error) => {
@@ -123,6 +126,7 @@ const GeminiAiWrapper = ({
               localHistory,
               filePreview: data?.filePreview,
               apiAuthToken,
+              userId,
             });
           })
           .catch((error) => {

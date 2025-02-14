@@ -30,6 +30,7 @@ export type AddHistoryToDB = {
   user?: User;
   filePreview?: string | null;
   apiAuthToken: string;
+  userId: string;
 };
 
 export type History = {
@@ -41,4 +42,5 @@ export type History = {
   response: string;
   filePreview?: string | null;
   createdAt?: string;
+  userId: string;
 };

@@ -3,6 +3,7 @@ import {
   HandleImageResponse,
   HandleSummarize,
 } from "@/types/response-handlers";
+import { decrypt } from "./hybrid-encryption";
 
 export const formatDate = (dateString: string) => {
   const timestamp = Date.parse(dateString); // Returns milliseconds since epoch
@@ -168,6 +169,7 @@ export const addHistoryToDb = async (addHistoryToDb: AddHistoryToDB) => {
       user,
       filePreview,
       apiAuthToken,
+      userId,
     } = addHistoryToDb;
     // Generate a unique history ID from input and summary
     const historyId = `${input.split(" ").join("-").slice(0, 10)}-${data.summary.split(" ").join("-").slice(0, 10)}-${user?.email}/${Date.now()}`;
@@ -185,6 +187,7 @@ export const addHistoryToDb = async (addHistoryToDb: AddHistoryToDB) => {
         filePreview: filePreview || "",
         email: user?.email,
         historyId: historyId,
+        userId: userId,
       }),
     });
     const response = await result.json();
@@ -198,6 +201,7 @@ export const addHistoryToDb = async (addHistoryToDb: AddHistoryToDB) => {
         prompt: input,
         response: data.summary,
         filePreview: filePreview || "",
+        userId: userId,
       },
       ...localHistory,
     ]);
@@ -206,5 +210,26 @@ export const addHistoryToDb = async (addHistoryToDb: AddHistoryToDB) => {
     setPrompt(input);
   } catch (error) {
     console.error("Error adding history to database:", error);
+  }
+};
+
+export const fetchUserId = async (email: string) => {
+  try {
+    const response = await fetch(
+      `${process.env.EXPRESS_API_URL}/users/findById`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${process.env.API_AUTH_TOKEN}`,
+        },
+        body: JSON.stringify({ email }),
+      },
+    );
+    const data = await response.json();
+    return decrypt(data.uid);
+  } catch (error) {
+    console.error("Error fetching user ID:", error);
+    return null;
   }
 };

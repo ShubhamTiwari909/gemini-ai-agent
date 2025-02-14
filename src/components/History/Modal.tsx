@@ -1,5 +1,5 @@
 "use client";
-import React, { useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import ResponseRenderer from "../Gemini/ResponseRenderer";
 import { useGlobalStore } from "@/store/global-store";
 import {
@@ -20,8 +20,25 @@ const Modal = ({
   modalRef: React.RefObject<HTMLDialogElement | null>;
 }) => {
   const summaryRef = useRef<HTMLDivElement>(null);
+  const optionsRef = useRef<HTMLDivElement>(null);
   const setIsPaused = useGlobalStore((state) => state.setIsSpeechPaused);
   const [copied, setCopied] = React.useState(false);
+  const [dropdown, setDropdown] = React.useState(false);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        optionsRef.current &&
+        !optionsRef.current.contains(event.target as Node)
+      ) {
+        setDropdown(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [modalRef]);
 
   const handleCopyLink = () => {
     navigator.clipboard.writeText(
@@ -44,42 +61,45 @@ const Modal = ({
               </span>
             </h3>
             <div className="modal-action mt-0 gap-x-3 lg:gap-x-8 items-center">
-              <div className="dropdown">
+              <div className="relative" ref={optionsRef}>
                 <button
                   role="button"
                   className="btn btn-primary btn-outline m-1 !pointer-events-auto"
+                  onClick={() => setDropdown(!dropdown)}
                 >
                   <MdMenu size="1.25rem" />
                 </button>
-                <div className="dropdown-content space-y-5 bg-base-content p-4 rounded-xl">
-                  <Link
-                    className="btn btn-sm lg:btn-md btn-bordered btn-info"
-                    href={`/history/${activeHistory?._id}`}
-                  >
-                    <MdArrowOutward
-                      color="text-base-content !size-4 lg:!size-5"
-                      size="1.25rem"
-                    />
-                  </Link>
-                  <button
-                    className="btn btn-sm lg:btn-md"
-                    onClick={handleCopyLink}
-                  >
-                    {copied ? (
-                      <div className="flex items-center gap-x-1">
-                        <MdFileCopy
+                {dropdown && (
+                  <div className="space-y-5 bg-base-content p-4 rounded-xl absolute">
+                    <Link
+                      className="btn btn-sm lg:btn-md btn-bordered btn-info"
+                      href={`/history/${activeHistory?._id}`}
+                    >
+                      <MdArrowOutward
+                        color="text-base-content !size-4 lg:!size-5"
+                        size="1.25rem"
+                      />
+                    </Link>
+                    <button
+                      className="btn btn-sm lg:btn-md"
+                      onClick={handleCopyLink}
+                    >
+                      {copied ? (
+                        <div className="flex items-center gap-x-1">
+                          <MdFileCopy
+                            size="1.25rem"
+                            className="size-4 lg:size-5"
+                          />
+                        </div>
+                      ) : (
+                        <MdOutlineFileCopy
                           size="1.25rem"
                           className="size-4 lg:size-5"
                         />
-                      </div>
-                    ) : (
-                      <MdOutlineFileCopy
-                        size="1.25rem"
-                        className="size-4 lg:size-5"
-                      />
-                    )}
-                  </button>
-                </div>
+                      )}
+                    </button>
+                  </div>
+                )}
               </div>
               <form method="dialog">
                 <button

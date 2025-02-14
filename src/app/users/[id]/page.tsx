@@ -1,12 +1,16 @@
 import { fetchHistory } from "@/components/History/History";
-import { formatDate } from "@/lib/utils";
+import { fetchUserId, formatDate } from "@/lib/utils";
 import { History } from "@/types/response-handlers";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import React from "react";
 
-const fetchUser = async (expressUrl: string, email: string) => {
+const fetchUser = async (
+  expressUrl: string,
+  email: string,
+  userId: string | null | undefined,
+) => {
   try {
     const response = await fetch(`${expressUrl}/users/find`, {
       method: "POST",
@@ -14,7 +18,7 @@ const fetchUser = async (expressUrl: string, email: string) => {
         "Content-Type": "application/json",
         Authorization: `Bearer ${process.env.API_AUTH_TOKEN}`,
       },
-      body: JSON.stringify({ email }),
+      body: JSON.stringify({ email, userId }),
     });
 
     const data = await response.json();
@@ -34,10 +38,11 @@ const page = async ({ params }: { params: Promise<{ id: string }> }) => {
   const { id } = await params;
   const expressUrl = process.env.EXPRESS_API_URL || "";
   const email = id.replace("%40", "@");
+  const userId = await fetchUserId(email || "");
 
   const [data, history] = await Promise.all([
-    fetchUser(expressUrl, email),
-    fetchHistory(expressUrl, email, 10),
+    fetchUser(expressUrl, email, userId),
+    fetchHistory(expressUrl, email, userId, 10),
   ]);
 
   if (data.message || history.message) {

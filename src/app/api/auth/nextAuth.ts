@@ -42,7 +42,13 @@ const addUsingUserToDb = async (user: User) => {
     body: JSON.stringify({
       name: user?.name, // User's name
       email: user?.email, // User's email
-      userId: Math.floor(Math.random() * 999999099).toString(), // Randomly generated user ID
+      userId:
+        user?.email?.replace("@", "_") +
+        Array(6)
+          .fill(null)
+          .map(() => String.fromCharCode(97 + Math.floor(Math.random() * 26)))
+          .join("") +
+        Math.floor(Math.random() * 999999), // Randomly generated user ID with letters and numbers
       image: user?.image, // User's image
     }),
   });

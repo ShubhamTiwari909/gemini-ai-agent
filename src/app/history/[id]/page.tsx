@@ -1,11 +1,13 @@
 import { auth } from "@/app/api/auth/nextAuth";
 import HistoryPageWrapper from "@/components/History/HistoryPageWrapper";
+import { fetchUserId } from "@/lib/utils";
 import { notFound } from "next/navigation";
 import React from "react";
 
 const fetchHistoryById = async (
   expressUrl: string,
   id: string | null | undefined,
+  userId: string | null | undefined,
 ) => {
   try {
     const response = await fetch(`${expressUrl}/history/findById`, {
@@ -14,7 +16,7 @@ const fetchHistoryById = async (
         "Content-Type": "application/json",
         Authorization: `Bearer ${process.env.API_AUTH_TOKEN}`,
       },
-      body: JSON.stringify({ id }),
+      body: JSON.stringify({ id, userId }),
       next: { revalidate: 60 * 60 },
     });
 
@@ -28,9 +30,12 @@ const fetchHistoryById = async (
 const page = async ({ params }: { params: Promise<{ id: string }> }) => {
   const { id } = await params;
   const session = await auth();
+  const userId = await fetchUserId(session?.user?.email || "");
+
   const activeHistory = await fetchHistoryById(
     process.env.EXPRESS_API_URL || "",
     id,
+    userId,
   );
 
   if (activeHistory.message) {
