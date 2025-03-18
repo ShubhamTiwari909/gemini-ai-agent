@@ -54,6 +54,14 @@ const FeedWrapper = ({ data }: { data: Data }) => {
     return () => observer.disconnect();
   }, [page, hasMore]); // Ensure effect runs when page updates
 
+  if (data.data.length === 0) {
+    return (
+      <div className="grid place-items-center h-screen">
+        <p className="text-2xl lg:text-5xl">No posts found</p>
+      </div>
+    );
+  }
+
   return (
     <section className="min-h-screen px-5 py-16 mx-auto max-w-7xl lg:px-0 lg:py-10">
       <div className="grid grid-cols-1 text-white gap-12 lg:gap-10">

@@ -37,7 +37,6 @@ const page = async () => {
     redirect("/login");
   }
   const data = await fetchFeed(3, 1);
-
   return <FeedWrapper data={data} />;
 };
 
