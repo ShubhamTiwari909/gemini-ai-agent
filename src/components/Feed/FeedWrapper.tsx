@@ -14,12 +14,15 @@ const FeedWrapper = ({ data }: { data: Data }) => {
   const [feed, setFeed] = useState(data.data);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(data.hasMore);
+  const [loading, setLoading] = useState(false);
   const observerRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
-        if (entries[0].isIntersecting) {
+        if (entries[0].isIntersecting && hasMore) {
+          // Ensure we have more data
+          setLoading(true);
           fetch(`${process.env.NEXT_PUBLIC_EXPRESS_API_URL}/feed`, {
             method: "POST",
             headers: {
@@ -33,13 +36,15 @@ const FeedWrapper = ({ data }: { data: Data }) => {
           })
             .then((res) => res.json())
             .then((result) => {
+              setLoading(false);
               setPage((prevPage) => prevPage + 1);
               setFeed((prevFeed) => [...prevFeed, ...result.data]);
               setHasMore(result.hasMore);
-            });
+            })
+            .catch((err) => console.error("Fetch error:", err));
         }
       },
-      { rootMargin: "10px" }, // Trigger when the last element is near the viewport
+      { rootMargin: "10px" },
     );
 
     if (observerRef.current) {
@@ -47,7 +52,7 @@ const FeedWrapper = ({ data }: { data: Data }) => {
     }
 
     return () => observer.disconnect();
-  }, [hasMore]);
+  }, [page, hasMore]); // Ensure effect runs when page updates
 
   return (
     <section className="min-h-screen px-5 py-16 mx-auto max-w-7xl lg:px-0 lg:py-10">
@@ -81,6 +86,7 @@ const FeedWrapper = ({ data }: { data: Data }) => {
             </div>
           );
         })}
+        <p className="text-center">{loading && "Loading..."}</p>
       </div>
     </section>
   );
