@@ -13,6 +13,9 @@ const Header = async () => {
           <Link className="btn" href="/">
             Home
           </Link>
+          <Link className="btn" href="/create-post">
+            Create post
+          </Link>
           <Link className="btn" href="/profile">
             Profile
           </Link>

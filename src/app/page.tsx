@@ -1,9 +1,28 @@
-import React, { Suspense } from "react";
-import GeminiAiWrapper from ".././components/Gemini/GeminiAiWrapper";
-import History from ".././components/History/History";
+import React from "react";
 import { auth } from "./api/auth/nextAuth";
 import { redirect } from "next/navigation";
-import { fetchUserId } from "@/lib/utils";
+import FeedWrapper from "@/components/Feed/FeedWrapper";
+
+const fetchFeed = async (limit: number, page: number) => {
+  try {
+    const response = await fetch(`${process.env.EXPRESS_API_URL}/feed`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${process.env.API_AUTH_TOKEN}`,
+      },
+      body: JSON.stringify({
+        limit,
+        page,
+      }),
+    });
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error fetching user ID:", error);
+    return null;
+  }
+};
 
 /**
  * The main page of the application.
@@ -17,43 +36,9 @@ const page = async () => {
     // If the user is not logged in, redirect to the login page.
     redirect("/login");
   }
-  const userId = await fetchUserId(session?.user?.email || "");
-  const apiAuthToken = process.env.API_AUTH_TOKEN;
-  return (
-    <section className="min-h-screen px-5 py-0 mx-auto max-w-7xl lg:px-0 pt-10">
-      <div>
-        <h1 className="mb-10 font-sans text-4xl font-bold text-center lg:text-6xl pl-7">
-          Gemini AI Zentauri
-        </h1>
-        <GeminiAiWrapper
-          /**
-           * The URL of the Express.js server.
-           * This is only available on the server.
-           */
-          expressUrl={process.env.EXPRESS_API_URL || ""}
-          /**
-           * The user object from the session.
-           * This is only available if the user is logged in.
-           */
-          user={session?.user}
-          apiAuthToken={apiAuthToken || ""}
-          userId={userId || ""}
-        />
-      </div>
-      <Suspense
-        fallback={
-          <div className="fixed left-0 top-20 lg:top-32 px-5">
-            <p className="flex items-center">
-              Loading history...
-              <span className="animate-spin inline-block size-5 rounded-full border border-r-transparent border-solid border-current"></span>
-            </p>
-          </div>
-        }
-      >
-        <History />
-      </Suspense>
-    </section>
-  );
+  const data = await fetchFeed(3, 1);
+
+  return <FeedWrapper data={data} />;
 };
 
 export default page;

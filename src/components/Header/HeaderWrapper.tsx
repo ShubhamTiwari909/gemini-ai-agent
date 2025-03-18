@@ -49,7 +49,7 @@ const HeaderWrapper = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <header
-      className={`flex justify-between fixed w-full top-0 z-40 ${pathname !== "/login" ? "bg-base-content" : ""}`}
+      className={`flex justify-between fixed w-full top-0 z-100 ${pathname !== "/login" ? "bg-base-content" : ""}`}
     >
       <div className="flex justify-between relative z-50 w-full py-5 lg:px-16 px-5">
         <Link href="/">
