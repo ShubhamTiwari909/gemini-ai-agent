@@ -1,5 +1,5 @@
 "use client";
-import React, { useRef, useState } from "react";
+import React, { useRef } from "react";
 import FormControls from "./FormControls";
 import ResponseRenderer, { childClasses } from "./ResponseRenderer";
 import { Session } from "next-auth";
@@ -54,13 +54,16 @@ const GeminiAiWrapper = ({
 
   // LOCAL STATES
   // State to store the input prompt text
-  const [prompt, setPrompt] = useState("");
+  const prompt = useGlobalStore((state) => state.prompt);
+  const setPrompt = useGlobalStore((state) => state.setPrompt);
 
   //State to store the input file
-  const [file, setFile] = useState<File | null>(null);
+  const file = useGlobalStore((state) => state.file);
+  const setFile = useGlobalStore((state) => state.setFile);
 
   // State to store the input file preview
-  const [filePreview, setFilePreview] = useState<string | null>(null);
+  const filePreview = useGlobalStore((state) => state.filePreview);
+  const setFilePreview = useGlobalStore((state) => state.setFilePreview);
 
   const handleSummarizeFromAi = async (input: string) => {
     const response = await fetch("/api/csrf");
@@ -143,9 +146,7 @@ const GeminiAiWrapper = ({
       <FormControls
         handleSummarize={handleSummarizeFromAi}
         file={file}
-        setFile={setFile}
         handleImageResponse={handleImageResponseFromAi}
-        setFilePreview={setFilePreview}
         className="lg:mb-20"
       />
       <ResponseRenderer

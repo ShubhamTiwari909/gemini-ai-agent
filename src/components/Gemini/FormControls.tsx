@@ -29,10 +29,8 @@ const promptsSample = {
 
 const FormControls = ({
   handleSummarize,
-  setFile,
   file,
   handleImageResponse,
-  setFilePreview,
   className,
 }: FormControlsProps) => {
   const fileInputRef = React.useRef<HTMLInputElement>(null);
@@ -65,23 +63,17 @@ const FormControls = ({
           setInputText={setInputText}
           loading={loading}
           stopSpeech={stopSpeech}
-          setFilePreview={setFilePreview}
           {...promptsSample}
         />
         <LanguageDropdown stopSpeech={stopSpeech} />
         <GenerateButton
-          setPreview={setFilePreview}
           stopSpeech={stopSpeech}
           loading={loading}
           handleSummarize={handleSummarize}
           handleImageResponse={handleImageResponse}
           file={file}
         />
-        <ImageUpload
-          stopSpeech={stopSpeech}
-          fileInputRef={fileInputRef}
-          setFile={setFile}
-        />
+        <ImageUpload stopSpeech={stopSpeech} fileInputRef={fileInputRef} />
       </div>
     </section>
   );
@@ -94,11 +86,11 @@ const GenerateButton = ({
   loading,
   handleSummarize,
   handleImageResponse,
-  setPreview,
   file,
 }: GenerateButtonProps) => {
   const inputText = useGlobalStore((state) => state.inputText);
   const language = useGlobalStore((state) => state.language);
+  const setFilePreview = useGlobalStore((state) => state.setFilePreview);
 
   return (
     <>
@@ -109,7 +101,7 @@ const GenerateButton = ({
         onClick={() => {
           stopSpeech();
           if (inputText !== "") {
-            setPreview(null);
+            setFilePreview(null);
           }
           if (file?.name) {
             handleImageResponse();

@@ -5,6 +5,12 @@ import { devtools } from "zustand/middleware";
 interface BearState {
   inputText: string;
   setInputText: (text: string) => void;
+  prompt: string;
+  setPrompt: (text: string) => void;
+  file: File | null;
+  setFile: (file: File | null) => void;
+  filePreview: string | null;
+  setFilePreview: (preview: string | null) => void;
   history: History[];
   updateHistory: (history: History[]) => void;
   isSpeechPaused: boolean;
@@ -25,6 +31,12 @@ export const useGlobalStore = create<BearState>()(
   devtools((set) => ({
     inputText: "",
     setInputText: (text) => set({ inputText: text }),
+    prompt: "",
+    setPrompt: (text) => set({ prompt: text }),
+    file: null,
+    setFile: (file) => set({ file }),
+    filePreview: null,
+    setFilePreview: (preview) => set({ filePreview: preview }),
     history: [],
     updateHistory: (history) => set({ history }),
     isSpeechPaused: true,

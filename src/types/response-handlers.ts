@@ -1,5 +1,4 @@
 import { User } from "next-auth";
-import { Dispatch } from "react";
 
 type SharedHandlerProps = {
   setLoading: (loading: boolean) => void;
@@ -26,7 +25,7 @@ export type AddHistoryToDB = {
   updateLocalHistory: (history: History[]) => void;
   localHistory: History[];
   expressUrl: string;
-  setPrompt: Dispatch<React.SetStateAction<string>>;
+  setPrompt: (text: string) => void;
   user?: User;
   filePreview?: string | null;
   apiAuthToken: string;

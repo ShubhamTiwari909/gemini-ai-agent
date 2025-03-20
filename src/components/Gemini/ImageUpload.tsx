@@ -4,11 +4,9 @@ import React from "react";
 import * as motion from "motion/react-client";
 
 const ImageUpload = ({
-  setFile,
   fileInputRef,
   stopSpeech,
 }: {
-  setFile: React.Dispatch<React.SetStateAction<File | null>>;
   fileInputRef: React.RefObject<HTMLInputElement | null>;
   stopSpeech: () => void;
 }) => {
@@ -17,6 +15,7 @@ const ImageUpload = ({
   const [focused, setFocused] = React.useState(false);
   const loading = useGlobalStore((state) => state.loading);
   const setInputText = useGlobalStore((state) => state.setInputText);
+  const setFile = useGlobalStore((state) => state.setFile);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputText("");

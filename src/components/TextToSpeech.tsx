@@ -16,7 +16,6 @@ const TextToSpeech = ({
   text: string;
   className?: string;
 }): JSX.Element => {
-  // const [isPaused, setIsPaused] = useState(true);
   const isPaused = useGlobalStore((state) => state.isSpeechPaused);
   const setIsPaused = useGlobalStore((state) => state.setIsSpeechPaused);
   const [utterance, setUtterance] = useState<SpeechSynthesisUtterance | null>(

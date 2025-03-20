@@ -1,6 +1,7 @@
 "use client";
 import React from "react";
 import * as motion from "motion/react-client";
+import { useGlobalStore } from "@/store/global-store";
 
 /**
  * A dropdown component that displays a list of items.
@@ -22,7 +23,6 @@ const Dropdown = ({
   setInputText,
   loading = false,
   stopSpeech,
-  setFilePreview,
 }: {
   title: string;
   itemsList: string[];
@@ -30,9 +30,9 @@ const Dropdown = ({
   setInputText?: (text: string) => void;
   loading?: boolean;
   stopSpeech?: () => void;
-  setFilePreview?: React.Dispatch<React.SetStateAction<string | null>>;
 }) => {
   const dropdownContentRef = React.useRef<HTMLUListElement>(null);
+  const setFilePreview = useGlobalStore((state) => state.setFilePreview);
   /**
    * Scrolls the dropdown content into view when the user focuses on the dropdown.
    */
