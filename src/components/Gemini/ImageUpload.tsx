@@ -16,6 +16,7 @@ const ImageUpload = ({
   const loading = useGlobalStore((state) => state.loading);
   const setInputText = useGlobalStore((state) => state.setInputText);
   const setFile = useGlobalStore((state) => state.setFile);
+  const tags = useGlobalStore((state) => state.tags);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputText("");
@@ -28,7 +29,7 @@ const ImageUpload = ({
   const handleDragAndDrop = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     const droppedFile = e.dataTransfer.files?.[0];
-    if (droppedFile) {
+    if (droppedFile && tags.length > 0) {
       setInputText("");
       setFile(droppedFile);
       setFileName(droppedFile.name);
@@ -39,6 +40,8 @@ const ImageUpload = ({
       }, 800);
     }
   };
+
+  const disableImageUpload = tags.length === 0 ? "opacity-40" : "opacity-100";
 
   return (
     <motion.div
@@ -59,11 +62,11 @@ const ImageUpload = ({
           color: focused ? "var(--color-blue-500)" : "",
         }}
         transition={{ duration: 0.4, ease: "easeInOut" }}
-        className="text-base text-base-content font-semibold mb-2 block"
+        className={`text-base text-base-content font-semibold mb-2 block ${disableImageUpload}`}
       >
         {focused ? "Uploaded successfully!" : "Upload file or Drag & Drop here"}
       </motion.label>
-      <div className="relative overflow-hidden">
+      <div className={`relative overflow-hidden ${disableImageUpload}`}>
         <input
           ref={fileInputRef}
           accept="image/*,.pdf,.html,.css,.js,.ts,.tsx,.py"
@@ -72,7 +75,7 @@ const ImageUpload = ({
           onDragOver={(e) => e.preventDefault()}
           onDrop={handleDragAndDrop}
           type="file"
-          disabled={loading}
+          disabled={loading || tags.length === 0}
           className="w-full text-slate-800 font-semibold text-sm bg-sky-100 border file:cursor-pointer cursor-pointer disabled:cursor-not-allowed disabled:file:cursor-not-allowed file:border-0 file:py-3 file:px-4 file:mr-4 file:bg-sky-500 file:hover:bg-sky-800 file:text-gray-100 rounded"
         />
         {fileName ? (
@@ -104,7 +107,7 @@ const ImageUpload = ({
           color: focused ? "var(--color-blue-500)" : "",
         }}
         transition={{ duration: 0.4, ease: "easeInOut" }}
-        className="text-xs text-base-content mt-2 leading-8"
+        className={`text-xs text-base-content mt-2 leading-8 ${disableImageUpload}`}
       >
         NOTE: For{" "}
         <strong className="bg-base-content text-base-100 py-1 px-2 rounded-full text-xs">

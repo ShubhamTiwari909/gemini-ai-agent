@@ -33,6 +33,8 @@ const Dropdown = ({
 }) => {
   const dropdownContentRef = React.useRef<HTMLUListElement>(null);
   const setFilePreview = useGlobalStore((state) => state.setFilePreview);
+  const tags = useGlobalStore((state) => state.tags);
+
   /**
    * Scrolls the dropdown content into view when the user focuses on the dropdown.
    */
@@ -52,8 +54,8 @@ const Dropdown = ({
         tabIndex={0}
         role="button"
         onClick={handleFocus}
-        className="btn btn-primary btn-outline m-1 !pointer-events-auto disabled:cursor-not-allowed"
-        disabled={loading}
+        className={`btn btn-sm lg:btn-md btn-outline m-1 !pointer-events-auto disabled:cursor-not-allowed ${tags.length === 0 ? "btn-ghost" : "btn-primary"}`}
+        disabled={loading || tags.length === 0}
       >
         {title}
       </motion.button>

@@ -65,6 +65,8 @@ const GeminiAiWrapper = ({
   const filePreview = useGlobalStore((state) => state.filePreview);
   const setFilePreview = useGlobalStore((state) => state.setFilePreview);
 
+  const tags = useGlobalStore((state) => state.tags);
+
   const handleSummarizeFromAi = async (input: string) => {
     const response = await fetch("/api/csrf");
     const token = await response.json();
@@ -90,6 +92,7 @@ const GeminiAiWrapper = ({
             localHistory,
             apiAuthToken,
             userId,
+            tags,
           });
         })
         .catch((error) => {
@@ -130,6 +133,7 @@ const GeminiAiWrapper = ({
               filePreview: data?.filePreview,
               apiAuthToken,
               userId,
+              tags,
             });
           })
           .catch((error) => {

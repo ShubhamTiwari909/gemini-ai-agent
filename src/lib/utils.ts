@@ -170,6 +170,7 @@ export const addHistoryToDb = async (addHistoryToDb: AddHistoryToDB) => {
       filePreview,
       apiAuthToken,
       userId,
+      tags,
     } = addHistoryToDb;
     // Generate a unique history ID from input and summary
     const historyId = `${input.split(" ").join("-").slice(0, 10)}-${data.summary.split(" ").join("-").slice(0, 10)}-${user?.email}/${Date.now()}`;
@@ -188,6 +189,7 @@ export const addHistoryToDb = async (addHistoryToDb: AddHistoryToDB) => {
         email: user?.email,
         historyId: historyId,
         userId: userId,
+        tags,
       }),
     });
     const response = await result.json();
@@ -202,6 +204,7 @@ export const addHistoryToDb = async (addHistoryToDb: AddHistoryToDB) => {
         response: data.summary,
         filePreview: filePreview || "",
         userId: userId,
+        tags,
       },
       ...localHistory,
     ]);

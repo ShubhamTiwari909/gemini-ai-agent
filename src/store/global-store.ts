@@ -11,6 +11,8 @@ interface BearState {
   setFile: (file: File | null) => void;
   filePreview: string | null;
   setFilePreview: (preview: string | null) => void;
+  tags: string[];
+  setTags: (tags: string[]) => void;
   history: History[];
   updateHistory: (history: History[]) => void;
   isSpeechPaused: boolean;
@@ -37,6 +39,8 @@ export const useGlobalStore = create<BearState>()(
     setFile: (file) => set({ file }),
     filePreview: null,
     setFilePreview: (preview) => set({ filePreview: preview }),
+    tags: [],
+    setTags: (tags) => set({ tags }),
     history: [],
     updateHistory: (history) => set({ history }),
     isSpeechPaused: true,
