@@ -98,6 +98,7 @@ const GeminiAiWrapper = ({
   const setFilePreview = useGlobalStore((state) => state.setFilePreview);
 
   const tags = useGlobalStore((state) => state.tags);
+  const setTags = useGlobalStore((state) => state.setTags);
 
   const handleSummarizeFromAi = async (input: string) => {
     const response = await fetch("/api/csrf");
@@ -112,6 +113,7 @@ const GeminiAiWrapper = ({
         summaryRef,
         setFileName,
         csrfToken,
+        setTags,
       })
         .then((data) => {
           addHistoryToDb({
@@ -152,6 +154,7 @@ const GeminiAiWrapper = ({
           setFileName,
           csrfToken,
           language,
+          setTags,
         })
           .then((data) => {
             addHistoryToDb({

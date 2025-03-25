@@ -1,6 +1,6 @@
 import React from "react";
 import Modal from "../Theme/Modal";
-import { auth } from "../../app/api/auth/nextAuth";
+import { auth, signOut } from "../../app/api/auth/nextAuth";
 import Link from "next/link";
 import HeaderWrapper from "./HeaderWrapper";
 
@@ -19,9 +19,19 @@ const Header = async () => {
           <Link className="btn" href="/profile">
             Profile
           </Link>
+          <Modal />
+          <form
+            action={async () => {
+              "use server";
+              await signOut();
+            }}
+          >
+            <button type="submit" className="btn btn-error">
+              Logout
+            </button>
+          </form>
         </>
       ) : null}
-      <Modal />
     </HeaderWrapper>
   );
 };

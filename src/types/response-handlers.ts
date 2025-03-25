@@ -6,6 +6,7 @@ type SharedHandlerProps = {
   summaryRef: React.RefObject<HTMLDivElement | null>;
   setFileName: (fileName: string) => void;
   csrfToken: string | null;
+  setTags: (tags: string[]) => void;
 };
 
 export type HandleSummarize = SharedHandlerProps & {

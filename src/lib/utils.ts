@@ -41,8 +41,15 @@ export const base64ToText = (base64Data: string) => {
  *   - addHistoryToDb: A function to add the history to the database
  */
 export const handleSummarize = async (handleSummarize: HandleSummarize) => {
-  const { input, setLoading, setSummary, summaryRef, setFileName, csrfToken } =
-    handleSummarize;
+  const {
+    input,
+    setLoading,
+    setSummary,
+    summaryRef,
+    setFileName,
+    csrfToken,
+    setTags,
+  } = handleSummarize;
   setLoading(true);
   setSummary("");
   try {
@@ -59,6 +66,7 @@ export const handleSummarize = async (handleSummarize: HandleSummarize) => {
       // Update the summary state with the response
       setSummary(data.summary);
       setFileName("");
+      setTags([]);
     }
     return data;
   } catch (error) {
@@ -96,6 +104,7 @@ export const handleImageResponse = async (
     setFileName,
     csrfToken,
     language,
+    setTags,
   } = handleImageResponse;
   setLoading(true);
   setSummary("");
@@ -135,6 +144,7 @@ export const handleImageResponse = async (
         // Update the summary state with the response
         setSummary(data.summary);
         setFileName("");
+        setTags([]);
       }
       return {
         data,
