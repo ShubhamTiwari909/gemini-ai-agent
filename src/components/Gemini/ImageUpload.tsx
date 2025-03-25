@@ -54,7 +54,7 @@ const ImageUpload = ({
       transition={{ duration: 0.4, ease: "easeInOut" }}
       onDragOver={(e) => e.preventDefault()}
       onDrop={handleDragAndDrop}
-      className={`p-4 rounded-xl border border-solid border-base-content ${loading ? "cursor-not-allowed" : ""}`}
+      className={`p-4 rounded-xl border border-solid border-base-content image-upload-input ${loading ? "cursor-not-allowed" : ""}`}
     >
       <motion.label
         initial={{ color: "" }}

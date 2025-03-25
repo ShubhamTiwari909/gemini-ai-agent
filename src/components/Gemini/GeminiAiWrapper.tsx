@@ -9,6 +9,38 @@ import {
   handleSummarize,
   addHistoryToDb,
 } from "@/lib/utils";
+import { TourProvider } from "@reactour/tour";
+
+const steps = [
+  {
+    selector: ".voice-input",
+    content: "Mic button to add the prompt with voice input",
+  },
+  {
+    selector: ".textarea-input",
+    content: "Input field to write down your prompt to generate content",
+  },
+  {
+    selector: ".tags-dropdown",
+    content: "Select a tag for your post",
+  },
+  {
+    selector: ".sample-dropdown",
+    content: "Select a sample prompt to get started",
+  },
+  {
+    selector: ".language-dropdown",
+    content: "Select a language to generate the response in that language",
+  },
+  {
+    selector: ".generate-button",
+    content: "Generate your response based on the prompt or image",
+  },
+  {
+    selector: ".image-upload-input",
+    content: "Upload an image to generate a description and captions for it",
+  },
+];
 
 const GeminiAiWrapper = ({
   user,
@@ -147,23 +179,25 @@ const GeminiAiWrapper = ({
 
   return (
     <div>
-      <FormControls
-        handleSummarize={handleSummarizeFromAi}
-        file={file}
-        handleImageResponse={handleImageResponseFromAi}
-        className="lg:mb-20"
-      />
-      <ResponseRenderer
-        summary={summary}
-        loading={loading}
-        filePreview={filePreview}
-        prompt={prompt}
-        summaryRef={summaryRef}
-        childClassNames={{
-          ...childClasses,
-          textToSpeech: `${childClasses.textToSpeech} top-2`,
-        }}
-      />
+      <TourProvider className="!bg-slate-900 !text-slate-100" steps={steps}>
+        <FormControls
+          handleSummarize={handleSummarizeFromAi}
+          file={file}
+          handleImageResponse={handleImageResponseFromAi}
+          className="lg:mb-20"
+        />
+        <ResponseRenderer
+          summary={summary}
+          loading={loading}
+          filePreview={filePreview}
+          prompt={prompt}
+          summaryRef={summaryRef}
+          childClassNames={{
+            ...childClasses,
+            textToSpeech: `${childClasses.textToSpeech} top-2`,
+          }}
+        />
+      </TourProvider>
     </div>
   );
 };

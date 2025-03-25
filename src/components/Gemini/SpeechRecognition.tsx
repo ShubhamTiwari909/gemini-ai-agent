@@ -7,17 +7,24 @@ import SpeechRecognition, {
 import { FaMicrophone, FaMicrophoneSlash } from "react-icons/fa";
 import { useGlobalStore } from "@/store/global-store";
 
-const SpeechRecognitionUI = ({ stopSpeech }: { stopSpeech: () => void }) => {
+const SpeechRecognitionUI = ({
+  stopSpeech,
+  className,
+}: {
+  stopSpeech: () => void;
+  className?: string;
+}) => {
   const { transcript, listening } = useSpeechRecognition();
   const loading = useGlobalStore((state) => state.loading);
   const setInputText = useGlobalStore((state) => state.setInputText);
-
   useEffect(() => {
     setInputText(transcript);
   }, [transcript]);
 
   return (
-    <div className="flex items-center gap-x-5 absolute z-10 right-3 top-28 lg:right-5 lg:top-5 bg-base-300 p-2.5 rounded-2xl">
+    <div
+      className={`flex items-center gap-x-5 absolute z-10 right-3 top-28 lg:right-5 lg:top-5 bg-base-300 p-2.5 rounded-2xl ${className}`}
+    >
       <button
         className="cursor-pointer disabled:cursor-not-allowed"
         onClick={() => {

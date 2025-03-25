@@ -46,7 +46,7 @@ const Dropdown = ({
     });
   };
   return (
-    <div className="dropdown">
+    <div className="dropdown sample-dropdown">
       <motion.button
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
