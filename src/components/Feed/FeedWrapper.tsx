@@ -3,6 +3,8 @@ import React, { useEffect, useRef, useState } from "react";
 import { History } from "@/types/response-handlers";
 import Link from "next/link";
 import { formatDate } from "@/lib/utils";
+import Search from "./Search";
+import { useSearchParams } from "next/navigation";
 
 type Data = {
   data: History[];
@@ -16,32 +18,40 @@ const FeedWrapper = ({ data }: { data: Data }) => {
   const [hasMore, setHasMore] = useState(data.hasMore);
   const [loading, setLoading] = useState(false);
   const observerRef = useRef<HTMLDivElement | null>(null);
+  const searchParams = useSearchParams();
+  const search = searchParams.get("search");
+
+  const handleFetch = () => {
+    fetch(`${process.env.NEXT_PUBLIC_EXPRESS_API_URL}/feed`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${process.env.NEXT_PUBLIC_API_AUTH_TOKEN}`,
+      },
+      body: JSON.stringify({
+        limit: 3,
+        page: page + 1,
+        search: search,
+      }),
+    })
+      .then((res) => res.json())
+      .then((result) => {
+        console.log(...result.data);
+        setLoading(false);
+        setPage((prevPage) => prevPage + 1);
+        setFeed((prevFeed) => [...prevFeed, ...result.data]);
+        setHasMore(result.hasMore);
+      })
+      .catch((err) => console.error("Fetch error:", err));
+  };
 
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
-        if (entries[0].isIntersecting && hasMore) {
+        if (entries[0].isIntersecting && hasMore && search === "") {
           // Ensure we have more data
           setLoading(true);
-          fetch(`${process.env.NEXT_PUBLIC_EXPRESS_API_URL}/feed`, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${process.env.NEXT_PUBLIC_API_AUTH_TOKEN}`,
-            },
-            body: JSON.stringify({
-              limit: 3,
-              page: page + 1,
-            }),
-          })
-            .then((res) => res.json())
-            .then((result) => {
-              setLoading(false);
-              setPage((prevPage) => prevPage + 1);
-              setFeed((prevFeed) => [...prevFeed, ...result.data]);
-              setHasMore(result.hasMore);
-            })
-            .catch((err) => console.error("Fetch error:", err));
+          handleFetch();
         }
       },
       { rootMargin: "10px" },
@@ -52,18 +62,26 @@ const FeedWrapper = ({ data }: { data: Data }) => {
     }
 
     return () => observer.disconnect();
-  }, [page, hasMore]); // Ensure effect runs when page updates
+  }, [page, hasMore, search]); // Ensure effect runs when page updates
 
   if (data.data.length === 0) {
     return (
-      <div className="grid place-items-center h-screen">
-        <p className="text-2xl lg:text-5xl">No posts found</p>
-      </div>
+      <section className="min-h-screen px-5 py-16 mx-auto max-w-7xl lg:px-0 lg:py-10">
+        <div className="mb-10">
+          <Search />
+        </div>
+        <div className="grid place-items-center h-screen">
+          <p className="text-2xl lg:text-5xl">No posts found</p>
+        </div>
+      </section>
     );
   }
 
   return (
     <section className="min-h-screen px-5 py-16 mx-auto max-w-7xl lg:px-0 lg:py-10">
+      <div className="mb-10">
+        <Search />
+      </div>
       <div className="grid grid-cols-1 text-white gap-12 lg:gap-10">
         {feed.map((post: History, index) => {
           return (
