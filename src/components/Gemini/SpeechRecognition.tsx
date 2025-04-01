@@ -23,7 +23,7 @@ const SpeechRecognitionUI = ({
 
   return (
     <div
-      className={`flex items-center gap-x-5 absolute z-10 right-3 top-28 lg:right-5 lg:top-5 bg-base-300 p-2.5 rounded-2xl ${className}`}
+      className={`flex items-center gap-x-5 absolute z-10 right-3 bottom-8 lg:bottom-[unset] lg:right-5 lg:top-5 bg-base-300 p-2.5 rounded-2xl ${className}`}
     >
       <button
         className="cursor-pointer disabled:cursor-not-allowed"

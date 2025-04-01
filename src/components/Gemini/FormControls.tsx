@@ -65,14 +65,19 @@ const FormControls = ({
 
   return (
     <section className={`${className} relative`}>
-      <SpeechRecognitionUI stopSpeech={stopSpeech} className="voice-input" />
       <div className="relative">
-        <Textarea inputRef={inputRef} file={file} />
+        <div className="relative">
+          <SpeechRecognitionUI
+            stopSpeech={stopSpeech}
+            className="voice-input"
+          />
+          <Textarea inputRef={inputRef} file={file} />
+        </div>
         <motion.button
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.4, ease: "easeInOut", times: 1 }}
-          className="btn btn-primary w-36 absolute bottom-14 right-2"
+          className="btn btn-sm lg:btn-md btn-primary w-36 absolute bottom-10 left-2 lg:left-[unset] lg:bottom-14 lg:right-2"
           onClick={() => {
             setGenerateImageTag(!generateImageTag);
             setInputText("Generate image: ");
@@ -202,7 +207,7 @@ const Textarea = ({
       value={inputText}
       onChange={(e) => setInputText(e.target.value)}
       placeholder="Paste your prompt here..."
-      rows={7}
+      rows={12}
       className="text-pretty textarea textarea-info w-full mb-6 lg:mb-10 textarea-input"
       disabled={loading || !!file}
     />
