@@ -7,6 +7,7 @@ import Modal from "./Modal";
 import Search from "./Search";
 import { AnimatePresence } from "motion/react";
 import { History } from "@/types/response-handlers";
+import Heading from "../Heading";
 
 /**
  * A component that displays a list of history items from the local history store.
@@ -264,7 +265,7 @@ const LocalHistory = ({
                   openModal();
                 }}
               >
-                {item.prompt}
+                <Heading prompt={item.prompt || ""} />
               </button>
             </motion.li>
           );

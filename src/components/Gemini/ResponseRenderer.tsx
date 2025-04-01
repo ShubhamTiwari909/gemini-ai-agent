@@ -15,9 +15,12 @@ import TextToSpeech from "../TextToSpeech";
 import Image from "next/image";
 import { base64ToText, formatDate } from "@/lib/utils";
 import Link from "next/link";
+import ImageResponse from "./ImageResponse";
+import Heading from "../Heading";
 
 export const childClasses = {
-  container: "w-full p-2.5 border border-solid border-cyan-300 rounded-lg",
+  container:
+    "w-full px-2.5 py-8 border border-solid border-cyan-300 rounded-lg h-fit",
   imageContainer:
     "flex justify-center mb-5 border border-solid border-base-content rounded-xl",
   heading:
@@ -39,6 +42,7 @@ const extractLanguage = (filePreview: string) => {
 };
 
 const ResponseRenderer = ({
+  isImageResponse,
   usermail,
   username,
   filePreview,
@@ -47,9 +51,10 @@ const ResponseRenderer = ({
   summary,
   loading,
   createdAt,
-  className,
+  className = "",
   childClassNames = childClasses,
 }: {
+  isImageResponse: boolean;
   usermail?: string | undefined | null;
   username?: string;
   filePreview?: string | null;
@@ -88,10 +93,26 @@ const ResponseRenderer = ({
   return (
     <section
       ref={summaryRef}
-      className={`relative pt-16 lg:pt-0 !overflow-auto ${className} `}
+      className={`relative !overflow-auto mt-5 ${className} `}
     >
-      <Loader loading={loading} summary={summary} />
-      {summary && (
+      <Loader loading={loading} summary={summary as string} />
+      {summary && isImageResponse ? (
+        <div>
+          <Heading prompt={prompt || ""} className={heading} />
+          <ImageResponse
+            src={summary || ""}
+            alt={prompt || ""}
+            className="xl:w-1/2"
+          />
+          <div className="text-center mt-10">
+            <CreatedAtByUsername
+              usermail={usermail}
+              createdAt={createdAt}
+              username={username}
+            />
+          </div>
+        </div>
+      ) : (
         <div className={`${loading ? "select-none" : ""} ${container}`}>
           {filePreview && (
             <>

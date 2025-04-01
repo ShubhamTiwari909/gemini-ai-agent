@@ -11,6 +11,7 @@ import {
 } from "react-icons/md";
 import Link from "next/link";
 import { History } from "@/types/response-handlers";
+import Heading from "../Heading";
 
 const Modal = ({
   activeHistory,
@@ -49,17 +50,15 @@ const Modal = ({
       setCopied(false);
     }, 2000);
   };
-
   return (
     <div>
       <dialog ref={modalRef} id="history-modal" className="modal">
         <div className="modal-box max-w-7xl relative p-0 !h-120 lg:!h-156">
           <div className="flex items-center justify-between sticky gap-x-3 top-0 bg-base-300 z-10 w-full p-3 lg:p-5">
-            <h3 className="font-bold text-lg text-ellipsis line-clamp-1 flex gap-x-3">
-              <span className="line-clamp-2 text-balance max-w-3xl">
-                {activeHistory?.prompt}
-              </span>
-            </h3>
+            <Heading
+              prompt={activeHistory?.prompt || ""}
+              className="font-bold text-lg text-ellipsis line-clamp-1 flex gap-x-3 text-balance max-w-3xl"
+            />
             <div className="modal-action mt-0 gap-x-3 lg:gap-x-8 items-center">
               <div className="relative" ref={optionsRef}>
                 <button
@@ -116,6 +115,7 @@ const Modal = ({
             </div>
           </div>
           <ResponseRenderer
+            isImageResponse={activeHistory?.responseType === "image"}
             filePreview={activeHistory?.filePreview || ""}
             summaryRef={summaryRef}
             summary={activeHistory?.response || ""}

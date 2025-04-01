@@ -32,6 +32,7 @@ export type AddHistoryToDB = {
   apiAuthToken: string;
   userId: string;
   tags: string[];
+  generateImageTag: boolean;
 };
 
 export type History = {
@@ -41,6 +42,7 @@ export type History = {
   email: string;
   prompt: string;
   response: string;
+  responseType: string;
   filePreview?: string | null;
   createdAt?: string;
   userId: string;

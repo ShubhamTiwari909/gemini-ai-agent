@@ -2,9 +2,17 @@ import { History } from "@/types/response-handlers";
 import { create } from "zustand";
 import { devtools } from "zustand/middleware";
 
+export type Src = {
+  inlineData: {
+    data: string;
+  };
+}[];
+
 interface BearState {
   inputText: string;
   setInputText: (text: string) => void;
+  generateImageTag: boolean;
+  setGenerateImageTag: (tag: boolean) => void;
   prompt: string;
   setPrompt: (text: string) => void;
   file: File | null;
@@ -33,6 +41,8 @@ export const useGlobalStore = create<BearState>()(
   devtools((set) => ({
     inputText: "",
     setInputText: (text) => set({ inputText: text }),
+    generateImageTag: false,
+    setGenerateImageTag: (tag) => set({ generateImageTag: tag }),
     prompt: "",
     setPrompt: (text) => set({ prompt: text }),
     file: null,

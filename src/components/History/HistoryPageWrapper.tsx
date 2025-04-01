@@ -22,6 +22,7 @@ const HistoryPageWrapper = ({
 
   return (
     <ResponseRenderer
+      isImageResponse={activeHistory?.responseType === "image"}
       usermail={usermail}
       username={activeHistory.username || ""}
       filePreview={activeHistory?.filePreview || ""}
@@ -32,8 +33,9 @@ const HistoryPageWrapper = ({
       className="p-3 lg:p-5 lg:mt-0 !pt-5"
       childClassNames={{
         ...childClasses,
-        container: "w-full lg:p-5",
-        heading: "text-3xl lg:text-5xl my-5 bg-clip-text text-base-content",
+        container: "w-full pt-10",
+        heading:
+          "text-3xl lg:text-5xl mt-5 mb-10 bg-clip-text text-base-content text-center",
         markdown: `${childClasses.markdown} pt-0 lg:pt-10`,
         textToSpeech: `${childClasses.textToSpeech} top-2`,
         imageContainer: `${childClasses.imageContainer} lg:w-[calc(100%-10rem)] mt-10 lg:mt-0`,

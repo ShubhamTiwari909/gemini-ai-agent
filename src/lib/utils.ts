@@ -62,6 +62,7 @@ export const handleSummarize = async (handleSummarize: HandleSummarize) => {
 
     // Parse the response data
     const data = await response.json();
+    console.log(data);
     if (data) {
       // Update the summary state with the response
       setSummary(data.summary);
@@ -181,6 +182,7 @@ export const addHistoryToDb = async (addHistoryToDb: AddHistoryToDB) => {
       apiAuthToken,
       userId,
       tags,
+      generateImageTag,
     } = addHistoryToDb;
     // Generate a unique history ID from input and summary
     const historyId = `${input.split(" ").join("-").slice(0, 10)}-${data.summary.split(" ").join("-").slice(0, 10)}-${user?.email}/${Date.now()}`;
@@ -195,6 +197,7 @@ export const addHistoryToDb = async (addHistoryToDb: AddHistoryToDB) => {
         username: user?.name,
         prompt: input,
         response: data.summary,
+        responseType: generateImageTag ? "image" : "text",
         filePreview: filePreview || "",
         email: user?.email,
         historyId: historyId,
@@ -215,6 +218,7 @@ export const addHistoryToDb = async (addHistoryToDb: AddHistoryToDB) => {
         filePreview: filePreview || "",
         userId: userId,
         tags,
+        responseType: generateImageTag ? "image" : "text",
       },
       ...localHistory,
     ]);

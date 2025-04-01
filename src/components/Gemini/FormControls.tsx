@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import SampleDropdown from "../Dropdown";
 import SpeechRecognitionUI from "./SpeechRecognition";
 import ImageUpload from "./ImageUpload";
@@ -40,6 +40,11 @@ const FormControls = ({
   const setIsPaused = useGlobalStore((state) => state.setIsSpeechPaused);
   const loading = useGlobalStore((state) => state.loading);
   const setInputText = useGlobalStore((state) => state.setInputText);
+  const generateImageTag = useGlobalStore((state) => state.generateImageTag);
+  const setGenerateImageTag = useGlobalStore(
+    (state) => state.setGenerateImageTag,
+  );
+  const inputRef = useRef<HTMLTextAreaElement>(null);
 
   const { setIsOpen } = useTour();
 
@@ -61,7 +66,22 @@ const FormControls = ({
   return (
     <section className={`${className} relative`}>
       <SpeechRecognitionUI stopSpeech={stopSpeech} className="voice-input" />
-      <Textarea file={file} />
+      <div className="relative">
+        <Textarea inputRef={inputRef} file={file} />
+        <motion.button
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.4, ease: "easeInOut", times: 1 }}
+          className="btn btn-primary w-36 absolute bottom-14 right-2"
+          onClick={() => {
+            setGenerateImageTag(!generateImageTag);
+            setInputText("Generate image: ");
+            inputRef?.current?.focus();
+          }}
+        >
+          {generateImageTag ? "Generate Text" : "Generate Image"}
+        </motion.button>
+      </div>
       <div className="flex flex-wrap gap-5 items-center justify-between lg:gap-10">
         <div className="flex flex-wrap items-center gap-5">
           <SampleDropdown
@@ -158,12 +178,20 @@ const GenerateButton = ({
   );
 };
 
-const Textarea = ({ file }: { file: File | null }) => {
+const Textarea = ({
+  file,
+  inputRef,
+}: {
+  file: File | null;
+  inputRef: React.RefObject<HTMLTextAreaElement | null>;
+}) => {
   const inputText = useGlobalStore((state) => state.inputText);
   const setInputText = useGlobalStore((state) => state.setInputText);
   const loading = useGlobalStore((state) => state.loading);
+
   return (
     <motion.textarea
+      ref={inputRef}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{

@@ -67,12 +67,6 @@ const GeminiAiWrapper = ({
   // Update the fileName state in the global store
   const setFileName = useGlobalStore((state) => state.setFileName);
 
-  /**
-   * The current summary in the global store.
-   * This state is updated when the Gemini AI model returns a response.
-   */
-  const summary = useGlobalStore((state) => state.summary);
-
   // Update the summary state in the global store
   const setSummary = useGlobalStore((state) => state.setSummary);
 
@@ -99,6 +93,14 @@ const GeminiAiWrapper = ({
 
   const tags = useGlobalStore((state) => state.tags);
   const setTags = useGlobalStore((state) => state.setTags);
+
+  /**
+   * The current summary in the global store.
+   * This state is updated when the Gemini AI model returns a response.
+   */
+  const summary = useGlobalStore((state) => state.summary);
+
+  const generateImageTag = useGlobalStore((state) => state.generateImageTag);
 
   const handleSummarizeFromAi = async (input: string) => {
     const response = await fetch("/api/csrf");
@@ -127,6 +129,7 @@ const GeminiAiWrapper = ({
             apiAuthToken,
             userId,
             tags,
+            generateImageTag,
           });
         })
         .catch((error) => {
@@ -169,6 +172,7 @@ const GeminiAiWrapper = ({
               apiAuthToken,
               userId,
               tags,
+              generateImageTag,
             });
           })
           .catch((error) => {
@@ -191,6 +195,7 @@ const GeminiAiWrapper = ({
         />
         <ResponseRenderer
           summary={summary}
+          isImageResponse={generateImageTag}
           loading={loading}
           filePreview={filePreview}
           prompt={prompt}

@@ -5,6 +5,8 @@ import Link from "next/link";
 import { formatDate } from "@/lib/utils";
 import Search from "./Search";
 import { useSearchParams } from "next/navigation";
+import ImageResponse from "../Gemini/ImageResponse";
+import Heading from "../Heading";
 
 type Data = {
   data: History[];
@@ -20,6 +22,7 @@ const FeedWrapper = ({ data }: { data: Data }) => {
   const observerRef = useRef<HTMLDivElement | null>(null);
   const searchParams = useSearchParams();
   const search = searchParams.get("search");
+  console.log(search);
 
   const handleFetch = () => {
     fetch(`${process.env.NEXT_PUBLIC_EXPRESS_API_URL}/feed`, {
@@ -36,7 +39,6 @@ const FeedWrapper = ({ data }: { data: Data }) => {
     })
       .then((res) => res.json())
       .then((result) => {
-        console.log(...result.data);
         setLoading(false);
         setPage((prevPage) => prevPage + 1);
         setFeed((prevFeed) => [...prevFeed, ...result.data]);
@@ -48,8 +50,8 @@ const FeedWrapper = ({ data }: { data: Data }) => {
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
-        if (entries[0].isIntersecting && hasMore && search === "") {
-          // Ensure we have more data
+        console.log("Observer triggered", entries);
+        if (entries[0].isIntersecting && hasMore && !search) {
           setLoading(true);
           handleFetch();
         }
@@ -82,21 +84,33 @@ const FeedWrapper = ({ data }: { data: Data }) => {
       <div className="mb-10">
         <Search />
       </div>
-      <div className="grid grid-cols-1 text-white gap-12 lg:gap-10">
+      <div className="flex flex-wrap text-white gap-12 lg:gap-10">
         {feed.map((post: History, index) => {
           return (
             <div
               key={post._id}
+              data-id={index === feed.length - 1 ? "Last" : "Not last"}
               ref={index === feed.length - 1 ? observerRef : null} // Attach ref to last item
-              className="p-5 rounded-xl border border-base-content border-solid"
+              className={`p-5 rounded-xl border border-base-content border-solid flex flex-col justify-between ${post.responseType === "image" ? "w-120" : "w-150"}`}
             >
               <Link href={`/history/${post._id}`}>
-                <h2 className="mb-4 text-xl lg:text-2xl bg-gradient-to-r from-pink-500 to-violet-500 bg-clip-text font-extrabold text-transparent">
-                  {post.prompt}
-                </h2>
-                <p className="mb-5 lg:mb-10 text-base-content">
-                  {post.response.slice(0, 200)}...
-                </p>
+                <Heading
+                  prompt={post.prompt || ""}
+                  className="mb-4 text-xl lg:text-2xl bg-gradient-to-r from-pink-500 to-violet-500 bg-clip-text font-extrabold text-transparent text-center"
+                />
+                <div className="mb-5 lg:mb-10 text-base-content">
+                  {post.responseType === "image" ? (
+                    <ImageResponse
+                      width={300}
+                      height={300}
+                      alt={post.prompt}
+                      src={post.response}
+                      className="w-50"
+                    />
+                  ) : (
+                    `${post.response.slice(0, 500)}...`
+                  )}
+                </div>
               </Link>
               <div className="flex flex-wrap gap-y-5 justify-between items-center font-bold">
                 <p className="text-sm">
