@@ -115,10 +115,12 @@ const Modal = ({
             </div>
           </div>
           <ResponseRenderer
-            isImageResponse={activeHistory?.responseType === "image"}
-            filePreview={activeHistory?.filePreview || ""}
+            post={{
+              isImageResponse: activeHistory?.responseType === "image",
+              filePreview: activeHistory?.filePreview || "",
+              summary: activeHistory?.response || "",
+            }}
             summaryRef={summaryRef}
-            summary={activeHistory?.response || ""}
             className="p-3 lg:p-5 lg:mt-0 !pt-5"
           />
         </div>

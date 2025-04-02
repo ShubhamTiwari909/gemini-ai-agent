@@ -194,11 +194,13 @@ const GeminiAiWrapper = ({
           className="lg:mb-20"
         />
         <ResponseRenderer
-          summary={summary}
-          isImageResponse={generateImageTag}
+          post={{
+            summary,
+            prompt,
+            isImageResponse: generateImageTag,
+            filePreview,
+          }}
           loading={loading}
-          filePreview={filePreview}
-          prompt={prompt}
           summaryRef={summaryRef}
           childClassNames={{
             ...childClasses,

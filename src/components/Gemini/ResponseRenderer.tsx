@@ -41,28 +41,28 @@ const extractLanguage = (filePreview: string) => {
   return languageType[contentType as keyof typeof languageType];
 };
 
-const ResponseRenderer = ({
-  isImageResponse,
-  usermail,
-  username,
-  filePreview,
-  prompt,
-  summaryRef,
-  summary,
-  loading,
-  createdAt,
-  className = "",
-  childClassNames = childClasses,
-}: {
+type Post = {
   isImageResponse: boolean;
-  usermail?: string | undefined | null;
   username?: string;
   filePreview?: string | null;
   prompt?: string;
-  summaryRef: React.RefObject<HTMLDivElement | null>;
   summary: string;
-  loading?: boolean;
   createdAt?: string;
+  tags?: string[];
+};
+
+const ResponseRenderer = ({
+  post,
+  usermail,
+  summaryRef,
+  loading,
+  className = "",
+  childClassNames = childClasses,
+}: {
+  post: Post;
+  usermail?: string | undefined | null;
+  loading?: boolean;
+  summaryRef: React.RefObject<HTMLDivElement | null>;
   className?: string;
   childClassNames?: {
     container?: string;
@@ -76,6 +76,9 @@ const ResponseRenderer = ({
   const syntaxHighlighterRef = useRef<SyntaxHighlighter>(null);
 
   const defaultLayoutPluginInstance = defaultLayoutPlugin();
+
+  const { isImageResponse, username, filePreview, prompt, summary, createdAt } =
+    post;
 
   const { container, imageContainer, heading, textToSpeech, markdown } =
     childClassNames;
@@ -99,12 +102,25 @@ const ResponseRenderer = ({
       {summary && isImageResponse ? (
         <div>
           <Heading prompt={prompt || ""} className={heading} />
+          {post.tags && (
+            <ul className="mb-8 flex flex-wrap gap-5">
+              {post.tags.map((tag: string, index: number) => (
+                <li
+                  key={index}
+                  className="inline-block px-2 py-1 mr-2 text-xs font-semibold text-gray-700 bg-gray-200 rounded-full"
+                >
+                  #{tag}
+                </li>
+              ))}
+            </ul>
+          )}
+
           <ImageResponse
             src={summary || ""}
             alt={prompt || ""}
-            className="xl:w-1/2"
+            className="w-full object-cover object-top"
           />
-          <div className="text-center mt-10">
+          <div className="mt-10">
             <CreatedAtByUsername
               usermail={usermail}
               createdAt={createdAt}
