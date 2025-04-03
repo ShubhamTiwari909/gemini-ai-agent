@@ -9,6 +9,7 @@ import NoPostFound from "./NoPostFound";
 import Tags from "./Tags";
 import Description from "./Description";
 import CardFooter from "./CardFooter";
+import CardHeader from "./CardHeader";
 
 type Data = {
   data: History[];
@@ -82,6 +83,7 @@ const FeedWrapper = ({ data }: { data: Data }) => {
               ref={index === feed.length - 1 ? observerRef : null} // Attach ref to last item
               className={`p-5 rounded-xl border border-base-content border-solid flex flex-col justify-between relative overflow-hidden ${post.responseType === "image" ? "" : "bg-base-300"}`}
             >
+              <CardHeader post={post} />
               <Link href={`/history/${post._id}`}>
                 <Heading
                   prompt={post.prompt || ""}

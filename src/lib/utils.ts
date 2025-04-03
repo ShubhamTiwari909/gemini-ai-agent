@@ -193,14 +193,12 @@ export const addHistoryToDb = async (addHistoryToDb: AddHistoryToDB) => {
         Authorization: `Bearer ${apiAuthToken}`,
       },
       body: JSON.stringify({
-        username: user?.name,
+        user: { ...user, userId },
         prompt: input,
         response: data.summary,
         responseType: generateImageTag ? "image" : "text",
         filePreview: filePreview || "",
-        email: user?.email,
         historyId: historyId,
-        userId: userId,
         tags,
       }),
     });
@@ -209,13 +207,12 @@ export const addHistoryToDb = async (addHistoryToDb: AddHistoryToDB) => {
     // Update the local history state
     updateLocalHistory([
       {
+        user: { ...user, userId },
         _id: response.newHistory._id,
         historyId: historyId,
-        email: user?.email || "",
         prompt: input,
         response: data.summary,
         filePreview: filePreview || "",
-        userId: userId,
         tags,
         responseType: generateImageTag ? "image" : "text",
       },

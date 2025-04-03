@@ -26,19 +26,23 @@ const ImageResponseRenderer = ({
           ))}
         </ul>
       )}
-      <div className="flex justify-center items-center relative">
-        <ImageResponse
-          src={summary || ""}
-          alt={post.prompt || ""}
-          className="w-full object-cover object-top"
-        />
-        <a
-          download={`${post.prompt}.png`}
-          href={summary}
-          className="absolute top-5 right-5 lg:right-10 p-3 rounded-full bg-base-content"
-        >
-          <FaDownload size="1.5rem" className="text-base-100" />
-        </a>
+      <div className="flex items-center w-full">
+        <div className="w-fit relative">
+          <ImageResponse
+            src={summary || ""}
+            alt={post.prompt || ""}
+            width={1200}
+            height={1200}
+            className="w-full object-cover object-top"
+          />
+          <a
+            download={`${post.prompt}.png`}
+            href={summary}
+            className="absolute top-5 right-5 lg:right-10 p-3 rounded-full bg-base-content"
+          >
+            <FaDownload size="1.5rem" className="text-base-100" />
+          </a>
+        </div>
       </div>
       <div className="mt-10">
         <CreatedAtByUsername
