@@ -1,7 +1,7 @@
 "use client";
 import ResponseRenderer, {
   childClasses,
-} from "@/components/Gemini/ResponseRenderer";
+} from "@/components/Gemini/ResponseRenderer/ResponseRenderer";
 import { History } from "@/types/response-handlers";
 import React, { useEffect, useRef } from "react";
 

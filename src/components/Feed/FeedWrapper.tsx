@@ -2,11 +2,13 @@
 import React, { useEffect, useRef, useState } from "react";
 import { History } from "@/types/response-handlers";
 import Link from "next/link";
-import { formatDate } from "@/lib/utils";
 import Search from "./Search";
 import { useSearchParams } from "next/navigation";
-import ImageResponse from "../Gemini/ImageResponse";
 import Heading from "../Heading";
+import NoPostFound from "./NoPostFound";
+import Tags from "./Tags";
+import Description from "./Description";
+import CardFooter from "./CardFooter";
 
 type Data = {
   data: History[];
@@ -49,7 +51,6 @@ const FeedWrapper = ({ data }: { data: Data }) => {
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
-        console.log("Observer triggered", entries);
         if (entries[0].isIntersecting && hasMore && !search) {
           setLoading(true);
           handleFetch();
@@ -66,23 +67,12 @@ const FeedWrapper = ({ data }: { data: Data }) => {
   }, [page, hasMore, search]); // Ensure effect runs when page updates
 
   if (data.data.length === 0) {
-    return (
-      <section className="min-h-screen px-5 py-16 mx-auto max-w-7xl lg:px-0 lg:py-10">
-        <div className="mb-10">
-          <Search />
-        </div>
-        <div className="grid place-items-center h-screen">
-          <p className="text-2xl lg:text-5xl">No posts found</p>
-        </div>
-      </section>
-    );
+    return <NoPostFound />;
   }
 
   return (
     <section className="min-h-screen px-5 py-16 mx-auto max-w-7xl lg:px-0 lg:py-10">
-      <div className="mb-10">
-        <Search />
-      </div>
+      <Search className="mb-10" />
       <div className="grid grid-cols-1 lg:grid-cols-3 text-white gap-12 lg:gap-10">
         {feed.map((post: History, index) => {
           return (
@@ -97,46 +87,10 @@ const FeedWrapper = ({ data }: { data: Data }) => {
                   prompt={post.prompt || ""}
                   className={`mb-4 text-xl lg:text-2xl bg-gradient-to-r bg-clip-text font-extrabold text-transparent ${post.responseType === "image" ? "from-pink-200 to-violet-200" : "from-pink-500 to-violet-500"}`}
                 />
-                <ul className="mb-8 flex flex-wrap gap-5">
-                  {post.tags.map((tag: string, index: number) => (
-                    <li
-                      key={index}
-                      className="inline-block px-2 py-1 mr-2 text-xs font-semibold text-gray-700 bg-base-content rounded-full"
-                    >
-                      #{tag}
-                    </li>
-                  ))}
-                </ul>
-                <div className="mb-5 lg:mb-10 text-base-content">
-                  {post.responseType === "image" ? (
-                    <>
-                      <div className="absolute inset-0 -z-10">
-                        <ImageResponse
-                          width={500}
-                          height={500}
-                          alt={post.prompt}
-                          src={post.response}
-                          className="w-full h-full object-cover object-top"
-                        />
-                      </div>
-                      <div className="absolute inset-0 -z-10 bg-black/70"></div>
-                    </>
-                  ) : (
-                    `${post.response.slice(0, 200)}...`
-                  )}
-                </div>
+                <Tags tags={post.tags} />
+                <Description post={post} />
               </Link>
-              <div className="flex flex-wrap gap-y-5 justify-between items-center font-bold">
-                <p className="text-xs text-base-content">
-                  {formatDate(post.createdAt as string)}
-                </p>
-                <Link
-                  href={`/users/${post.email}`}
-                  className="bg-base-content text-base-100 px-4 py-2 lg:px-6 rounded-full text-xs"
-                >
-                  {post.username?.split(" ")[0]} {post.username?.split(" ")[1]}
-                </Link>
-              </div>
+              <CardFooter post={post} />
             </div>
           );
         })}

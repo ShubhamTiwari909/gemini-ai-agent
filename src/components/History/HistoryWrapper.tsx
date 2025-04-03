@@ -3,7 +3,7 @@ import { useGlobalStore } from "@/store/global-store";
 import React, { useEffect } from "react";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import * as motion from "motion/react-client";
-import Modal from "./Modal";
+import Modal from "./Modal/Modal";
 import Search from "./Search";
 import { AnimatePresence } from "motion/react";
 import { History } from "@/types/response-handlers";

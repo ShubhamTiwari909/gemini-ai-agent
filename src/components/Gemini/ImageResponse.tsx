@@ -1,3 +1,4 @@
+import { ImageResponseProps } from "@/types/utils";
 import Image from "next/image";
 import React from "react";
 
@@ -7,13 +8,7 @@ const ImageResponse = ({
   width = 400,
   height = 400,
   className = "",
-}: {
-  src: string;
-  alt: string;
-  width?: number;
-  height?: number;
-  className?: string;
-}) => {
+}: ImageResponseProps) => {
   const filteredAltText = alt
     .slice(0, alt?.indexOf(" - Generate the entire response in"))
     .replace("Generate image: ", "");

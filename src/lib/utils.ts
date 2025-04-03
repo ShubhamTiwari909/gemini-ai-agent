@@ -62,7 +62,6 @@ export const handleSummarize = async (handleSummarize: HandleSummarize) => {
 
     // Parse the response data
     const data = await response.json();
-    console.log(data);
     if (data) {
       // Update the summary state with the response
       setSummary(data.summary);

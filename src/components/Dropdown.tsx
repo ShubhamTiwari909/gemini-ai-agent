@@ -2,6 +2,7 @@
 import React from "react";
 import * as motion from "motion/react-client";
 import { useGlobalStore } from "@/store/global-store";
+import { DropdownProps } from "@/types/utils";
 
 /**
  * A dropdown component that displays a list of items.
@@ -23,14 +24,7 @@ const Dropdown = ({
   setInputText,
   loading = false,
   stopSpeech,
-}: {
-  title: string;
-  itemsList: string[];
-  onClick: (item: string) => void;
-  setInputText?: (text: string) => void;
-  loading?: boolean;
-  stopSpeech?: () => void;
-}) => {
+}: DropdownProps) => {
   const dropdownContentRef = React.useRef<HTMLUListElement>(null);
   const setFilePreview = useGlobalStore((state) => state.setFilePreview);
   const tags = useGlobalStore((state) => state.tags);

@@ -1,14 +1,14 @@
 "use client";
 import React, { useState } from "react";
 
-const Search = () => {
+const Search = ({ className }: { className?: string }) => {
   const [search, setSearch] = useState("");
 
   const handleNavigation = () => {
     window.location.href = `/search?search=${search}`; // Navigate to the page
   };
   return (
-    <div className="flex gap-5 items-center w-full">
+    <div className={`flex gap-5 items-center w-full ${className}`}>
       <input
         className="input input-bordered w-full"
         type="text"

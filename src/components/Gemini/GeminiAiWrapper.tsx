@@ -1,8 +1,9 @@
 "use client";
 import React, { useRef } from "react";
 import FormControls from "./FormControls";
-import ResponseRenderer, { childClasses } from "./ResponseRenderer";
-import { Session } from "next-auth";
+import ResponseRenderer, {
+  childClasses,
+} from "./ResponseRenderer/ResponseRenderer";
 import { useGlobalStore } from "@/store/global-store";
 import {
   handleImageResponse,
@@ -10,6 +11,7 @@ import {
   addHistoryToDb,
 } from "@/lib/utils";
 import { TourProvider } from "@reactour/tour";
+import { GeminiAiWrapperProps } from "@/types/utils";
 
 const steps = [
   {
@@ -47,12 +49,7 @@ const GeminiAiWrapper = ({
   expressUrl,
   apiAuthToken,
   userId,
-}: {
-  user: Session["user"];
-  expressUrl: string;
-  apiAuthToken: string;
-  userId: string;
-}) => {
+}: GeminiAiWrapperProps) => {
   // REFS
   // Reference to the DOM element that will display the summary
   const summaryRef = useRef<HTMLDivElement>(null);
