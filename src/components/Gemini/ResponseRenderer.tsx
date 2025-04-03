@@ -4,7 +4,7 @@ import Markdown, { ExtraProps } from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { atomDark } from "react-syntax-highlighter/dist/esm/styles/prism";
-import { FaCopy, FaRegCopy } from "react-icons/fa";
+import { FaCopy, FaDownload, FaRegCopy } from "react-icons/fa";
 import { Viewer } from "@react-pdf-viewer/core";
 import { defaultLayoutPlugin } from "@react-pdf-viewer/default-layout";
 import "@react-pdf-viewer/core/lib/styles/index.css";
@@ -107,19 +107,27 @@ const ResponseRenderer = ({
               {post.tags.map((tag: string, index: number) => (
                 <li
                   key={index}
-                  className="inline-block px-2 py-1 mr-2 text-xs font-semibold text-gray-700 bg-gray-200 rounded-full"
+                  className="inline-block px-2 py-1 mr-2 text-xs font-semibold text-gray-700 bg-base-content rounded-full"
                 >
                   #{tag}
                 </li>
               ))}
             </ul>
           )}
-
-          <ImageResponse
-            src={summary || ""}
-            alt={prompt || ""}
-            className="w-full object-cover object-top"
-          />
+          <div className="flex justify-center items-center relative">
+            <ImageResponse
+              src={summary || ""}
+              alt={prompt || ""}
+              className="w-full object-cover object-top"
+            />
+            <a
+              download={`${prompt}.png`}
+              href={summary}
+              className="absolute top-5 right-5 lg:right-10 p-3 rounded-full bg-base-content"
+            >
+              <FaDownload size="1.5rem" className="text-base-100" />
+            </a>
+          </div>
           <div className="mt-10">
             <CreatedAtByUsername
               usermail={usermail}
@@ -180,6 +188,18 @@ const ResponseRenderer = ({
                   prompt.indexOf("- Generate the entire response in"),
                 )}
               </h2>
+              {post.tags && (
+                <ul className="mb-8 flex flex-wrap gap-5">
+                  {post.tags.map((tag: string, index: number) => (
+                    <li
+                      key={index}
+                      className="inline-block px-2 py-1 mr-2 text-xs font-semibold text-gray-700 bg-base-content rounded-full"
+                    >
+                      #{tag}
+                    </li>
+                  ))}
+                </ul>
+              )}
               <CreatedAtByUsername
                 usermail={usermail}
                 createdAt={createdAt}

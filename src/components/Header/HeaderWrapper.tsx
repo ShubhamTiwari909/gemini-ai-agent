@@ -49,16 +49,16 @@ const HeaderWrapper = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <header
-      className={`flex justify-between fixed w-full top-0 z-100 ${pathname !== "/login" ? "bg-base-content" : ""}`}
+      className={`flex justify-between items-center fixed w-full top-0 z-100 ${pathname !== "/login" ? "bg-base-content" : ""}`}
     >
-      <div className="flex justify-between relative z-50 w-full py-5 lg:px-16 px-5">
+      <div className="flex justify-between relative z-50 w-full py-3 lg:px-16 px-5">
         <Link href="/">
           <Image
             src="/gemini-zentauri-logo.png"
             alt="logo"
-            width={100}
+            width={50}
             height={50}
-            className="w-20 lg:w-24"
+            className="w-16"
           />
         </Link>
         <button

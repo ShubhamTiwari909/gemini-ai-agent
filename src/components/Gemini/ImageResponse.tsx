@@ -18,15 +18,13 @@ const ImageResponse = ({
     .slice(0, alt?.indexOf(" - Generate the entire response in"))
     .replace("Generate image: ", "");
   return (
-    <div className="flex justify-center items-center">
-      <Image
-        src={src}
-        alt={filteredAltText}
-        width={width}
-        height={height}
-        className={`rounded-xl border-2 border-primary border-solid ${className}`}
-      />
-    </div>
+    <Image
+      src={src}
+      alt={filteredAltText}
+      width={width}
+      height={height}
+      className={`rounded-xl border-2 border-primary border-solid ${className}`}
+    />
   );
 };
 
