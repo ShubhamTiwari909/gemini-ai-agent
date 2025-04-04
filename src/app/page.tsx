@@ -32,12 +32,15 @@ const fetchFeed = async (limit: number, page: number) => {
  */
 const page = async () => {
   const session = await auth();
+  const expressUrl = process.env.EXPRESS_API_URL || "";
   if (!session?.user) {
     // If the user is not logged in, redirect to the login page.
     redirect("/login");
   }
   const data = await fetchFeed(3, 1);
-  return <FeedWrapper data={data} />;
+  return (
+    <FeedWrapper data={data} expressUrl={expressUrl} user={session?.user} />
+  );
 };
 
 export default page;

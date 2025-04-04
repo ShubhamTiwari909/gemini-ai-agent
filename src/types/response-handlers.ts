@@ -1,4 +1,4 @@
-import { Session } from "next-auth";
+import { Session, User } from "next-auth";
 
 type SharedHandlerProps = {
   setLoading: (loading: boolean) => void;
@@ -57,4 +57,5 @@ export type History = {
   filePreview?: string | null;
   createdAt?: string;
   tags: string[];
+  likes: User[];
 };

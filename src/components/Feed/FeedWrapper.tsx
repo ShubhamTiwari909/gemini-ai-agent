@@ -10,6 +10,7 @@ import Tags from "./Tags";
 import Description from "./Description";
 import CardFooter from "./CardFooter";
 import CardHeader from "./CardHeader";
+import { User } from "next-auth";
 
 type Data = {
   data: History[];
@@ -17,7 +18,15 @@ type Data = {
   hasMore: boolean;
 };
 
-const FeedWrapper = ({ data }: { data: Data }) => {
+const FeedWrapper = ({
+  data,
+  expressUrl,
+  user,
+}: {
+  data: Data;
+  expressUrl: string;
+  user: User;
+}) => {
   const [feed, setFeed] = useState(data.data);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(data.hasMore);
@@ -102,6 +111,10 @@ const FeedWrapper = ({ data }: { data: Data }) => {
                     ? "text-white"
                     : "text-base-content"
                 }
+                expressUrl={expressUrl}
+                historyId={post.historyId}
+                user={user}
+                likes={post.likes}
               />
             </div>
           );

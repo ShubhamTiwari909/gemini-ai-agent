@@ -279,6 +279,7 @@ export const addHistoryToDb = (addHistoryToDb: AddHistoryToDB) => {
             filePreview: filePreview || "",
             tags,
             responseType: generateImageTag ? "image" : "text",
+            likes: response.newHistory.likes,
           },
           ...localHistory,
         ]);

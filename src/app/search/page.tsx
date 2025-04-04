@@ -43,7 +43,11 @@ const page = async ({ searchParams }: Props) => {
   const data = await fetchFeed(3, 1, currSearchParams.search);
   return (
     <div>
-      <FeedWrapper data={data} />
+      <FeedWrapper
+        data={data}
+        expressUrl={process.env.EXPRESS_API_URL || ""}
+        user={session?.user}
+      />
     </div>
   );
 };
