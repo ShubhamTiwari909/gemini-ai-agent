@@ -40,40 +40,71 @@ export const base64ToText = (base64Data: string) => {
  *   - setFileName: A function to set the file name state
  *   - addHistoryToDb: A function to add the history to the database
  */
-export const handleSummarize = async (handleSummarize: HandleSummarize) => {
+export const handleSummarize = (handleSummarize: HandleSummarize) => {
   const {
     input,
+    summaryRef,
+    csrfToken,
+    user,
+    expressUrl,
+    localHistory,
+    apiAuthToken,
+    userId,
+    tags,
+    generateImageTag,
+    setPrompt,
     setLoading,
     setSummary,
-    summaryRef,
     setFileName,
-    csrfToken,
     setTags,
+    setInputText,
+    updateLocalHistory,
   } = handleSummarize;
-  setLoading(true);
-  setSummary("");
   try {
+    setLoading(true);
+    setSummary("");
     // Send POST request to the Gemini AI model API with input text
-    const response = await fetch("/api/gemini-model", {
+    fetch("/api/gemini-model", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ text: input, csrfToken }),
-    });
-
-    // Parse the response data
-    const data = await response.json();
-    if (data) {
-      // Update the summary state with the response
-      setSummary(data.summary);
-      setFileName("");
-      setTags([]);
-    }
-    return data;
+    })
+      .then((response) => {
+        return response.json();
+      })
+      .then((response) => {
+        // Parse the response data
+        if (response) {
+          // Update the summary state with the response
+          setSummary(response.summary);
+          setFileName("");
+          setTags([]);
+          setLoading(false);
+          setInputText("");
+          addHistoryToDb({
+            data: response.summary,
+            input,
+            user,
+            expressUrl,
+            setPrompt,
+            updateLocalHistory,
+            localHistory,
+            apiAuthToken,
+            userId,
+            tags,
+            generateImageTag,
+          });
+        }
+        return response;
+      })
+      .catch((error) => {
+        console.error("Error summarizing content:", error);
+        setSummary("An error occurred while summarizing.");
+      });
   } catch (error) {
     console.error("Error summarizing content:", error);
     setSummary("An error occurred while summarizing.");
   } finally {
-    setLoading(false);
     // Scroll the summary into view smoothly
     summaryRef.current?.scrollIntoView({
       behavior: "smooth",
@@ -91,27 +122,36 @@ export const handleSummarize = async (handleSummarize: HandleSummarize) => {
  * @returns {Promise<void>} - A promise that resolves when the summary has been
  * updated.
  */
-export const handleImageResponse = async (
+export const handleImageResponse = (
   handleImageResponse: HandleImageResponse,
 ) => {
   const {
-    setLoading,
     file,
+    summaryRef,
+    csrfToken,
+    language,
+    user,
+    expressUrl,
+    localHistory,
+    apiAuthToken,
+    userId,
+    tags,
+    generateImageTag,
+    setPrompt,
+    updateLocalHistory,
+    setLoading,
     setFilePreview,
     setFile,
     setSummary,
-    summaryRef,
     setFileName,
-    csrfToken,
-    language,
     setTags,
   } = handleImageResponse;
-  setLoading(true);
-  setSummary("");
-  setFilePreview(null);
   try {
+    setLoading(true);
+    setSummary("");
+    setFilePreview(null);
     if (file) {
-      const fileBase64 = await new Promise((resolve, reject) => {
+      const fileBase64 = new Promise((resolve, reject) => {
         const reader = new FileReader();
         reader.onload = () => {
           if (typeof reader.result === "string") {
@@ -124,32 +164,55 @@ export const handleImageResponse = async (
         reader.readAsDataURL(file);
       });
 
-      const fileDataUrl = `data:${file.type};base64,${fileBase64}`;
-      setFilePreview(fileDataUrl);
+      fileBase64.then((base64String) => {
+        if (base64String) {
+          const fileDataUrl = `data:${file.type};base64,${base64String}`;
+          setFilePreview(fileDataUrl);
 
-      // Send POST request to the Gemini AI model API with input text
-      const response = await fetch("/api/gemini-image", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          image: fileBase64,
-          mimeType: file.type,
-          csrfToken,
-          language,
-        }),
+          // Send POST request to the Gemini AI model API with input text
+          fetch("/api/gemini-image", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              image: base64String,
+              mimeType: file.type,
+              csrfToken,
+              language,
+            }),
+          })
+            .then((response) => {
+              return response.json();
+            })
+            .then((response) => {
+              if (response) {
+                // Update the summary state with the response
+                setSummary(response.summary);
+                setFileName("");
+                setTags([]);
+                setLoading(false);
+                setFile(null);
+                addHistoryToDb({
+                  data: response?.summary,
+                  input: file?.name || "",
+                  user,
+                  expressUrl,
+                  setPrompt,
+                  updateLocalHistory,
+                  localHistory,
+                  filePreview: fileDataUrl,
+                  apiAuthToken,
+                  userId,
+                  tags,
+                  generateImageTag,
+                });
+              }
+              return {
+                response,
+                filePreview: fileDataUrl,
+              };
+            });
+        }
       });
-      // Parse the response data
-      const data = await response.json();
-      if (data) {
-        // Update the summary state with the response
-        setSummary(data.summary);
-        setFileName("");
-        setTags([]);
-      }
-      return {
-        data,
-        filePreview: fileDataUrl,
-      };
     }
     return null;
   } catch (error) {
@@ -157,17 +220,15 @@ export const handleImageResponse = async (
     setSummary("An error occurred while summarizing.");
     return null;
   } finally {
-    setLoading(false);
     // Scroll the summary into view smoothly
     summaryRef.current?.scrollIntoView({
       behavior: "smooth",
       block: "start",
     });
-    setFile(null);
   }
 };
 
-export const addHistoryToDb = async (addHistoryToDb: AddHistoryToDB) => {
+export const addHistoryToDb = (addHistoryToDb: AddHistoryToDB) => {
   try {
     const {
       data,
@@ -183,10 +244,11 @@ export const addHistoryToDb = async (addHistoryToDb: AddHistoryToDB) => {
       tags,
       generateImageTag,
     } = addHistoryToDb;
+
     // Generate a unique history ID from input and summary
-    const historyId = `${input.split(" ").join("-").slice(0, 10)}-${data.summary.split(" ").join("-").slice(0, 10)}-${user?.email}/${Date.now()}`;
+    const historyId = `${input.split(" ").join("-").slice(0, 10)}-${data.split(" ").join("-").slice(0, 10)}-${user?.email}/${Date.now()}`;
     // Save the prompt and its response to the server-side history
-    const result = await fetch(`${expressUrl}/history/add`, {
+    fetch(`${expressUrl}/history/add`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -195,32 +257,34 @@ export const addHistoryToDb = async (addHistoryToDb: AddHistoryToDB) => {
       body: JSON.stringify({
         user: { ...user, userId },
         prompt: input,
-        response: data.summary,
+        response: data,
         responseType: generateImageTag ? "image" : "text",
         filePreview: filePreview || "",
         historyId: historyId,
         tags,
       }),
-    });
-    const response = await result.json();
-
-    // Update the local history state
-    updateLocalHistory([
-      {
-        user: { ...user, userId },
-        _id: response.newHistory._id,
-        historyId: historyId,
-        prompt: input,
-        response: data.summary,
-        filePreview: filePreview || "",
-        tags,
-        responseType: generateImageTag ? "image" : "text",
-      },
-      ...localHistory,
-    ]);
-
-    // Set the current prompt
-    setPrompt(input);
+    })
+      .then((response) => {
+        return response.json();
+      })
+      .then((response) => {
+        // Update the local history state
+        updateLocalHistory([
+          {
+            user: { ...user, userId },
+            _id: response.newHistory._id,
+            historyId: historyId,
+            prompt: input,
+            response: data,
+            filePreview: filePreview || "",
+            tags,
+            responseType: generateImageTag ? "image" : "text",
+          },
+          ...localHistory,
+        ]);
+        // Set the current prompt
+        setPrompt(input);
+      });
   } catch (error) {
     console.error("Error adding history to database:", error);
   }

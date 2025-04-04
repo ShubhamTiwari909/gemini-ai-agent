@@ -19,7 +19,8 @@ export const childClasses = {
   heading:
     "text-3xl my-5 bg-clip-text text-transparent bg-gradient-to-r from-pink-500 to-violet-500",
   textToSpeech: "absolute lg:right-8 lg:top-8 right-3 top-0 ",
-  markdown: "prose prose-base w-full max-w-full lg:pr-28 py-5",
+  markdown:
+    "prose prose-base overflow-hidden [&_p]:break-words w-full max-w-full lg:pr-28 py-5",
 };
 
 const ResponseRenderer = ({
@@ -30,8 +31,7 @@ const ResponseRenderer = ({
   className = "",
   childClassNames = childClasses,
 }: ResponseRendererProps) => {
-  const { isImageResponse, username, filePreview, prompt, summary, createdAt } =
-    post;
+  const { username, filePreview, prompt, summary, createdAt } = post;
 
   const { container, textToSpeech } = childClassNames;
 
@@ -41,12 +41,8 @@ const ResponseRenderer = ({
       className={`relative !overflow-auto mt-5 ${className} `}
     >
       <Loader loading={loading} summary={summary as string} />
-      {summary && isImageResponse ? (
-        <ImageResponseRenderer
-          post={post}
-          usermail={usermail}
-          summary={summary}
-        />
+      {summary && summary.includes("data:image") ? (
+        <ImageResponseRenderer post={post} usermail={usermail} src={summary} />
       ) : (
         <div className={`${loading ? "select-none" : ""} ${container}`}>
           {filePreview && (

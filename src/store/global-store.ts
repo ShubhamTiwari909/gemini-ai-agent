@@ -8,7 +8,7 @@ export type Src = {
   };
 }[];
 
-interface BearState {
+interface GlobalState {
   inputText: string;
   setInputText: (text: string) => void;
   generateImageTag: boolean;
@@ -37,7 +37,7 @@ interface BearState {
   setLanguage: (language: string) => void;
 }
 
-export const useGlobalStore = create<BearState>()(
+export const useGlobalStore = create<GlobalState>()(
   devtools((set) => ({
     inputText: "",
     setInputText: (text) => set({ inputText: text }),

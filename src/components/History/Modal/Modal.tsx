@@ -4,6 +4,7 @@ import ResponseRenderer from "../../Gemini/ResponseRenderer/ResponseRenderer";
 import { History } from "@/types/response-handlers";
 import Heading from "../../Heading";
 import ModalHeader from "./ModalHeader";
+import CreatedAtByUsername from "@/components/Gemini/ResponseRenderer/CreatedAtByUserName";
 
 const Modal = ({
   activeHistory,
@@ -25,9 +26,13 @@ const Modal = ({
             />
             <ModalHeader activeHistory={activeHistory} modalRef={modalRef} />
           </div>
+          <CreatedAtByUsername
+            createdAt={activeHistory?.createdAt}
+            username={activeHistory?.user.name}
+            usermail={activeHistory?.user.email}
+          />
           <ResponseRenderer
             post={{
-              isImageResponse: activeHistory?.responseType === "image",
               filePreview: activeHistory?.filePreview || "",
               summary: activeHistory?.response || "",
             }}

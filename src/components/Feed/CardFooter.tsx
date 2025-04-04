@@ -1,13 +1,18 @@
 import { formatDate } from "@/lib/utils";
-import { History } from "@/types/response-handlers";
 import React from "react";
 
-const CardFooter = ({ post }: { post: History }) => {
+const CardFooter = ({
+  createdAt,
+  className,
+}: {
+  createdAt: string;
+  className?: string;
+}) => {
   return (
-    <div className="flex flex-wrap gap-y-5 justify-between items-center font-bold">
-      <p className="text-xs text-base-content">
-        {formatDate(post.createdAt as string)}
-      </p>
+    <div
+      className={`flex flex-wrap gap-y-5 justify-between items-center font-bold ${className}`}
+    >
+      <p className="text-xs">{formatDate(createdAt as string)}</p>
     </div>
   );
 };

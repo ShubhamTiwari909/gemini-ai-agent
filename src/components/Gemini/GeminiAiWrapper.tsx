@@ -5,11 +5,7 @@ import ResponseRenderer, {
   childClasses,
 } from "./ResponseRenderer/ResponseRenderer";
 import { useGlobalStore } from "@/store/global-store";
-import {
-  handleImageResponse,
-  handleSummarize,
-  addHistoryToDb,
-} from "@/lib/utils";
+import { handleImageResponse, handleSummarize } from "@/lib/utils";
 import { TourProvider } from "@reactour/tour";
 import { GeminiAiWrapperProps } from "@/types/utils";
 
@@ -91,6 +87,8 @@ const GeminiAiWrapper = ({
   const tags = useGlobalStore((state) => state.tags);
   const setTags = useGlobalStore((state) => state.setTags);
 
+  const setInputText = useGlobalStore((state) => state.setInputText);
+
   /**
    * The current summary in the global store.
    * This state is updated when the Gemini AI model returns a response.
@@ -99,83 +97,69 @@ const GeminiAiWrapper = ({
 
   const generateImageTag = useGlobalStore((state) => state.generateImageTag);
 
-  const handleSummarizeFromAi = async (input: string) => {
-    const response = await fetch("/api/csrf");
-    const token = await response.json();
-
-    if (token) {
-      const csrfToken = token.csrfToken;
-      await handleSummarize({
-        input,
-        setLoading,
-        setSummary,
-        summaryRef,
-        setFileName,
-        csrfToken,
-        setTags,
+  const handleSummarizeFromAi = (input: string) => {
+    fetch("/api/csrf")
+      .then((response) => {
+        return response.json();
       })
-        .then((data) => {
-          addHistoryToDb({
-            data,
+      .then((token) => {
+        if (token) {
+          const csrfToken = token.csrfToken;
+          handleSummarize({
             input,
+            csrfToken,
+            summaryRef,
             user,
             expressUrl,
-            setPrompt,
-            updateLocalHistory,
             localHistory,
             apiAuthToken,
             userId,
             tags,
             generateImageTag,
+            setPrompt,
+            setLoading,
+            setSummary,
+            setFileName,
+            setTags,
+            setInputText,
+            updateLocalHistory,
           });
-        })
-        .catch((error) => {
-          console.error(error);
-        });
-    } else {
-      console.error("Failed to fetch CSRF token:");
-    }
+        } else {
+          console.error("Failed to fetch CSRF token:");
+        }
+      });
   };
 
-  const handleImageResponseFromAi = async () => {
+  const handleImageResponseFromAi = () => {
     try {
-      const response = await fetch("/api/csrf");
-      const token = await response.json();
-
-      if (token) {
-        const csrfToken = token.csrfToken;
-        await handleImageResponse({
-          setLoading,
-          file,
-          setFilePreview,
-          setFile,
-          setSummary,
-          summaryRef,
-          setFileName,
-          csrfToken,
-          language,
-          setTags,
-        })
-          .then((data) => {
-            addHistoryToDb({
-              data: data?.data,
-              input: file?.name || "",
+      fetch("/api/csrf")
+        .then((response) => response.json())
+        .then((token) => {
+          if (token) {
+            const csrfToken = token.csrfToken;
+            handleImageResponse({
+              file,
+              csrfToken,
+              language,
+              summaryRef,
               user,
               expressUrl,
-              setPrompt,
-              updateLocalHistory,
               localHistory,
-              filePreview: data?.filePreview,
               apiAuthToken,
               userId,
               tags,
               generateImageTag,
+              setPrompt,
+              updateLocalHistory,
+              setLoading,
+              setFilePreview,
+              setFile,
+              setSummary,
+              setFileName,
+              setTags,
             });
-          })
-          .catch((error) => {
-            console.error(error);
-          });
-      }
+          }
+        });
     } catch (error) {
       console.error("Failed to fetch CSRF token:", error);
     }
@@ -194,7 +178,6 @@ const GeminiAiWrapper = ({
           post={{
             summary,
             prompt,
-            isImageResponse: generateImageTag,
             filePreview,
           }}
           loading={loading}

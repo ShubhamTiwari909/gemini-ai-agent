@@ -1,7 +1,6 @@
 import { Session } from "next-auth";
 
 export type Post = {
-  isImageResponse: boolean;
   username?: string;
   filePreview?: string | null;
   prompt?: string;
@@ -12,7 +11,7 @@ export type Post = {
 
 export type CreateAtAndUserName = {
   createdAt: string | undefined;
-  username: string | undefined;
+  username: string | undefined | null;
   usermail: string | undefined | null;
 };
 
@@ -26,7 +25,7 @@ export type FilePreviewProps = {
 
 export type ImageResponseRendererProps = {
   post: Post;
-  summary: string | undefined;
+  src: string | undefined;
   usermail: string | undefined | null;
 };
 

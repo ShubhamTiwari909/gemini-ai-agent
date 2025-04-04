@@ -23,7 +23,6 @@ const HistoryPageWrapper = ({
   return (
     <ResponseRenderer
       post={{
-        isImageResponse: activeHistory?.responseType === "image",
         username: activeHistory.user.name || "",
         filePreview: activeHistory?.filePreview || "",
         prompt: activeHistory?.prompt || "",

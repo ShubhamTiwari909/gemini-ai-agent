@@ -1,4 +1,4 @@
-import { User } from "next-auth";
+import { Session } from "next-auth";
 
 type SharedHandlerProps = {
   setLoading: (loading: boolean) => void;
@@ -9,30 +9,36 @@ type SharedHandlerProps = {
   setTags: (tags: string[]) => void;
 };
 
-export type HandleSummarize = SharedHandlerProps & {
-  input: string;
-};
-
-export type HandleImageResponse = SharedHandlerProps & {
-  file: File | null;
-  setFilePreview: (filePreview: string | null) => void;
-  setFile: (file: File | null) => void;
-  language: string;
-};
-
-export type AddHistoryToDB = {
-  data: { summary: string };
-  input: string;
-  updateLocalHistory: (history: History[]) => void;
-  localHistory: History[];
+type SharedHistoryProps = {
+  user: Session["user"];
   expressUrl: string;
   setPrompt: (text: string) => void;
-  user?: User;
-  filePreview?: string | null;
+  updateLocalHistory: (history: History[]) => void;
+  localHistory: History[];
   apiAuthToken: string;
   userId: string;
   tags: string[];
   generateImageTag: boolean;
+};
+
+export type HandleSummarize = SharedHandlerProps &
+  SharedHistoryProps & {
+    input: string;
+    setInputText: (text: string) => void;
+  };
+
+export type HandleImageResponse = SharedHandlerProps &
+  SharedHistoryProps & {
+    file: File | null;
+    setFilePreview: (filePreview: string | null) => void;
+    setFile: (file: File | null) => void;
+    language: string;
+  };
+
+export type AddHistoryToDB = SharedHistoryProps & {
+  data: string;
+  input: string;
+  filePreview?: string | null;
 };
 
 export type History = {

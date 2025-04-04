@@ -81,18 +81,28 @@ const FeedWrapper = ({ data }: { data: Data }) => {
               key={post._id}
               data-id={index === feed.length - 1 ? "Last" : "Not last"}
               ref={index === feed.length - 1 ? observerRef : null} // Attach ref to last item
-              className={`p-5 rounded-xl border border-base-content border-solid flex flex-col justify-between relative overflow-hidden ${post.responseType === "image" ? "" : "bg-base-300"}`}
+              className={`p-5 rounded-xl border border-base-content border-solid flex flex-col justify-between relative overflow-hidden ${post.responseType === "image" || post.filePreview?.includes("data:image") ? "" : "bg-base-300"}`}
             >
-              <CardHeader post={post} />
-              <Link href={`/history/${post._id}`}>
-                <Heading
-                  prompt={post.prompt || ""}
-                  className={`mb-4 text-xl lg:text-2xl bg-gradient-to-r bg-clip-text font-extrabold text-transparent ${post.responseType === "image" ? "from-pink-200 to-violet-200" : "from-pink-500 to-violet-500"}`}
-                />
-                <Tags tags={post.tags} />
-                <Description post={post} />
-              </Link>
-              <CardFooter post={post} />
+              <div>
+                <CardHeader post={post} />
+                <Link href={`/history/${post._id}`}>
+                  <Heading
+                    prompt={post.prompt || ""}
+                    className={`mb-4 text-xl lg:text-2xl bg-gradient-to-r bg-clip-text font-extrabold text-transparent ${post.responseType === "image" || post.filePreview?.includes("data:image") ? "from-pink-200 to-violet-200" : "from-pink-500 to-violet-500"}`}
+                  />
+                  <Tags tags={post.tags} />
+                  <Description post={post} />
+                </Link>
+              </div>
+              <CardFooter
+                createdAt={post.createdAt as string}
+                className={
+                  post.filePreview?.includes("data:image") ||
+                  post.responseType === "image"
+                    ? "text-white"
+                    : "text-base-content"
+                }
+              />
             </div>
           );
         })}
