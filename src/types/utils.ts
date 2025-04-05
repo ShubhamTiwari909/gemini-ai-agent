@@ -74,7 +74,6 @@ export type DropdownProps = {
   title: string;
   itemsList: string[];
   onClick: (item: string) => void;
-  setInputText?: (text: string) => void;
   loading?: boolean;
   stopSpeech?: () => void;
 };

@@ -21,13 +21,13 @@ const Dropdown = ({
   title,
   itemsList,
   onClick,
-  setInputText,
   loading = false,
   stopSpeech,
 }: DropdownProps) => {
   const dropdownContentRef = React.useRef<HTMLUListElement>(null);
   const setFilePreview = useGlobalStore((state) => state.setFilePreview);
   const tags = useGlobalStore((state) => state.tags);
+  const setInputText = useGlobalStore((state) => state.setInputText);
 
   /**
    * Scrolls the dropdown content into view when the user focuses on the dropdown.

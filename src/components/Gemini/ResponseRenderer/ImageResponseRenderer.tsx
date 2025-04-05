@@ -31,9 +31,8 @@ const ImageResponseRenderer = ({
           <ImageResponse
             src={src || ""}
             alt={post.prompt || ""}
-            width={1200}
-            height={1200}
-            className="w-full object-cover object-top"
+            width={500}
+            className="object-cover object-top"
           />
           <a
             download={`${post.prompt?.slice(0, post.prompt?.indexOf("- Generate the entire response in"))}.png`}

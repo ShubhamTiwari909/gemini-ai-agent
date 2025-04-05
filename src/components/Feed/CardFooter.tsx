@@ -50,7 +50,7 @@ const CardFooter = ({
     >
       <p className="text-xs">{formatDate(createdAt as string)}</p>
       <button
-        className="flex items-center gap-x-2 cursor-pointer"
+        className="flex items-center gap-x-2 cursor-pointer text-sm"
         onClick={handleLikes}
       >
         <FaHeart color={iconColor} /> {likesCount}

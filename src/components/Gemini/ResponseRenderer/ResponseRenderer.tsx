@@ -38,7 +38,7 @@ const ResponseRenderer = ({
   return (
     <section
       ref={summaryRef}
-      className={`relative !overflow-auto mt-5 ${className} `}
+      className={`relative max-w-5xl mx-auto !overflow-auto mt-5 ${className} `}
     >
       <Loader loading={loading} summary={summary as string} />
       {summary && summary.includes("data:image") ? (

@@ -40,11 +40,6 @@ const FormControls = ({
   const setIsPaused = useGlobalStore((state) => state.setIsSpeechPaused);
   const loading = useGlobalStore((state) => state.loading);
   const setInputText = useGlobalStore((state) => state.setInputText);
-  const generateImageTag = useGlobalStore((state) => state.generateImageTag);
-  const setGenerateImageTag = useGlobalStore(
-    (state) => state.setGenerateImageTag,
-  );
-  const inputRef = useRef<HTMLTextAreaElement>(null);
 
   const { setIsOpen } = useTour();
 
@@ -71,27 +66,14 @@ const FormControls = ({
             stopSpeech={stopSpeech}
             className="voice-input"
           />
-          <Textarea inputRef={inputRef} file={file} />
+          <Textarea file={file} />
+          <GenerateImageBtn />
         </div>
-        <motion.button
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.4, ease: "easeInOut", times: 1 }}
-          className="btn btn-sm lg:btn-md btn-primary w-36 absolute bottom-10 left-2 lg:left-[unset] lg:bottom-14 lg:right-2"
-          onClick={() => {
-            setGenerateImageTag(!generateImageTag);
-            setInputText("Generate image: ");
-            inputRef?.current?.focus();
-          }}
-        >
-          {generateImageTag ? "Generate Text" : "Generate Image"}
-        </motion.button>
       </div>
       <div className="flex flex-wrap gap-5 items-center justify-between lg:gap-10">
         <div className="flex flex-wrap items-center gap-5">
           <SampleDropdown
             onClick={handleSummarize}
-            setInputText={setInputText}
             loading={loading}
             stopSpeech={stopSpeech}
             {...promptsSample}
@@ -183,16 +165,20 @@ const GenerateButton = ({
   );
 };
 
-const Textarea = ({
-  file,
-  inputRef,
-}: {
-  file: File | null;
-  inputRef: React.RefObject<HTMLTextAreaElement | null>;
-}) => {
+const Textarea = ({ file }: { file: File | null }) => {
   const inputText = useGlobalStore((state) => state.inputText);
   const setInputText = useGlobalStore((state) => state.setInputText);
   const loading = useGlobalStore((state) => state.loading);
+  const generateImageTag = useGlobalStore((state) => state.generateImageTag);
+  const inputRef = useRef<HTMLTextAreaElement>(null);
+
+  useEffect(() => {
+    if (generateImageTag) {
+      setInputText("Generate image: ");
+    } else {
+      setInputText("");
+    }
+  }, [generateImageTag]);
 
   return (
     <motion.textarea
@@ -342,5 +328,27 @@ const TagsDropdown = ({
         ))}
       </ul>
     </div>
+  );
+};
+
+const GenerateImageBtn = () => {
+  const generateImageTag = useGlobalStore((state) => state.generateImageTag);
+  const setGenerateImageTag = useGlobalStore(
+    (state) => state.setGenerateImageTag,
+  );
+  const setInputText = useGlobalStore((state) => state.setInputText);
+  return (
+    <motion.button
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.4, ease: "easeInOut", times: 1 }}
+      className="btn btn-sm lg:btn-md btn-primary w-36 absolute bottom-10 left-2 lg:left-[unset] lg:bottom-14 lg:right-2"
+      onClick={() => {
+        setGenerateImageTag(!generateImageTag);
+        setInputText("Generate image: ");
+      }}
+    >
+      {generateImageTag ? "Generate Text" : "Generate Image"}
+    </motion.button>
   );
 };
