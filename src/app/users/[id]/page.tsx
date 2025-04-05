@@ -1,6 +1,6 @@
-import { fetchHistory } from "@/components/History/History";
+import { fetchPosts } from "@/components/Post/Post";
 import { fetchUserId, formatDate } from "@/lib/utils";
-import { History } from "@/types/response-handlers";
+import { Posts } from "@/types/response-handlers";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -40,15 +40,15 @@ const page = async ({ params }: { params: Promise<{ id: string }> }) => {
   const email = id.replace("%40", "@");
   const userId = await fetchUserId(email || "");
 
-  const [data, history] = await Promise.all([
+  const [data, post] = await Promise.all([
     fetchUser(expressUrl, email, userId),
-    fetchHistory(expressUrl, email, userId, 10),
+    fetchPosts(expressUrl, email, userId, 10),
   ]);
 
-  if (data.message || history.message) {
+  if (data.message || post.message) {
     return (
       <div className="w-full h-screen grid place-items-center text-4xl">
-        {data.message || history.message}
+        {data.message || post.message}
       </div>
     );
   }
@@ -81,16 +81,16 @@ const page = async ({ params }: { params: Promise<{ id: string }> }) => {
         </h2>
         <hr className="mb-10" />
         <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-5 lg:gap-8">
-          {history.length === 0 ? (
+          {post.length === 0 ? (
             <p>No searches found for the user</p>
           ) : (
-            history.map((item: History) => (
+            post.map((item: Posts) => (
               <div
                 key={item._id}
                 className="mb-5 lg:w-80 bg-base-100 rounded-2xl p-3 border border-base-content"
               >
                 <Link
-                  href={`/history/${item._id}`}
+                  href={`/post/${item._id}`}
                   className="mb-2 w-full lg:max-w-80 lg:min-h-20 line-clamp-1 text-ellipsis inline-block"
                 >
                   <span className="inline-block mb-4 font-semibold w-fit">

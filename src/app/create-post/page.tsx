@@ -1,13 +1,13 @@
 import React, { Suspense } from "react";
 import GeminiAiWrapper from "../.././components/Gemini/GeminiAiWrapper";
-import History from "../.././components/History/History";
+import Post from "../../components/Post/Post";
 import { auth } from ".././api/auth/nextAuth";
 import { redirect } from "next/navigation";
 import { fetchUserId } from "@/lib/utils";
 
 /**
  * The main page of the application.
- * This page renders the Gemini AI Text Generator and the history component.
+ * This page renders the Gemini AI Text Generator and the post component.
  * If the user is not logged in, it redirects to the login page.
  * @returns {React.ReactElement} The main page of the application.
  */
@@ -44,13 +44,13 @@ const page = async () => {
         fallback={
           <div className="fixed left-0 top-20 lg:top-32 px-5">
             <p className="flex items-center">
-              Loading history...
+              Loading posts...
               <span className="animate-spin inline-block size-5 rounded-full border border-r-transparent border-solid border-current"></span>
             </p>
           </div>
         }
       >
-        <History />
+        <Post />
       </Suspense>
     </section>
   );

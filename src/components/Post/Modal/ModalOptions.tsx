@@ -1,13 +1,13 @@
-import { History } from "@/types/response-handlers";
+import { Posts } from "@/types/response-handlers";
 import Link from "next/link";
 import React from "react";
 import { MdArrowOutward, MdFileCopy, MdOutlineFileCopy } from "react-icons/md";
 
-const ModalOptions = ({ activeHistory }: { activeHistory: History | null }) => {
+const ModalOptions = ({ activePost }: { activePost: Posts | null }) => {
   const [copied, setCopied] = React.useState(false);
   const handleCopyLink = () => {
     navigator.clipboard.writeText(
-      `${window.location.href}history/${activeHistory?._id}`,
+      `${window.location.href}post/${activePost?._id}`,
     );
     setCopied(true);
     setTimeout(() => {
@@ -18,7 +18,7 @@ const ModalOptions = ({ activeHistory }: { activeHistory: History | null }) => {
     <div className="space-y-5 bg-base-content p-4 rounded-xl absolute">
       <Link
         className="btn btn-sm lg:btn-md btn-bordered btn-info"
-        href={`/history/${activeHistory?._id}`}
+        href={`/post/${activePost?._id}`}
       >
         <MdArrowOutward
           color="text-base-content !size-4 lg:!size-5"

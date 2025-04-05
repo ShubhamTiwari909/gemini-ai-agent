@@ -1,14 +1,14 @@
 import { auth } from "@/app/api/auth/nextAuth";
-import HistoryPageWrapper from "@/components/History/HistoryPageWrapper";
+import PostPageWrapper from "@/components/Post/PostPageWrapper";
 import { notFound } from "next/navigation";
 import React from "react";
 
-const fetchHistoryById = async (
+const fetchPostById = async (
   expressUrl: string,
   id: string | null | undefined,
 ) => {
   try {
-    const response = await fetch(`${expressUrl}/history/findById`, {
+    const response = await fetch(`${expressUrl}/posts/findById`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -21,7 +21,7 @@ const fetchHistoryById = async (
     const data = await response.json();
     return data;
   } catch (error) {
-    console.error("Error fetching history by ID:", error);
+    console.error("Error fetching posts by ID:", error);
     return [];
   }
 };
@@ -29,16 +29,13 @@ const page = async ({ params }: { params: Promise<{ id: string }> }) => {
   const { id } = await params;
   const session = await auth();
 
-  const activeHistory = await fetchHistoryById(
-    process.env.EXPRESS_API_URL || "",
-    id,
-  );
+  const activePost = await fetchPostById(process.env.EXPRESS_API_URL || "", id);
 
-  if (activeHistory.message) {
-    if (activeHistory.message.includes("domain")) {
+  if (activePost.message) {
+    if (activePost.message.includes("domain")) {
       return (
         <div className="w-full h-screen grid place-items-center text-4xl">
-          {activeHistory.message}
+          {activePost.message}
         </div>
       );
     }
@@ -46,10 +43,7 @@ const page = async ({ params }: { params: Promise<{ id: string }> }) => {
   }
 
   return (
-    <HistoryPageWrapper
-      usermail={session?.user?.email}
-      activeHistory={activeHistory}
-    />
+    <PostPageWrapper usermail={session?.user?.email} activePost={activePost} />
   );
 };
 

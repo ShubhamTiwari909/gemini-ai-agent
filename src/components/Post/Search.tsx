@@ -10,7 +10,7 @@ const Search = ({
       type="text"
       className="input input-bordered"
       onChange={(e) => setSearch(e.target.value)}
-      placeholder="Search history..."
+      placeholder="Search posts..."
     />
   );
 };

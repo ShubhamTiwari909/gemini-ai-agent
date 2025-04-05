@@ -1,9 +1,9 @@
 "use client";
-import { History } from "@/types/response-handlers";
+import { Posts } from "@/types/response-handlers";
 import React from "react";
 import ImageResponse from "../Gemini/ImageResponse";
 
-const Description = ({ post }: { post: History }) => {
+const Description = ({ post }: { post: Posts }) => {
   return (
     <div
       className={`mb-5 lg:mb-10 ${post.filePreview?.includes("data:image") || post.responseType === "image" ? "text-white" : "text-base-content"}`}

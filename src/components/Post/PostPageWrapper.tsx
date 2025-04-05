@@ -2,14 +2,14 @@
 import ResponseRenderer, {
   childClasses,
 } from "@/components/Gemini/ResponseRenderer/ResponseRenderer";
-import { History } from "@/types/response-handlers";
+import { Posts } from "@/types/response-handlers";
 import React, { useEffect, useRef } from "react";
 
-const HistoryPageWrapper = ({
-  activeHistory,
+const PostPageWrapper = ({
+  activePost,
   usermail,
 }: {
-  activeHistory: History;
+  activePost: Posts;
   usermail: string | undefined | null;
 }) => {
   const summaryRef = useRef<HTMLDivElement>(null);
@@ -23,12 +23,12 @@ const HistoryPageWrapper = ({
   return (
     <ResponseRenderer
       post={{
-        username: activeHistory.user.name || "",
-        filePreview: activeHistory?.filePreview || "",
-        prompt: activeHistory?.prompt || "",
-        summary: activeHistory?.response || "",
-        createdAt: activeHistory?.createdAt || "",
-        tags: activeHistory?.tags || [],
+        username: activePost.user.name || "",
+        filePreview: activePost?.filePreview || "",
+        prompt: activePost?.prompt || "",
+        summary: activePost?.response || "",
+        createdAt: activePost?.createdAt || "",
+        tags: activePost?.tags || [],
       }}
       summaryRef={summaryRef}
       usermail={usermail}
@@ -46,4 +46,4 @@ const HistoryPageWrapper = ({
   );
 };
 
-export default HistoryPageWrapper;
+export default PostPageWrapper;

@@ -1,5 +1,5 @@
 import {
-  AddHistoryToDB,
+  AddPostsToDB,
   HandleImageResponse,
   HandleSummarize,
 } from "@/types/response-handlers";
@@ -38,7 +38,7 @@ export const base64ToText = (base64Data: string) => {
  *   - setSummary: A function to set the summary state
  *   - summaryRef: A React ref to the summary element
  *   - setFileName: A function to set the file name state
- *   - addHistoryToDb: A function to add the history to the database
+ *   - addPostsToDb: A function to add the post to the database
  */
 export const handleSummarize = (handleSummarize: HandleSummarize) => {
   const {
@@ -47,7 +47,7 @@ export const handleSummarize = (handleSummarize: HandleSummarize) => {
     csrfToken,
     user,
     expressUrl,
-    localHistory,
+    localPosts,
     apiAuthToken,
     userId,
     tags,
@@ -58,7 +58,7 @@ export const handleSummarize = (handleSummarize: HandleSummarize) => {
     setFileName,
     setTags,
     setInputText,
-    updateLocalHistory,
+    updateLocalPosts,
   } = handleSummarize;
   try {
     setLoading(true);
@@ -81,14 +81,14 @@ export const handleSummarize = (handleSummarize: HandleSummarize) => {
           setTags([]);
           setLoading(false);
           setInputText("");
-          addHistoryToDb({
+          addPostToDb({
             data: response.summary,
             input,
             user,
             expressUrl,
             setPrompt,
-            updateLocalHistory,
-            localHistory,
+            updateLocalPosts,
+            localPosts,
             apiAuthToken,
             userId,
             tags,
@@ -132,13 +132,13 @@ export const handleImageResponse = (
     language,
     user,
     expressUrl,
-    localHistory,
+    localPosts,
     apiAuthToken,
     userId,
     tags,
     generateImageTag,
     setPrompt,
-    updateLocalHistory,
+    updateLocalPosts,
     setLoading,
     setFilePreview,
     setFile,
@@ -191,14 +191,14 @@ export const handleImageResponse = (
                 setTags([]);
                 setLoading(false);
                 setFile(null);
-                addHistoryToDb({
+                addPostToDb({
                   data: response?.summary,
                   input: file?.name || "",
                   user,
                   expressUrl,
                   setPrompt,
-                  updateLocalHistory,
-                  localHistory,
+                  updateLocalPosts,
+                  localPosts,
                   filePreview: fileDataUrl,
                   apiAuthToken,
                   userId,
@@ -228,13 +228,13 @@ export const handleImageResponse = (
   }
 };
 
-export const addHistoryToDb = (addHistoryToDb: AddHistoryToDB) => {
+export const addPostToDb = (addPostToDb: AddPostsToDB) => {
   try {
     const {
       data,
       input,
-      updateLocalHistory,
-      localHistory,
+      updateLocalPosts,
+      localPosts,
       expressUrl,
       setPrompt,
       user,
@@ -243,12 +243,12 @@ export const addHistoryToDb = (addHistoryToDb: AddHistoryToDB) => {
       userId,
       tags,
       generateImageTag,
-    } = addHistoryToDb;
+    } = addPostToDb;
 
-    // Generate a unique history ID from input and summary
-    const historyId = `${input.split(" ").join("-").slice(0, 10)}-${data.split(" ").join("-").slice(0, 10)}-${user?.email}/${Date.now()}`;
-    // Save the prompt and its response to the server-side history
-    fetch(`${expressUrl}/history/add`, {
+    // Generate a unique post ID from input and summary
+    const postId = `${input.split(" ").join("-").slice(0, 10)}-${data.split(" ").join("-").slice(0, 10)}-${user?.email}/${Date.now()}`;
+    // Save the prompt and its response to the server-side post
+    fetch(`${expressUrl}/posts/add`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -260,7 +260,7 @@ export const addHistoryToDb = (addHistoryToDb: AddHistoryToDB) => {
         response: data,
         responseType: generateImageTag ? "image" : "text",
         filePreview: filePreview || "",
-        historyId: historyId,
+        postId,
         tags,
       }),
     })
@@ -268,26 +268,26 @@ export const addHistoryToDb = (addHistoryToDb: AddHistoryToDB) => {
         return response.json();
       })
       .then((response) => {
-        // Update the local history state
-        updateLocalHistory([
+        // Update the local posts state
+        updateLocalPosts([
           {
             user: { ...user, userId },
-            _id: response.newHistory._id,
-            historyId: historyId,
+            _id: response.newPost._id,
+            postId,
             prompt: input,
             response: data,
             filePreview: filePreview || "",
             tags,
             responseType: generateImageTag ? "image" : "text",
-            likes: response.newHistory.likes,
+            likes: response.newPost.likes,
           },
-          ...localHistory,
+          ...localPosts,
         ]);
         // Set the current prompt
         setPrompt(input);
       });
   } catch (error) {
-    console.error("Error adding history to database:", error);
+    console.error("Error adding posts to database:", error);
   }
 };
 

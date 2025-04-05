@@ -9,12 +9,12 @@ type SharedHandlerProps = {
   setTags: (tags: string[]) => void;
 };
 
-type SharedHistoryProps = {
+type SharedPostProps = {
   user: Session["user"];
   expressUrl: string;
   setPrompt: (text: string) => void;
-  updateLocalHistory: (history: History[]) => void;
-  localHistory: History[];
+  updateLocalPosts: (posts: Posts[]) => void;
+  localPosts: Posts[];
   apiAuthToken: string;
   userId: string;
   tags: string[];
@@ -22,26 +22,26 @@ type SharedHistoryProps = {
 };
 
 export type HandleSummarize = SharedHandlerProps &
-  SharedHistoryProps & {
+  SharedPostProps & {
     input: string;
     setInputText: (text: string) => void;
   };
 
 export type HandleImageResponse = SharedHandlerProps &
-  SharedHistoryProps & {
+  SharedPostProps & {
     file: File | null;
     setFilePreview: (filePreview: string | null) => void;
     setFile: (file: File | null) => void;
     language: string;
   };
 
-export type AddHistoryToDB = SharedHistoryProps & {
+export type AddPostsToDB = SharedPostProps & {
   data: string;
   input: string;
   filePreview?: string | null;
 };
 
-export type History = {
+export type Posts = {
   _id?: string | undefined;
   user: {
     userId: string;
@@ -50,7 +50,7 @@ export type History = {
     email?: string | null;
     image?: string | null;
   };
-  historyId: string;
+  postId: string;
   prompt: string;
   response: string;
   responseType: string;

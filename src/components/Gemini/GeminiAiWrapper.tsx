@@ -51,11 +51,11 @@ const GeminiAiWrapper = ({
   const summaryRef = useRef<HTMLDivElement>(null);
 
   // GLOBAL STATES
-  // Retrieve the local history of prompts and responses from the global store
-  const localHistory = useGlobalStore((state) => state.history);
+  // Retrieve the local posts of prompts and responses from the global store
+  const localPosts = useGlobalStore((state) => state.posts);
 
-  // Function to update the local history in the global store
-  const updateLocalHistory = useGlobalStore((state) => state.updateHistory);
+  // Function to update the local posts in the global store
+  const updateLocalPosts = useGlobalStore((state) => state.updatePosts);
 
   // Update the fileName state in the global store
   const setFileName = useGlobalStore((state) => state.setFileName);
@@ -111,7 +111,7 @@ const GeminiAiWrapper = ({
             summaryRef,
             user,
             expressUrl,
-            localHistory,
+            localPosts,
             apiAuthToken,
             userId,
             tags,
@@ -122,7 +122,7 @@ const GeminiAiWrapper = ({
             setFileName,
             setTags,
             setInputText,
-            updateLocalHistory,
+            updateLocalPosts,
           });
         } else {
           console.error("Failed to fetch CSRF token:");
@@ -144,13 +144,13 @@ const GeminiAiWrapper = ({
               summaryRef,
               user,
               expressUrl,
-              localHistory,
+              localPosts,
               apiAuthToken,
               userId,
               tags,
               generateImageTag,
               setPrompt,
-              updateLocalHistory,
+              updateLocalPosts,
               setLoading,
               setFilePreview,
               setFile,

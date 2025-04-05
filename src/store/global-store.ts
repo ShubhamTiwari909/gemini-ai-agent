@@ -1,4 +1,4 @@
-import { History } from "@/types/response-handlers";
+import { Posts } from "@/types/response-handlers";
 import { create } from "zustand";
 import { devtools } from "zustand/middleware";
 
@@ -21,8 +21,8 @@ interface GlobalState {
   setFilePreview: (preview: string | null) => void;
   tags: string[];
   setTags: (tags: string[]) => void;
-  history: History[];
-  updateHistory: (history: History[]) => void;
+  posts: Posts[];
+  updatePosts: (posts: Posts[]) => void;
   isSpeechPaused: boolean;
   setIsSpeechPaused: (isPaused: boolean) => void;
   rateLimitMessage: string;
@@ -51,8 +51,8 @@ export const useGlobalStore = create<GlobalState>()(
     setFilePreview: (preview) => set({ filePreview: preview }),
     tags: [],
     setTags: (tags) => set({ tags }),
-    history: [],
-    updateHistory: (history) => set({ history }),
+    posts: [],
+    updatePosts: (posts: Posts[]) => set({ posts }),
     isSpeechPaused: true,
     setIsSpeechPaused: (isPaused) => set({ isSpeechPaused: isPaused }),
     rateLimitMessage: "",

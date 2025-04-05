@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useRef, useState } from "react";
-import { History } from "@/types/response-handlers";
+import { Posts } from "@/types/response-handlers";
 import Link from "next/link";
 import Search from "./Search";
 import { useSearchParams } from "next/navigation";
@@ -13,7 +13,7 @@ import CardHeader from "./CardHeader";
 import { User } from "next-auth";
 
 type Data = {
-  data: History[];
+  data: Posts[];
   currentPage: number;
   hasMore: boolean;
 };
@@ -84,7 +84,7 @@ const FeedWrapper = ({
     <section className="min-h-screen px-5 py-16 mx-auto max-w-7xl lg:px-0 lg:py-10">
       <Search className="mb-10" />
       <div className="grid grid-cols-1 lg:grid-cols-3 text-white gap-12 lg:gap-10">
-        {feed.map((post: History, index) => {
+        {feed.map((post: Posts, index) => {
           return (
             <div
               key={post._id}
@@ -94,7 +94,7 @@ const FeedWrapper = ({
             >
               <div>
                 <CardHeader post={post} />
-                <Link href={`/history/${post._id}`}>
+                <Link href={`/post/${post._id}`}>
                   <Heading
                     prompt={post.prompt || ""}
                     className={`mb-4 text-xl lg:text-2xl bg-gradient-to-r bg-clip-text font-extrabold text-transparent ${post.responseType === "image" || post.filePreview?.includes("data:image") ? "from-pink-200 to-violet-200" : "from-pink-500 to-violet-500"}`}
@@ -112,7 +112,7 @@ const FeedWrapper = ({
                     : "text-base-content"
                 }
                 expressUrl={expressUrl}
-                historyId={post.historyId}
+                postId={post.postId}
                 user={user}
                 likes={post.likes}
               />

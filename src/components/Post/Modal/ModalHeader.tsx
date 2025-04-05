@@ -2,13 +2,13 @@ import { useGlobalStore } from "@/store/global-store";
 import React, { useEffect, useRef } from "react";
 import { MdClose, MdMenu } from "react-icons/md";
 import ModalOptions from "./ModalOptions";
-import { History } from "@/types/response-handlers";
+import { Posts } from "@/types/response-handlers";
 
 const ModalHeader = ({
-  activeHistory,
+  activePost,
   modalRef,
 }: {
-  activeHistory: History | null;
+  activePost: Posts | null;
   modalRef: React.RefObject<HTMLDialogElement | null>;
 }) => {
   const setIsPaused = useGlobalStore((state) => state.setIsSpeechPaused);
@@ -41,7 +41,7 @@ const ModalHeader = ({
         >
           <MdMenu size="1.25rem" />
         </button>
-        {dropdown && <ModalOptions activeHistory={activeHistory} />}
+        {dropdown && <ModalOptions activePost={activePost} />}
       </div>
       <form method="dialog">
         <button

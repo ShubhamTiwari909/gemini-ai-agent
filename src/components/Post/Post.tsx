@@ -1,16 +1,16 @@
 import React from "react";
-import HistoryWrapper from "./HistoryWrapper";
 import { auth } from "@/app/api/auth/nextAuth";
 import { fetchUserId } from "@/lib/utils";
+import PostWrapper from "./PostWrapper";
 
-export const fetchHistory = async (
+export const fetchPosts = async (
   expressUrl: string,
   email: string | null | undefined,
   userId: string | null | undefined,
   limit?: number,
 ) => {
   try {
-    const response = await fetch(`${expressUrl}/history/find`, {
+    const response = await fetch(`${expressUrl}/posts/find`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -22,21 +22,21 @@ export const fetchHistory = async (
     const data = await response.json();
     return data;
   } catch (error) {
-    console.error("Error fetching history:", error);
+    console.error("Error fetching posts:", error);
     return [];
   }
 };
 
-const History = async () => {
+const Posts = async () => {
   const session = await auth();
   const userId = await fetchUserId(session?.user?.email || "");
 
-  const history = await fetchHistory(
+  const posts = await fetchPosts(
     process.env.EXPRESS_API_URL || "",
     session?.user?.email,
     userId,
   );
-  return <HistoryWrapper history={history} />;
+  return <PostWrapper posts={posts} />;
 };
 
-export default History;
+export default Posts;

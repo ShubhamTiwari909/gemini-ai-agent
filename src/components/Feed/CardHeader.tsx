@@ -1,9 +1,9 @@
-import { History } from "@/types/response-handlers";
+import { Posts } from "@/types/response-handlers";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 
-const CardHeader = ({ post }: { post: History }) => {
+const CardHeader = ({ post }: { post: Posts }) => {
   return (
     <Link
       href={`/users/${post.user.email}`}

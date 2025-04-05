@@ -6,55 +6,49 @@ import * as motion from "motion/react-client";
 import Modal from "./Modal/Modal";
 import Search from "./Search";
 import { AnimatePresence } from "motion/react";
-import { History } from "@/types/response-handlers";
+import { Posts } from "@/types/response-handlers";
 import Heading from "../Heading";
 
 /**
- * A component that displays a list of history items from the local history store.
+ * A component that displays a list of posts items from the local posts store.
  * The list is displayed in a fixed position on the left side of the screen.
  * The user can click on each item to open a modal dialog with the prompt and response.
  * The user can also click on the left arrow button to close the list.
  */
-const HistoryWrapper = ({
-  history,
-}: {
-  history: History[] | { message: string };
-}) => {
+const PostWrapper = ({ posts }: { posts: Posts[] | { message: string } }) => {
   /**
-   * Whether the list of history items is open or closed.
+   * Whether the list of posts items is open or closed.
    * This state is used to control the visibility of the list.
    */
   const [isOpen, setIsOpen] = React.useState(false);
 
   /**
    * The search query entered by the user.
-   * This state is used to filter the list of history items based on the user's search query.
+   * This state is used to filter the list of posts items based on the user's search query.
    */
   const [search, setSearch] = React.useState("");
 
   /**
-   * The currently active history item.
-   * This state is used to pass the active history item to the Modal component.
+   * The currently active posts item.
+   * This state is used to pass the active posts item to the Modal component.
    */
-  const [activeHistory, setActiveHistory] = React.useState<History | null>(
-    null,
-  );
+  const [activePost, setActivePost] = React.useState<Posts | null>(null);
 
   /**
-   * The local history store.
-   * This store is used to keep track of the user's history of prompts and responses.
+   * The local posts store.
+   * This store is used to keep track of the user's posts of prompts and responses.
    */
-  const localHistory = useGlobalStore((state) => state.history);
+  const localPost = useGlobalStore((state) => state.posts);
 
   /**
-   * A function to update the local history store.
-   * This function is used to update the local history store with new history items.
+   * A function to update the local posts store.
+   * This function is used to update the local posts store with new posts items.
    */
-  const updateLocalHistory = useGlobalStore((state) => state.updateHistory);
+  const updateLocalPosts = useGlobalStore((state) => state.updatePosts);
 
   /**
    * A function to set the speech synthesis pause state.
-   * This function is used to pause or resume the speech synthesis when the user interacts with the history list.
+   * This function is used to pause or resume the speech synthesis when the user interacts with the posts list.
    */
   const setIsPaused = useGlobalStore((state) => state.setIsSpeechPaused);
 
@@ -89,19 +83,19 @@ const HistoryWrapper = ({
   };
 
   /**
-   * When the component mounts, update the local history store with the new history items.
+   * When the component mounts, update the local posts store with the new posts items.
    */
   useEffect(() => {
-    if ("message" in history) {
-      setRateLimitMessage(history.message);
-      updateLocalHistory([]);
+    if ("message" in posts) {
+      setRateLimitMessage(posts.message);
+      updateLocalPosts([]);
     } else {
-      updateLocalHistory(history);
+      updateLocalPosts(posts);
     }
-  }, [history]);
+  }, [posts]);
 
   /**
-   * Resets the search query to an empty string when the list of history items is closed.
+   * Resets the search query to an empty string when the list of posts items is closed.
    */
   useEffect(() => {
     if (!isOpen) {
@@ -111,7 +105,7 @@ const HistoryWrapper = ({
   }, [isOpen]);
 
   /**
-   * A component to open the list of history items.
+   * A component to open the list of posts items.
    * This component is displayed in the top-left corner of the screen.
    */
   const handleButtonOpen = () => {
@@ -125,7 +119,7 @@ const HistoryWrapper = ({
   };
 
   /**
-   * A component to close the list of history items.
+   * A component to close the list of posts items.
    * This component is displayed in the top-right corner of the screen.
    */
   const handleButtonClose = () => {
@@ -173,17 +167,17 @@ const HistoryWrapper = ({
               </div>
             ) : null}
 
-            <LocalHistory
-              localHistory={localHistory}
+            <LocalPost
+              localPost={localPost}
               search={search}
-              setActiveHistory={setActiveHistory}
+              setActivePost={setActivePost}
               openModal={openModal}
               setIsOpen={setIsOpen}
             />
           </motion.div>
         </AnimatePresence>
 
-        <Modal modalRef={modalRef} activeHistory={activeHistory} />
+        <Modal modalRef={modalRef} activePost={activePost} />
       </motion.div>
       {rateLimitMessage !== "" ? (
         <RateLimitMessage
@@ -195,7 +189,7 @@ const HistoryWrapper = ({
   );
 };
 
-export default HistoryWrapper;
+export default PostWrapper;
 
 const ButtonOpen = ({ handleButtonOpen }: { handleButtonOpen: () => void }) => (
   <button
@@ -217,36 +211,36 @@ const ButtonClose = ({
 );
 
 /**
- * A component that displays the user's local history.
- * It takes in the user's local history, a search string, a function to set the active history,
+ * A component that displays the user's local posts.
+ * It takes in the user's local posts, a search string, a function to set the active posts,
  * a function to open the modal and a function to set the modal open state.
- * It filters the local history based on the search string and displays the results
- * as a list of history items.
- * Each history item is a button that when clicked, sets the active history and opens the modal.
+ * It filters the local posts based on the search string and displays the results
+ * as a list of posts items.
+ * Each posts item is a button that when clicked, sets the active posts and opens the modal.
  * The component uses the `motion` library to animate the list items.
  */
-const LocalHistory = ({
-  localHistory,
+const LocalPost = ({
+  localPost,
   search,
-  setActiveHistory,
+  setActivePost,
   openModal,
   setIsOpen,
 }: {
-  localHistory: History[];
+  localPost: Posts[];
   search: string;
-  setActiveHistory: (history: History) => void;
+  setActivePost: (posts: Posts) => void;
   openModal: () => void;
   setIsOpen: (isOpen: boolean) => void;
 }) => {
-  const filterSearchHistory = localHistory.filter((item) =>
+  const filterSearchPosts = localPost.filter((item) =>
     item.prompt.toLocaleLowerCase().includes(search.toLocaleLowerCase()),
   );
   return (
     <ul className="h-full py-5 overflow-auto space-y-7">
-      {filterSearchHistory.length === 0 ? (
-        <p>No history found for the search</p>
+      {filterSearchPosts.length === 0 ? (
+        <p>No posts found for the search</p>
       ) : (
-        filterSearchHistory.map((item, index) => {
+        filterSearchPosts.map((item, index) => {
           return (
             <motion.li
               initial={{ opacity: 0 }}
@@ -261,7 +255,7 @@ const LocalHistory = ({
                 className="text-left line-clamp-2 text-ellipsis"
                 onClick={() => {
                   setIsOpen(false);
-                  setActiveHistory(item);
+                  setActivePost(item);
                   openModal();
                 }}
               >
@@ -280,7 +274,7 @@ const LocalHistory = ({
  * It displays a message with the text that is passed as a prop.
  * The message is displayed for 2 seconds before it is removed.
  * It is displayed in the center of the screen.
- * The component is used by the `useHistory` hook.
+ * The component is used by the `usePost` hook.
  */
 const RateLimitMessage = ({
   rateLimitMessage,

@@ -7,14 +7,14 @@ const CardFooter = ({
   createdAt,
   className,
   expressUrl,
-  historyId,
+  postId,
   user,
   likes,
 }: {
   createdAt: string;
   className?: string;
   expressUrl: string;
-  historyId: string;
+  postId: string;
   user: User;
   likes: User[];
 }) => {
@@ -26,14 +26,14 @@ const CardFooter = ({
   const [likesCount, setLikesCount] = useState<number>(likes.length);
   const [iconColor, setIconColor] = useState<string>(heartColor(likes));
   const handleLikes = () => {
-    fetch(`${expressUrl}/history/updateLikes`, {
+    fetch(`${expressUrl}/posts/updateLikes`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${process.env.NEXT_PUBLIC_API_AUTH_TOKEN}`,
       },
       body: JSON.stringify({
-        historyId,
+        postId,
         user,
       }),
     })

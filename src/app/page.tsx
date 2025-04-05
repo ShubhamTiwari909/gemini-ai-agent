@@ -26,7 +26,7 @@ const fetchFeed = async (limit: number, page: number) => {
 
 /**
  * The main page of the application.
- * This page renders the Gemini AI Text Generator and the history component.
+ * This page renders the Gemini AI Text Generator and the post component.
  * If the user is not logged in, it redirects to the login page.
  * @returns {React.ReactElement} The main page of the application.
  */
