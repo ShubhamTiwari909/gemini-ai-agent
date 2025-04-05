@@ -147,7 +147,7 @@ const GenerateButton = ({
           }
         }}
         disabled={(loading || !inputText || tags.length === 0) && !file?.name}
-        className="relative inline-flex h-12 overflow-hidden rounded-full p-[1px] focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-50 disabled:cursor-not-allowed disabled:!opacity-50 generate-button"
+        className="relative inline-flex h-12 overflow-hidden rounded-full p-[1px] focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-50 disabled:cursor-not-allowed disabled:!opacity-50 cursor-pointer generate-button"
       >
         <span className="absolute inset-[-1000%] animate-[spin_2s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#E2CBFF_0%,#393BB2_50%,#E2CBFF_100%)]" />
         <p className="inline-flex h-full w-full items-center justify-center rounded-full bg-slate-800 px-5 lg:px-10 py-3 text-lg font-medium text-white backdrop-blur-3xl">

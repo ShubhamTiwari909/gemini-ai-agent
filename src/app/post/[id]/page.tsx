@@ -1,5 +1,6 @@
 import { auth } from "@/app/api/auth/nextAuth";
 import PostPageWrapper from "@/components/Post/PostPageWrapper";
+import { User } from "next-auth";
 import { notFound } from "next/navigation";
 import React from "react";
 
@@ -15,7 +16,6 @@ const fetchPostById = async (
         Authorization: `Bearer ${process.env.API_AUTH_TOKEN}`,
       },
       body: JSON.stringify({ id }),
-      next: { revalidate: 60 * 60 },
     });
 
     const data = await response.json();
@@ -43,7 +43,11 @@ const page = async ({ params }: { params: Promise<{ id: string }> }) => {
   }
 
   return (
-    <PostPageWrapper usermail={session?.user?.email} activePost={activePost} />
+    <PostPageWrapper
+      user={session?.user as User}
+      usermail={session?.user?.email}
+      activePost={activePost}
+    />
   );
 };
 

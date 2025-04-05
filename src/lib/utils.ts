@@ -280,6 +280,7 @@ export const addPostToDb = (addPostToDb: AddPostsToDB) => {
             tags,
             responseType: generateImageTag ? "image" : "text",
             likes: response.newPost.likes,
+            views: response.newPost.views,
           },
           ...localPosts,
         ]);

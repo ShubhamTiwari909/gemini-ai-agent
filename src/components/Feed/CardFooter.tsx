@@ -2,29 +2,27 @@ import { formatDate } from "@/lib/utils";
 import { User } from "next-auth";
 import React, { useState } from "react";
 import { FaHeart } from "react-icons/fa";
+import PostViews from "../Gemini/ResponseRenderer/PostViews";
+import { Posts } from "@/types/response-handlers";
 
 const CardFooter = ({
-  createdAt,
   className,
   expressUrl,
-  postId,
   user,
-  likes,
+  post,
 }: {
-  createdAt: string;
   className?: string;
   expressUrl: string;
-  postId: string;
   user: User;
-  likes: User[];
+  post: Posts;
 }) => {
   const heartColor = (likes: User[]) => {
     return likes.some((like: User) => like.email === user.email)
       ? "red"
       : "gray";
   };
-  const [likesCount, setLikesCount] = useState<number>(likes.length);
-  const [iconColor, setIconColor] = useState<string>(heartColor(likes));
+  const [likesCount, setLikesCount] = useState<number>(post.likes.length);
+  const [iconColor, setIconColor] = useState<string>(heartColor(post.likes));
   const handleLikes = () => {
     fetch(`${expressUrl}/posts/updateLikes`, {
       method: "POST",
@@ -33,7 +31,7 @@ const CardFooter = ({
         Authorization: `Bearer ${process.env.NEXT_PUBLIC_API_AUTH_TOKEN}`,
       },
       body: JSON.stringify({
-        postId,
+        postId: post.postId,
         user,
       }),
     })
@@ -48,13 +46,21 @@ const CardFooter = ({
     <div
       className={`flex flex-wrap gap-y-5 justify-between items-center font-bold ${className}`}
     >
-      <p className="text-xs">{formatDate(createdAt as string)}</p>
-      <button
-        className="flex items-center gap-x-2 cursor-pointer text-sm"
-        onClick={handleLikes}
-      >
-        <FaHeart color={iconColor} /> {likesCount}
-      </button>
+      <p className="text-xs">{formatDate(post.createdAt as string)}</p>
+      <div className="flex flex-wrap items-center gap-5">
+        <button
+          className="flex items-center gap-x-2 cursor-pointer text-sm"
+          onClick={handleLikes}
+        >
+          <FaHeart color={iconColor} /> {likesCount}
+        </button>
+        <PostViews
+          expressUrl={process.env.NEXT_PUBLIC_EXPRESS_API_URL as string}
+          postId={post?.postId as string}
+          user={user}
+          views={post.views as User[]}
+        />
+      </div>
     </div>
   );
 };

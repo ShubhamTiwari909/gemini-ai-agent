@@ -3,14 +3,17 @@ import ResponseRenderer, {
   childClasses,
 } from "@/components/Gemini/ResponseRenderer/ResponseRenderer";
 import { Posts } from "@/types/response-handlers";
+import { User } from "next-auth";
 import React, { useEffect, useRef } from "react";
 
 const PostPageWrapper = ({
   activePost,
   usermail,
+  user,
 }: {
   activePost: Posts;
   usermail: string | undefined | null;
+  user: User;
 }) => {
   const summaryRef = useRef<HTMLDivElement>(null);
 
@@ -29,9 +32,15 @@ const PostPageWrapper = ({
         summary: activePost?.response || "",
         createdAt: activePost?.createdAt || "",
         tags: activePost?.tags || [],
+        user: activePost?.user || {},
+        postId: activePost?.postId || "",
+        views: activePost?.views || 0,
       }}
+      user={user}
       summaryRef={summaryRef}
       usermail={usermail}
+      showHeader={true}
+      showViews={true}
       className="p-3 lg:p-5 lg:mt-0 !pt-5"
       childClassNames={{
         ...childClasses,

@@ -1,12 +1,15 @@
-import { Session } from "next-auth";
+import { Session, User } from "next-auth";
 
 export type Post = {
+  user?: User;
   username?: string;
   filePreview?: string | null;
   prompt?: string;
   summary: string;
   createdAt?: string;
   tags?: string[];
+  views?: User[];
+  postId?: string;
 };
 
 export type CreateAtAndUserName = {
@@ -26,7 +29,6 @@ export type FilePreviewProps = {
 export type ImageResponseRendererProps = {
   post: Post;
   src: string | undefined;
-  usermail: string | undefined | null;
 };
 
 export type LoaderProps = {
@@ -38,6 +40,8 @@ export type ResponseHeaderProps = {
   prompt: string;
   post: Post;
   usermail: string | undefined | null;
+  user: User;
+  showViews?: boolean;
 };
 
 export type ResponseRendererProps = {
@@ -45,7 +49,10 @@ export type ResponseRendererProps = {
   usermail?: string | undefined | null;
   loading?: boolean;
   summaryRef: React.RefObject<HTMLDivElement | null>;
+  showHeader?: boolean;
+  showViews?: boolean;
   className?: string;
+  user?: User;
   childClassNames?: {
     container?: string;
     imageContainer?: string;

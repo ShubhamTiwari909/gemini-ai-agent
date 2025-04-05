@@ -10,6 +10,7 @@ import FilePreview from "./FilePreview";
 import ResponseHeaderUi from "./ResponseHeaderUI";
 import MarkdownRenderer from "./MarkdownRender";
 import { ResponseRendererProps } from "@/types/utils";
+import { User } from "next-auth";
 
 export const childClasses = {
   container:
@@ -28,6 +29,9 @@ const ResponseRenderer = ({
   usermail,
   summaryRef,
   loading,
+  user,
+  showHeader = false,
+  showViews = false,
   className = "",
   childClassNames = childClasses,
 }: ResponseRendererProps) => {
@@ -42,7 +46,18 @@ const ResponseRenderer = ({
     >
       <Loader loading={loading} summary={summary as string} />
       {summary && summary.includes("data:image") ? (
-        <ImageResponseRenderer post={post} usermail={usermail} src={summary} />
+        <>
+          {showHeader && (
+            <ResponseHeaderUi
+              user={user as User}
+              prompt={post.prompt as string}
+              post={post}
+              usermail={usermail}
+              showViews={showViews}
+            />
+          )}
+          <ImageResponseRenderer post={post} src={summary} />
+        </>
       ) : (
         <div className={`${loading ? "select-none" : ""} ${container}`}>
           {filePreview && (
@@ -55,7 +70,13 @@ const ResponseRenderer = ({
             />
           )}
           {!filePreview && prompt ? (
-            <ResponseHeaderUi prompt={prompt} post={post} usermail={usermail} />
+            <ResponseHeaderUi
+              showViews={showViews}
+              user={user as User}
+              prompt={prompt}
+              post={post}
+              usermail={usermail}
+            />
           ) : null}
           <TextToSpeech text={summary} className={textToSpeech} />
           <MarkdownRenderer summary={summary} />

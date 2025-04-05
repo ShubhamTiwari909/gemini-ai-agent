@@ -58,4 +58,5 @@ export type Posts = {
   createdAt?: string;
   tags: string[];
   likes: User[];
+  views: User[];
 };

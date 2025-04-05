@@ -4,6 +4,8 @@ import Markdown, { ExtraProps } from "react-markdown";
 import SyntaxHighlighter from "react-syntax-highlighter";
 import { atomDark } from "react-syntax-highlighter/dist/esm/styles/prism";
 import remarkGfm from "remark-gfm";
+import remarkMath from "remark-math";
+import rehypeKatex from "rehype-katex";
 import { childClasses } from "./ResponseRenderer";
 
 const MarkdownRenderer = ({ summary }: { summary: string }) => {
@@ -21,7 +23,8 @@ const MarkdownRenderer = ({ summary }: { summary: string }) => {
   };
   return (
     <Markdown
-      remarkPlugins={[remarkGfm]}
+      remarkPlugins={[remarkGfm, remarkMath]}
+      rehypePlugins={[rehypeKatex]}
       components={{
         // Render a code block with syntax highlighting and a copy button
         code(

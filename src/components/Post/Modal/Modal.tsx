@@ -4,7 +4,6 @@ import ResponseRenderer from "../../Gemini/ResponseRenderer/ResponseRenderer";
 import { Posts } from "@/types/response-handlers";
 import Heading from "../../Heading";
 import ModalHeader from "./ModalHeader";
-import CreatedAtByUsername from "@/components/Gemini/ResponseRenderer/CreatedAtByUserName";
 
 const Modal = ({
   activePost,
@@ -26,11 +25,6 @@ const Modal = ({
             />
             <ModalHeader activePost={activePost} modalRef={modalRef} />
           </div>
-          <CreatedAtByUsername
-            createdAt={activePost?.createdAt}
-            username={activePost?.user.name}
-            usermail={activePost?.user.email}
-          />
           <ResponseRenderer
             post={{
               filePreview: activePost?.filePreview || "",

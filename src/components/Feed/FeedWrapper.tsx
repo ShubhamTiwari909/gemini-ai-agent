@@ -104,7 +104,6 @@ const FeedWrapper = ({
                 </Link>
               </div>
               <CardFooter
-                createdAt={post.createdAt as string}
                 className={
                   post.filePreview?.includes("data:image") ||
                   post.responseType === "image"
@@ -112,9 +111,8 @@ const FeedWrapper = ({
                     : "text-base-content"
                 }
                 expressUrl={expressUrl}
-                postId={post.postId}
                 user={user}
-                likes={post.likes}
+                post={post}
               />
             </div>
           );
