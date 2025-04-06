@@ -187,6 +187,7 @@ const GeminiAiWrapper = ({
             textToSpeech: `${childClasses.textToSpeech} top-2`,
           }}
           showHeader
+          className="max-w-5xl mx-auto"
         />
       </TourProvider>
     </div>

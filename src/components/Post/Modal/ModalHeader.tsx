@@ -1,8 +1,9 @@
 import { useGlobalStore } from "@/store/global-store";
 import React, { useEffect, useRef } from "react";
-import { MdClose, MdMenu } from "react-icons/md";
+import { MdClose } from "react-icons/md";
 import ModalOptions from "./ModalOptions";
 import { Posts } from "@/types/response-handlers";
+import { BsThreeDotsVertical } from "react-icons/bs";
 
 const ModalHeader = ({
   activePost,
@@ -32,14 +33,14 @@ const ModalHeader = ({
   }, [modalRef]);
 
   return (
-    <div className="modal-action mt-0 gap-x-3 lg:gap-x-8 items-center">
+    <div className="modal-action mt-0 gap-x-3 lg:gap-x-4 items-center">
       <div className="relative" ref={optionsRef}>
         <button
           role="button"
-          className="btn btn-primary btn-outline m-1 !pointer-events-auto"
+          className="!pointer-events-auto cursor-pointer"
           onClick={() => setDropdown(!dropdown)}
         >
-          <MdMenu size="1.25rem" />
+          <BsThreeDotsVertical size="1.25rem" />
         </button>
         {dropdown && <ModalOptions activePost={activePost} />}
       </div>

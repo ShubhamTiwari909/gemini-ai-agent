@@ -32,6 +32,7 @@ const ResponseRenderer = ({
   user,
   showHeader = false,
   showViews = false,
+  showLikes = false,
   className = "",
   childClassNames = childClasses,
 }: ResponseRendererProps) => {
@@ -42,20 +43,21 @@ const ResponseRenderer = ({
   return (
     <section
       ref={summaryRef}
-      className={`relative max-w-5xl mx-auto !overflow-auto mt-5 ${className} `}
+      className={`relative !overflow-auto mt-5 ${className} `}
     >
       <Loader loading={loading} summary={summary as string} />
+      {showHeader && (
+        <ResponseHeaderUi
+          user={user as User}
+          prompt={prompt as string}
+          post={post}
+          usermail={usermail}
+          showViews={showViews}
+          showLikes={showLikes}
+        />
+      )}
       {summary && summary.includes("data:image") ? (
         <>
-          {showHeader && (
-            <ResponseHeaderUi
-              user={user as User}
-              prompt={post.prompt as string}
-              post={post}
-              usermail={usermail}
-              showViews={showViews}
-            />
-          )}
           <ImageResponseRenderer post={post} src={summary} />
         </>
       ) : (
@@ -69,15 +71,6 @@ const ResponseRenderer = ({
               username={username}
             />
           )}
-          {!filePreview && prompt ? (
-            <ResponseHeaderUi
-              showViews={showViews}
-              user={user as User}
-              prompt={prompt}
-              post={post}
-              usermail={usermail}
-            />
-          ) : null}
           <TextToSpeech text={summary} className={textToSpeech} />
           <MarkdownRenderer summary={summary} />
         </div>

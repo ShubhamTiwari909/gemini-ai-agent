@@ -2,8 +2,9 @@ import React from "react";
 import CreatedAtByUsername from "./CreatedAtByUserName";
 import { childClasses } from "./ResponseRenderer";
 import { ResponseHeaderProps } from "@/types/utils";
-import PostViews from "./PostViews";
+import PostViews from "../../Post/PostViews";
 import { User } from "next-auth";
+import PostLikes from "@/components/Post/PostLikes";
 
 const ResponseHeaderUi = ({
   prompt,
@@ -11,8 +12,8 @@ const ResponseHeaderUi = ({
   usermail,
   user,
   showViews,
+  showLikes,
 }: ResponseHeaderProps) => {
-  console.log(showViews);
   return (
     <div className="lg:pt-0 mb-10 lg:mb-0 lg:mr-30">
       <h2
@@ -38,14 +39,22 @@ const ResponseHeaderUi = ({
           createdAt={post.createdAt}
           username={post?.user?.name}
         />
-        {showViews && (
-          <PostViews
-            expressUrl={process.env.NEXT_PUBLIC_EXPRESS_API_URL as string}
-            postId={post?.postId as string}
-            user={user}
-            views={post.views as User[]}
-          />
-        )}
+        <div className="flex flex-wrap gap-6 items-center">
+          {showViews && (
+            <PostViews
+              postId={post?.postId as string}
+              user={user}
+              views={post.views as User[]}
+            />
+          )}
+          {showLikes && (
+            <PostLikes
+              user={user}
+              postId={post?.postId as string}
+              postLikes={post?.likes as User[]}
+            />
+          )}
+        </div>
       </div>
     </div>
   );

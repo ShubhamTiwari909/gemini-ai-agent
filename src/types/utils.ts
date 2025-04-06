@@ -9,6 +9,7 @@ export type Post = {
   createdAt?: string;
   tags?: string[];
   views?: User[];
+  likes?: User[];
   postId?: string;
 };
 
@@ -42,6 +43,7 @@ export type ResponseHeaderProps = {
   usermail: string | undefined | null;
   user: User;
   showViews?: boolean;
+  showLikes?: boolean;
 };
 
 export type ResponseRendererProps = {
@@ -51,6 +53,7 @@ export type ResponseRendererProps = {
   summaryRef: React.RefObject<HTMLDivElement | null>;
   showHeader?: boolean;
   showViews?: boolean;
+  showLikes?: boolean;
   className?: string;
   user?: User;
   childClassNames?: {

@@ -18,15 +18,7 @@ type Data = {
   hasMore: boolean;
 };
 
-const FeedWrapper = ({
-  data,
-  expressUrl,
-  user,
-}: {
-  data: Data;
-  expressUrl: string;
-  user: User;
-}) => {
+const FeedWrapper = ({ data, user }: { data: Data; user: User }) => {
   const [feed, setFeed] = useState(data.data);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(data.hasMore);
@@ -110,7 +102,6 @@ const FeedWrapper = ({
                     ? "text-white"
                     : "text-base-content"
                 }
-                expressUrl={expressUrl}
                 user={user}
                 post={post}
               />

@@ -35,13 +35,15 @@ const PostPageWrapper = ({
         user: activePost?.user || {},
         postId: activePost?.postId || "",
         views: activePost?.views || 0,
+        likes: activePost?.likes || 0,
       }}
       user={user}
       summaryRef={summaryRef}
       usermail={usermail}
       showHeader={true}
       showViews={true}
-      className="p-3 lg:p-5 lg:mt-0 !pt-5"
+      showLikes={true}
+      className="p-3 lg:p-5 lg:mt-0 !pt-5 max-w-5xl mx-auto"
       childClassNames={{
         ...childClasses,
         container: "w-full pt-10",
