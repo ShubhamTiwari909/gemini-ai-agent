@@ -11,6 +11,7 @@ import ResponseHeaderUi from "./ResponseHeaderUI";
 import MarkdownRenderer from "./MarkdownRender";
 import { ResponseRendererProps } from "@/types/utils";
 import { User } from "next-auth";
+import PostComments from "@/components/Post/PostComments";
 
 export const childClasses = {
   container:
@@ -33,10 +34,11 @@ const ResponseRenderer = ({
   showHeader = false,
   showViews = false,
   showLikes = false,
+  showComments = false,
   className = "",
   childClassNames = childClasses,
 }: ResponseRendererProps) => {
-  const { username, filePreview, prompt, summary, createdAt } = post;
+  const { filePreview, prompt, summary, createdAt } = post;
 
   const { container, textToSpeech } = childClassNames;
 
@@ -68,11 +70,19 @@ const ResponseRenderer = ({
               prompt={prompt || ""}
               createdAt={createdAt}
               usermail={usermail}
-              username={username}
+              username={post.user?.name || ""}
             />
           )}
           <TextToSpeech text={summary} className={textToSpeech} />
           <MarkdownRenderer summary={summary} />
+          {showComments && (
+            <PostComments
+              comments={post?.comments}
+              user={user as User}
+              postId={post.postId as string}
+              className="mt-10"
+            />
+          )}
         </div>
       )}
     </section>

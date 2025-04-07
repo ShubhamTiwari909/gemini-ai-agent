@@ -1,8 +1,8 @@
 import { Session, User } from "next-auth";
+import { Comments } from "./response-handlers";
 
 export type Post = {
   user?: User;
-  username?: string;
   filePreview?: string | null;
   prompt?: string;
   summary: string;
@@ -11,6 +11,7 @@ export type Post = {
   views?: User[];
   likes?: User[];
   postId?: string;
+  comments?: Comments[];
 };
 
 export type CreateAtAndUserName = {
@@ -54,6 +55,7 @@ export type ResponseRendererProps = {
   showHeader?: boolean;
   showViews?: boolean;
   showLikes?: boolean;
+  showComments?: boolean;
   className?: string;
   user?: User;
   childClassNames?: {

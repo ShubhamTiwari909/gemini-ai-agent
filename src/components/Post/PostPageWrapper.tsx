@@ -26,7 +26,6 @@ const PostPageWrapper = ({
   return (
     <ResponseRenderer
       post={{
-        username: activePost.user.name || "",
         filePreview: activePost?.filePreview || "",
         prompt: activePost?.prompt || "",
         summary: activePost?.response || "",
@@ -36,6 +35,7 @@ const PostPageWrapper = ({
         postId: activePost?.postId || "",
         views: activePost?.views || 0,
         likes: activePost?.likes || 0,
+        comments: activePost?.comments || [],
       }}
       user={user}
       summaryRef={summaryRef}
@@ -43,10 +43,11 @@ const PostPageWrapper = ({
       showHeader={true}
       showViews={true}
       showLikes={true}
+      showComments={true}
       className="p-3 lg:p-5 lg:mt-0 !pt-5 max-w-5xl mx-auto"
       childClassNames={{
         ...childClasses,
-        container: "w-full pt-10",
+        container: "w-full py-10",
         heading:
           "text-3xl lg:text-5xl mt-5 mb-10 bg-clip-text text-base-content",
         markdown: `${childClasses.markdown} pt-0 lg:pt-10`,

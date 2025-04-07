@@ -41,6 +41,21 @@ export type AddPostsToDB = SharedPostProps & {
   filePreview?: string | null;
 };
 
+export type Replies = {
+  id: string;
+  text: string;
+  user: User;
+  likes: User[];
+};
+
+export type Comments = {
+  id: string;
+  text: string;
+  user: User;
+  likes: User[];
+  replies: Replies[];
+};
+
 export type Posts = {
   _id?: string | undefined;
   user: {
@@ -59,4 +74,5 @@ export type Posts = {
   tags: string[];
   likes: User[];
   views: User[];
+  comments: Comments[];
 };
