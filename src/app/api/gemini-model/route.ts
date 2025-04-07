@@ -69,5 +69,6 @@ async function generateImage({ prompt }: { prompt: string }) {
     }
   } catch (error) {
     console.error("Error generating content:", error);
+    return error;
   }
 }

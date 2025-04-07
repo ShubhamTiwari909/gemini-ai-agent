@@ -1,13 +1,17 @@
 "use client";
 import React, { useRef } from "react";
 import FormControls from "./FormControls";
-import ResponseRenderer, {
-  childClasses,
-} from "./ResponseRenderer/ResponseRenderer";
 import { useGlobalStore } from "@/store/global-store";
 import { handleImageResponse, handleSummarize } from "@/lib/utils";
 import { TourProvider } from "@reactour/tour";
 import { GeminiAiWrapperProps } from "@/types/utils";
+import Loader from "./ResponseRenderer/Loader";
+import ResponseHeaderUi from "./ResponseRenderer/ResponseHeaderUI";
+import { User } from "next-auth";
+import ImageResponseRenderer from "./ResponseRenderer/ImageResponseRenderer";
+import FilePreview from "./ResponseRenderer/FilePreview";
+import TextToSpeech from "../TextToSpeech";
+import MarkdownRenderer from "./ResponseRenderer/MarkdownRender";
 
 const steps = [
   {
@@ -96,6 +100,9 @@ const GeminiAiWrapper = ({
   const summary = useGlobalStore((state) => state.summary);
 
   const generateImageTag = useGlobalStore((state) => state.generateImageTag);
+  const setGenerateImageTag = useGlobalStore(
+    (state) => state.setGenerateImageTag,
+  );
 
   const handleSummarizeFromAi = (input: string) => {
     fetch("/api/csrf")
@@ -123,6 +130,7 @@ const GeminiAiWrapper = ({
             setTags,
             setInputText,
             updateLocalPosts,
+            setGenerateImageTag,
           });
         } else {
           console.error("Failed to fetch CSRF token:");
@@ -174,21 +182,40 @@ const GeminiAiWrapper = ({
           handleImageResponse={handleImageResponseFromAi}
           className="lg:mb-20"
         />
-        <ResponseRenderer
-          post={{
-            summary,
-            prompt,
-            filePreview,
-          }}
-          loading={loading}
-          summaryRef={summaryRef}
-          childClassNames={{
-            ...childClasses,
-            textToSpeech: `${childClasses.textToSpeech} top-2`,
-          }}
-          showHeader
-          className="max-w-5xl mx-auto"
-        />
+        <section
+          ref={summaryRef}
+          className="relative !overflow-auto mt-5 max-w-5xl mx-auto"
+        >
+          <Loader loading={loading} summary={summary as string} />
+          <ResponseHeaderUi
+            user={user as User}
+            prompt={prompt as string}
+            post={{
+              summary,
+              prompt,
+              filePreview,
+            }}
+            usermail={undefined}
+          />
+          {summary && summary.includes("data:image") ? (
+            <>
+              <ImageResponseRenderer prompt={prompt as string} src={summary} />
+            </>
+          ) : (
+            <div
+              className={`${loading ? "select-none" : ""} relative w-full px-2.5 py-8 border border-solid border-cyan-300 rounded-lg h-fit`}
+            >
+              {filePreview && (
+                <FilePreview filePreview={filePreview} prompt={prompt || ""} />
+              )}
+              <TextToSpeech
+                text={summary as string}
+                className="absolute lg:right-8 lg:top-8 right-3 top-2"
+              />
+              <MarkdownRenderer summary={summary as string} />
+            </div>
+          )}
+        </section>
       </TourProvider>
     </div>
   );

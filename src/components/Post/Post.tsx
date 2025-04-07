@@ -35,6 +35,7 @@ const Posts = async () => {
     process.env.EXPRESS_API_URL || "",
     session?.user?.email,
     userId,
+    5,
   );
   return <PostWrapper posts={posts} />;
 };

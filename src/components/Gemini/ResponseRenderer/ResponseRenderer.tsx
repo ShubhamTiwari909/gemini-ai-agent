@@ -11,7 +11,6 @@ import ResponseHeaderUi from "./ResponseHeaderUI";
 import MarkdownRenderer from "./MarkdownRender";
 import { ResponseRendererProps } from "@/types/utils";
 import { User } from "next-auth";
-import PostComments from "@/components/Post/PostComments";
 
 export const childClasses = {
   container:
@@ -34,7 +33,6 @@ const ResponseRenderer = ({
   showHeader = false,
   showViews = false,
   showLikes = false,
-  showComments = false,
   className = "",
   childClassNames = childClasses,
 }: ResponseRendererProps) => {
@@ -60,7 +58,7 @@ const ResponseRenderer = ({
       )}
       {summary && summary.includes("data:image") ? (
         <>
-          <ImageResponseRenderer post={post} src={summary} />
+          <ImageResponseRenderer prompt={post.prompt as string} src={summary} />
         </>
       ) : (
         <div className={`${loading ? "select-none" : ""} ${container}`}>
@@ -73,16 +71,8 @@ const ResponseRenderer = ({
               username={post.user?.name || ""}
             />
           )}
-          <TextToSpeech text={summary} className={textToSpeech} />
-          <MarkdownRenderer summary={summary} />
-          {showComments && (
-            <PostComments
-              comments={post?.comments}
-              user={user as User}
-              postId={post.postId as string}
-              className="mt-10"
-            />
-          )}
+          <TextToSpeech text={summary as string} className={textToSpeech} />
+          <MarkdownRenderer summary={summary as string} />
         </div>
       )}
     </section>

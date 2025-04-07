@@ -5,7 +5,7 @@ export type Post = {
   user?: User;
   filePreview?: string | null;
   prompt?: string;
-  summary: string;
+  summary?: string;
   createdAt?: string;
   tags?: string[];
   views?: User[];
@@ -23,13 +23,13 @@ export type CreateAtAndUserName = {
 export type FilePreviewProps = {
   filePreview: string;
   prompt: string;
-  createdAt: string | undefined;
-  usermail: string | undefined | null;
-  username: string | undefined;
+  createdAt?: string | undefined;
+  usermail?: string | undefined | null;
+  username?: string | undefined;
 };
 
 export type ImageResponseRendererProps = {
-  post: Post;
+  prompt: string;
   src: string | undefined;
 };
 
@@ -55,7 +55,6 @@ export type ResponseRendererProps = {
   showHeader?: boolean;
   showViews?: boolean;
   showLikes?: boolean;
-  showComments?: boolean;
   className?: string;
   user?: User;
   childClassNames?: {

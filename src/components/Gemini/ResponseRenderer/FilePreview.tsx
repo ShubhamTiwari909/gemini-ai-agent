@@ -66,11 +66,13 @@ const FilePreview = ({
           </div>
         )}
       </div>
-      <CreatedAtByUsername
-        usermail={usermail}
-        createdAt={createdAt}
-        username={username}
-      />
+      {usermail && createdAt && (
+        <CreatedAtByUsername
+          usermail={usermail}
+          createdAt={createdAt}
+          username={username}
+        />
+      )}
     </>
   );
 };

@@ -34,11 +34,13 @@ const ResponseHeaderUi = ({
         </ul>
       )}
       <div className="flex flex-wrap justify-between items-center gap-3">
-        <CreatedAtByUsername
-          usermail={usermail}
-          createdAt={post.createdAt}
-          username={post?.user?.name}
-        />
+        {usermail && (
+          <CreatedAtByUsername
+            usermail={usermail}
+            createdAt={post.createdAt}
+            username={post?.user?.name}
+          />
+        )}
         <div className="flex flex-wrap gap-6 items-center">
           {showViews && (
             <PostViews

@@ -1,10 +1,13 @@
 "use client";
-import ResponseRenderer, {
-  childClasses,
-} from "@/components/Gemini/ResponseRenderer/ResponseRenderer";
 import { Posts } from "@/types/response-handlers";
 import { User } from "next-auth";
 import React, { useEffect, useRef } from "react";
+import ResponseHeaderUi from "../Gemini/ResponseRenderer/ResponseHeaderUI";
+import ImageResponseRenderer from "../Gemini/ResponseRenderer/ImageResponseRenderer";
+import FilePreview from "../Gemini/ResponseRenderer/FilePreview";
+import TextToSpeech from "../TextToSpeech";
+import MarkdownRenderer from "../Gemini/ResponseRenderer/MarkdownRender";
+import PostComments from "./PostComments";
 
 const PostPageWrapper = ({
   activePost,
@@ -24,37 +27,59 @@ const PostPageWrapper = ({
   }, []);
 
   return (
-    <ResponseRenderer
-      post={{
-        filePreview: activePost?.filePreview || "",
-        prompt: activePost?.prompt || "",
-        summary: activePost?.response || "",
-        createdAt: activePost?.createdAt || "",
-        tags: activePost?.tags || [],
-        user: activePost?.user || {},
-        postId: activePost?.postId || "",
-        views: activePost?.views || 0,
-        likes: activePost?.likes || 0,
-        comments: activePost?.comments || [],
-      }}
-      user={user}
-      summaryRef={summaryRef}
-      usermail={usermail}
-      showHeader={true}
-      showViews={true}
-      showLikes={true}
-      showComments={true}
-      className="p-3 lg:p-5 lg:mt-0 !pt-5 max-w-5xl mx-auto"
-      childClassNames={{
-        ...childClasses,
-        container: "w-full py-10",
-        heading:
-          "text-3xl lg:text-5xl mt-5 mb-10 bg-clip-text text-base-content",
-        markdown: `${childClasses.markdown} pt-0 lg:pt-10`,
-        textToSpeech: `${childClasses.textToSpeech} top-2`,
-        imageContainer: `${childClasses.imageContainer} lg:w-[calc(100%-10rem)] mt-10 lg:mt-0`,
-      }}
-    />
+    <>
+      <section
+        ref={summaryRef}
+        className="relative !overflow-auto mt-5 p-3 lg:p-5 lg:mt-0 !pt-5 max-w-5xl mx-auto"
+      >
+        <ResponseHeaderUi
+          user={user as User}
+          prompt={activePost?.prompt}
+          post={{
+            tags: activePost?.tags || [],
+            createdAt: activePost?.createdAt || "",
+            user: activePost?.user || {},
+            views: activePost?.views || 0,
+            postId: activePost?.postId || "",
+            likes: activePost?.likes || 0,
+          }}
+          usermail={usermail}
+          showViews={true}
+          showLikes={true}
+        />
+        {activePost?.response && activePost?.response.includes("data:image") ? (
+          <>
+            <ImageResponseRenderer
+              prompt={activePost.prompt as string}
+              src={activePost?.response}
+            />
+          </>
+        ) : (
+          <div className="w-full py-10">
+            {activePost.filePreview && (
+              <FilePreview
+                filePreview={activePost.filePreview}
+                prompt={activePost.prompt || ""}
+                createdAt={activePost.createdAt}
+                usermail={usermail}
+                username={activePost.user?.name || ""}
+              />
+            )}
+            <TextToSpeech
+              text={activePost?.response}
+              className="absolute lg:right-8 lg:top-8 right-3 top-2"
+            />
+            <MarkdownRenderer summary={activePost?.response} />
+            <PostComments
+              comments={activePost?.comments}
+              user={user as User}
+              postId={activePost.postId}
+              className="mt-10"
+            />
+          </div>
+        )}
+      </section>
+    </>
   );
 };
 

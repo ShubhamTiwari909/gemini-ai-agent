@@ -59,10 +59,19 @@ export const handleSummarize = (handleSummarize: HandleSummarize) => {
     setTags,
     setInputText,
     updateLocalPosts,
+    setGenerateImageTag,
   } = handleSummarize;
   try {
     setLoading(true);
     setSummary("");
+
+    const resetStates = () => {
+      setFileName("");
+      setTags([]);
+      setLoading(false);
+      setInputText("");
+      setGenerateImageTag(false);
+    };
     // Send POST request to the Gemini AI model API with input text
     fetch("/api/gemini-model", {
       method: "POST",
@@ -74,13 +83,10 @@ export const handleSummarize = (handleSummarize: HandleSummarize) => {
       })
       .then((response) => {
         // Parse the response data
-        if (response) {
+        if (response && response.summary.name !== "ServerError") {
           // Update the summary state with the response
           setSummary(response.summary);
-          setFileName("");
-          setTags([]);
-          setLoading(false);
-          setInputText("");
+          resetStates();
           addPostToDb({
             data: response.summary,
             input,
@@ -94,8 +100,12 @@ export const handleSummarize = (handleSummarize: HandleSummarize) => {
             tags,
             generateImageTag,
           });
+          return response;
         }
-        return response;
+        if (response.summary.name === "ServerError") {
+          setSummary("An error occurred while summarizing.");
+          resetStates();
+        }
       })
       .catch((error) => {
         console.error("Error summarizing content:", error);
@@ -150,6 +160,13 @@ export const handleImageResponse = (
     setLoading(true);
     setSummary("");
     setFilePreview(null);
+
+    const resetStates = () => {
+      setFileName("");
+      setTags([]);
+      setLoading(false);
+      setFile(null);
+    };
     if (file) {
       const fileBase64 = new Promise((resolve, reject) => {
         const reader = new FileReader();
@@ -184,13 +201,10 @@ export const handleImageResponse = (
               return response.json();
             })
             .then((response) => {
-              if (response) {
+              if (response && response.summary.name !== "ServerError") {
                 // Update the summary state with the response
                 setSummary(response.summary);
-                setFileName("");
-                setTags([]);
-                setLoading(false);
-                setFile(null);
+                resetStates();
                 addPostToDb({
                   data: response?.summary,
                   input: file?.name || "",
@@ -205,11 +219,11 @@ export const handleImageResponse = (
                   tags,
                   generateImageTag,
                 });
+                return {
+                  response,
+                  filePreview: fileDataUrl,
+                };
               }
-              return {
-                response,
-                filePreview: fileDataUrl,
-              };
             });
         }
       });

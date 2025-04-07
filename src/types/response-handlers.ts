@@ -25,6 +25,7 @@ export type HandleSummarize = SharedHandlerProps &
   SharedPostProps & {
     input: string;
     setInputText: (text: string) => void;
+    setGenerateImageTag: (tag: boolean) => void;
   };
 
 export type HandleImageResponse = SharedHandlerProps &

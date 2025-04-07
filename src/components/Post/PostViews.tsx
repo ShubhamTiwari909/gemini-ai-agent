@@ -30,7 +30,6 @@ const PostViews = ({
       .then((res) => res.json())
       .then((result) => {
         if (result.views) {
-          console.log(result);
           setViewsCount(result.views.length);
         }
       });
