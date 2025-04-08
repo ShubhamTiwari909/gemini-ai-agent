@@ -18,8 +18,11 @@ const PostComments = ({
 }) => {
   const [comment, setComment] = useState<Comments[] | undefined>(comments);
   const [commentText, setCommentText] = useState<string>("");
-  const [limit, setLimit] = useState(4);
-  const [hasMore, setHasMore] = useState(commentsLength < 3 ? false : true);
+  const [limit, setLimit] = useState(40);
+  const [hasMore, setHasMore] = useState(commentsLength < 21 ? false : true);
+  const [localComments, setLocalComments] = useState<Comments[] | undefined>(
+    [],
+  );
 
   const generateCommentId = () => {
     const timestamp = Date.now().toString();
@@ -37,8 +40,9 @@ const PostComments = ({
         },
         body: JSON.stringify({
           postId,
-          limit,
-          skip: limit - 2,
+          limit: limit,
+          skip: limit - 20,
+          localComments,
         }),
       },
     )
@@ -70,8 +74,6 @@ const PostComments = ({
           commentId: generateCommentId(),
           commentText,
           user,
-          limit,
-          skip: limit - 2,
         }),
       },
     )
@@ -82,10 +84,9 @@ const PostComments = ({
           commentsLength: number;
         }) => {
           if (result?.comment) {
-            setComment((prev) => [
-              ...new Set([...result.comment!, ...prev!].slice(0, 2)),
-            ]);
-            setHasMore(result?.commentsLength < 3 ? false : true);
+            setComment((prev) => [...new Set([...result.comment!, ...prev!])]);
+            setHasMore(result?.commentsLength < 21 ? false : true);
+            setLocalComments((prev) => [...prev!, ...result.comment!]);
           }
           setCommentText("");
         },

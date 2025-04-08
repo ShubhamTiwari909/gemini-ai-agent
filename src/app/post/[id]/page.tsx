@@ -15,7 +15,7 @@ const fetchPostById = async (
         "Content-Type": "application/json",
         Authorization: `Bearer ${process.env.API_AUTH_TOKEN}`,
       },
-      body: JSON.stringify({ id, limit: 2, skip: 0 }),
+      body: JSON.stringify({ id, limit: 20, skip: 0 }),
     });
 
     const data = await response.json();
