@@ -1,40 +1,28 @@
 import { Session, User } from "next-auth";
 
-type SharedHandlerProps = {
-  setLoading: (loading: boolean) => void;
-  setSummary: (summary: string) => void;
-  summaryRef: React.RefObject<HTMLDivElement | null>;
-  setFileName: (fileName: string) => void;
-  csrfToken: string | null;
-  setTags: (tags: string[]) => void;
-};
-
 type SharedPostProps = {
-  user: Session["user"];
   expressUrl: string;
+  user: Session["user"];
   setPrompt: (text: string) => void;
   updateLocalPosts: (posts: Posts[]) => void;
-  localPosts: Posts[];
   apiAuthToken: string;
+  localPosts: Posts[];
   userId: string;
   tags: string[];
   generateImageTag: boolean;
 };
 
-export type HandleSummarize = SharedHandlerProps &
-  SharedPostProps & {
-    input: string;
-    setInputText: (text: string) => void;
-    setGenerateImageTag: (tag: boolean) => void;
-  };
+export type HandleSummarize = {
+  input: string;
+  csrfToken: string | null;
+};
 
-export type HandleImageResponse = SharedHandlerProps &
-  SharedPostProps & {
-    file: File | null;
-    setFilePreview: (filePreview: string | null) => void;
-    setFile: (file: File | null) => void;
-    language: string;
-  };
+export type HandleImageResponse = {
+  file: File | null;
+  csrfToken: string | null;
+  language: string;
+  base64String: string;
+};
 
 export type AddPostsToDB = SharedPostProps & {
   data: string;

@@ -40,87 +40,23 @@ export const base64ToText = (base64Data: string) => {
  *   - setFileName: A function to set the file name state
  *   - addPostsToDb: A function to add the post to the database
  */
-export const handleSummarize = (handleSummarize: HandleSummarize) => {
-  const {
-    input,
-    summaryRef,
-    csrfToken,
-    user,
-    expressUrl,
-    localPosts,
-    apiAuthToken,
-    userId,
-    tags,
-    generateImageTag,
-    setPrompt,
-    setLoading,
-    setSummary,
-    setFileName,
-    setTags,
-    setInputText,
-    updateLocalPosts,
-    setGenerateImageTag,
-  } = handleSummarize;
-  try {
-    setLoading(true);
-    setSummary("");
-
-    const resetStates = () => {
-      setFileName("");
-      setTags([]);
-      setLoading(false);
-      setInputText("");
-      setGenerateImageTag(false);
-    };
-    // Send POST request to the Gemini AI model API with input text
-    fetch("/api/gemini-model", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ text: input, csrfToken }),
+export const handleSummarize = (
+  handleSummarize: HandleSummarize,
+): Promise<string> => {
+  const { input, csrfToken } = handleSummarize;
+  return fetch("/api/gemini-model", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ text: input, csrfToken }),
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      return data.summary;
     })
-      .then((response) => {
-        return response.json();
-      })
-      .then((response) => {
-        // Parse the response data
-        if (response && response.summary.name !== "ServerError") {
-          // Update the summary state with the response
-          setSummary(response.summary);
-          resetStates();
-          addPostToDb({
-            data: response.summary,
-            input,
-            user,
-            expressUrl,
-            setPrompt,
-            updateLocalPosts,
-            localPosts,
-            apiAuthToken,
-            userId,
-            tags,
-            generateImageTag,
-          });
-          return response;
-        }
-        if (response.summary.name === "ServerError") {
-          setSummary("An error occurred while summarizing.");
-          resetStates();
-        }
-      })
-      .catch((error) => {
-        console.error("Error summarizing content:", error);
-        setSummary("An error occurred while summarizing.");
-      });
-  } catch (error) {
-    console.error("Error summarizing content:", error);
-    setSummary("An error occurred while summarizing.");
-  } finally {
-    // Scroll the summary into view smoothly
-    summaryRef.current?.scrollIntoView({
-      behavior: "smooth",
-      block: "start",
+    .catch((error) => {
+      console.error("Error summarizing content:", error);
+      return Promise.reject(error);
     });
-  }
 };
 
 /**
@@ -135,111 +71,20 @@ export const handleSummarize = (handleSummarize: HandleSummarize) => {
 export const handleImageResponse = (
   handleImageResponse: HandleImageResponse,
 ) => {
-  const {
-    file,
-    summaryRef,
-    csrfToken,
-    language,
-    user,
-    expressUrl,
-    localPosts,
-    apiAuthToken,
-    userId,
-    tags,
-    generateImageTag,
-    setPrompt,
-    updateLocalPosts,
-    setLoading,
-    setFilePreview,
-    setFile,
-    setSummary,
-    setFileName,
-    setTags,
-  } = handleImageResponse;
-  try {
-    setLoading(true);
-    setSummary("");
-    setFilePreview(null);
-
-    const resetStates = () => {
-      setFileName("");
-      setTags([]);
-      setLoading(false);
-      setFile(null);
-    };
-    if (file) {
-      const fileBase64 = new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onload = () => {
-          if (typeof reader.result === "string") {
-            resolve(reader.result.split(",")[1]); // Extract Base64 string
-          } else {
-            reject(new Error("Invalid file format"));
-          }
-        };
-        reader.onerror = reject;
-        reader.readAsDataURL(file);
-      });
-
-      fileBase64.then((base64String) => {
-        if (base64String) {
-          const fileDataUrl = `data:${file.type};base64,${base64String}`;
-          setFilePreview(fileDataUrl);
-
-          // Send POST request to the Gemini AI model API with input text
-          fetch("/api/gemini-image", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              image: base64String,
-              mimeType: file.type,
-              csrfToken,
-              language,
-            }),
-          })
-            .then((response) => {
-              return response.json();
-            })
-            .then((response) => {
-              if (response && response.summary.name !== "ServerError") {
-                // Update the summary state with the response
-                setSummary(response.summary);
-                resetStates();
-                addPostToDb({
-                  data: response?.summary,
-                  input: file?.name || "",
-                  user,
-                  expressUrl,
-                  setPrompt,
-                  updateLocalPosts,
-                  localPosts,
-                  filePreview: fileDataUrl,
-                  apiAuthToken,
-                  userId,
-                  tags,
-                  generateImageTag,
-                });
-                return {
-                  response,
-                  filePreview: fileDataUrl,
-                };
-              }
-            });
-        }
-      });
-    }
-    return null;
-  } catch (error) {
-    console.error("Error summarizing content:", error);
-    setSummary("An error occurred while summarizing.");
-    return null;
-  } finally {
-    // Scroll the summary into view smoothly
-    summaryRef.current?.scrollIntoView({
-      behavior: "smooth",
-      block: "start",
-    });
-  }
+  const { file, csrfToken, language, base64String } = handleImageResponse;
+  // Send POST request to the Gemini AI model API with input text
+  return fetch("/api/gemini-image", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      image: base64String,
+      mimeType: file?.type,
+      csrfToken,
+      language,
+    }),
+  }).then((response) => {
+    return response.json();
+  });
 };
 
 export const addPostToDb = (addPostToDb: AddPostsToDB) => {

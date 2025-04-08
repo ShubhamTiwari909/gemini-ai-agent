@@ -2,7 +2,7 @@
 import React, { useRef } from "react";
 import FormControls from "./FormControls";
 import { useGlobalStore } from "@/store/global-store";
-import { handleImageResponse, handleSummarize } from "@/lib/utils";
+import { addPostToDb, handleImageResponse, handleSummarize } from "@/lib/utils";
 import { TourProvider } from "@reactour/tour";
 import { GeminiAiWrapperProps } from "@/types/utils";
 import Loader from "./ResponseRenderer/Loader";
@@ -112,26 +112,51 @@ const GeminiAiWrapper = ({
       .then((token) => {
         if (token) {
           const csrfToken = token.csrfToken;
+          setLoading(true);
+          setSummary("");
+
+          const resetStates = () => {
+            setFileName("");
+            setTags([]);
+            setLoading(false);
+            setInputText("");
+            setGenerateImageTag(false);
+          };
+
           handleSummarize({
             input,
             csrfToken,
-            summaryRef,
-            user,
-            expressUrl,
-            localPosts,
-            apiAuthToken,
-            userId,
-            tags,
-            generateImageTag,
-            setPrompt,
-            setLoading,
-            setSummary,
-            setFileName,
-            setTags,
-            setInputText,
-            updateLocalPosts,
-            setGenerateImageTag,
-          });
+          })
+            .then((response) => {
+              if (response) {
+                setSummary(response);
+                resetStates();
+                addPostToDb({
+                  data: response,
+                  input,
+                  user,
+                  expressUrl,
+                  setPrompt,
+                  updateLocalPosts,
+                  localPosts,
+                  apiAuthToken,
+                  userId,
+                  tags,
+                  generateImageTag,
+                });
+                return response;
+              }
+            })
+            .catch((error) => {
+              console.error("Error summarizing content:", error);
+              setSummary("An error occurred while summarizing.");
+            })
+            .finally(() => {
+              summaryRef.current?.scrollIntoView({
+                behavior: "smooth",
+                block: "start",
+              });
+            });
         } else {
           console.error("Failed to fetch CSRF token:");
         }
@@ -145,27 +170,65 @@ const GeminiAiWrapper = ({
         .then((token) => {
           if (token) {
             const csrfToken = token.csrfToken;
-            handleImageResponse({
-              file,
-              csrfToken,
-              language,
-              summaryRef,
-              user,
-              expressUrl,
-              localPosts,
-              apiAuthToken,
-              userId,
-              tags,
-              generateImageTag,
-              setPrompt,
-              updateLocalPosts,
-              setLoading,
-              setFilePreview,
-              setFile,
-              setSummary,
-              setFileName,
-              setTags,
-            });
+            setLoading(true);
+            setSummary("");
+            setFilePreview(null);
+
+            const resetStates = () => {
+              setFileName("");
+              setTags([]);
+              setLoading(false);
+              setFile(null);
+            };
+            if (file) {
+              const fileBase64: Promise<string> = new Promise(
+                (resolve, reject) => {
+                  const reader = new FileReader();
+                  reader.onload = () => {
+                    if (typeof reader.result === "string") {
+                      resolve(reader.result.split(",")[1]); // Extract Base64 string
+                    } else {
+                      reject(new Error("Invalid file format"));
+                    }
+                  };
+                  reader.onerror = reject;
+                  reader.readAsDataURL(file);
+                },
+              );
+              fileBase64.then((base64String: string) => {
+                if (base64String) {
+                  const fileDataUrl = `data:${file.type};base64,${base64String}`;
+                  setFilePreview(fileDataUrl);
+                  handleImageResponse({
+                    file,
+                    csrfToken,
+                    language,
+                    base64String,
+                  }).then((response) => {
+                    setSummary(response.summary);
+                    resetStates();
+                    addPostToDb({
+                      data: response?.summary,
+                      input: file?.name || "",
+                      user,
+                      expressUrl,
+                      setPrompt,
+                      updateLocalPosts,
+                      localPosts,
+                      filePreview: fileDataUrl,
+                      apiAuthToken,
+                      userId,
+                      tags,
+                      generateImageTag,
+                    });
+                    return {
+                      response,
+                      filePreview: fileDataUrl,
+                    };
+                  });
+                }
+              });
+            }
           }
         });
     } catch (error) {
