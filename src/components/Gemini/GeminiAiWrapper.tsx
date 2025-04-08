@@ -247,7 +247,7 @@ const GeminiAiWrapper = ({
         />
         <section
           ref={summaryRef}
-          className="relative !overflow-auto mt-5 max-w-5xl mx-auto"
+          className="relative !overflow-auto mt-5 max-w-7xl mx-auto"
         >
           <Loader loading={loading} summary={summary as string} />
           <ResponseHeaderUi
