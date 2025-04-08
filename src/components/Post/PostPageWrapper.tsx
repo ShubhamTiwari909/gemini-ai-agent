@@ -1,5 +1,5 @@
 "use client";
-import { Posts } from "@/types/response-handlers";
+import { Comments, Posts } from "@/types/response-handlers";
 import { User } from "next-auth";
 import React, { useEffect, useRef } from "react";
 import ResponseHeaderUi from "../Gemini/ResponseRenderer/ResponseHeaderUI";
@@ -10,11 +10,15 @@ import MarkdownRenderer from "../Gemini/ResponseRenderer/MarkdownRender";
 import PostComments from "./PostComments";
 
 const PostPageWrapper = ({
-  activePost,
+  post,
   usermail,
   user,
 }: {
-  activePost: Posts;
+  post: {
+    post: Posts;
+    comments: Comments[];
+    commentsLength: number;
+  };
   usermail: string | undefined | null;
   user: User;
 }) => {
@@ -25,6 +29,8 @@ const PostPageWrapper = ({
       document.body.style.overflow = "auto";
     }
   }, []);
+
+  const { post: activePost, comments, commentsLength } = post;
 
   return (
     <>
@@ -71,9 +77,10 @@ const PostPageWrapper = ({
             />
             <MarkdownRenderer summary={activePost?.response} />
             <PostComments
-              comments={activePost?.comments}
+              comments={comments}
               user={user as User}
               postId={activePost.postId}
+              commentsLength={commentsLength}
               className="mt-10"
             />
           </div>

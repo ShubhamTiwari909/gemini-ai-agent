@@ -10,11 +10,13 @@ const Comment = ({
   user,
   postId,
   setComment,
+  limit,
 }: {
   comment: Comments | undefined;
   user: User;
   postId: string;
   setComment: React.Dispatch<React.SetStateAction<Comments[] | undefined>>;
+  limit: number;
 }) => {
   const [showReply, setShowReply] = useState(false);
   const handleCommentLikes = () => {
@@ -30,12 +32,18 @@ const Comment = ({
           postId,
           commentId: comment?.id,
           user,
+          limit,
+          skip: limit - 2,
         }),
       },
     )
       .then((res) => res.json())
       .then((result) => {
-        setComment(result.comments);
+        setComment((prevComments) =>
+          prevComments?.map((comment) =>
+            comment.id === result.comment.id ? result.comment : comment,
+          ),
+        );
       });
   };
 

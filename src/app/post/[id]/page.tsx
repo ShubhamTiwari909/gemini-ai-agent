@@ -15,7 +15,7 @@ const fetchPostById = async (
         "Content-Type": "application/json",
         Authorization: `Bearer ${process.env.API_AUTH_TOKEN}`,
       },
-      body: JSON.stringify({ id }),
+      body: JSON.stringify({ id, limit: 2, skip: 0 }),
     });
 
     const data = await response.json();
@@ -33,13 +33,13 @@ const page = async ({ params }: { params: Promise<{ id: string }> }) => {
     redirect("/login");
   }
 
-  const activePost = await fetchPostById(process.env.EXPRESS_API_URL || "", id);
+  const post = await fetchPostById(process.env.EXPRESS_API_URL || "", id);
 
-  if (activePost.message) {
-    if (activePost.message.includes("domain")) {
+  if (post.message) {
+    if (post.message.includes("domain")) {
       return (
         <div className="w-full h-screen grid place-items-center text-4xl">
-          {activePost.message}
+          {post.message}
         </div>
       );
     }
@@ -50,7 +50,7 @@ const page = async ({ params }: { params: Promise<{ id: string }> }) => {
     <PostPageWrapper
       user={session?.user as User}
       usermail={session?.user?.email}
-      activePost={activePost}
+      post={post}
     />
   );
 };
