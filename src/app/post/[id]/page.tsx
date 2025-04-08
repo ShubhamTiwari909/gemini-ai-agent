@@ -1,7 +1,7 @@
 import { auth } from "@/app/api/auth/nextAuth";
 import PostPageWrapper from "@/components/Post/PostPageWrapper";
 import { User } from "next-auth";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import React from "react";
 
 const fetchPostById = async (
@@ -28,6 +28,10 @@ const fetchPostById = async (
 const page = async ({ params }: { params: Promise<{ id: string }> }) => {
   const { id } = await params;
   const session = await auth();
+  if (!session?.user) {
+    // If the user is not logged in, redirect to the login page.
+    redirect("/login");
+  }
 
   const activePost = await fetchPostById(process.env.EXPRESS_API_URL || "", id);
 

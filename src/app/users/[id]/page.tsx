@@ -1,9 +1,10 @@
+import { auth } from "@/app/api/auth/nextAuth";
 import { fetchPosts } from "@/components/Post/Post";
 import { fetchUserId, formatDate } from "@/lib/utils";
 import { Posts } from "@/types/response-handlers";
 import Image from "next/image";
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import React from "react";
 
 const fetchUser = async (
@@ -39,6 +40,12 @@ const page = async ({ params }: { params: Promise<{ id: string }> }) => {
   const expressUrl = process.env.EXPRESS_API_URL || "";
   const email = id.replace("%40", "@");
   const userId = await fetchUserId(email || "");
+  const session = await auth();
+
+  if (!session?.user) {
+    // If the user is not logged in, redirect to the login page.
+    redirect("/login");
+  }
 
   const [data, post] = await Promise.all([
     fetchUser(expressUrl, email, userId),
