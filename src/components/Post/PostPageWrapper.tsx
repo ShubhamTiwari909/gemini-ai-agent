@@ -53,38 +53,40 @@ const PostPageWrapper = ({
           showViews={true}
           showLikes={true}
         />
-        {activePost?.response && activePost?.response.includes("data:image") ? (
-          <>
-            <ImageResponseRenderer
-              prompt={activePost.prompt as string}
-              src={activePost?.response}
-            />
-          </>
-        ) : (
-          <div className="w-full py-10">
-            {activePost.filePreview && (
-              <FilePreview
-                filePreview={activePost.filePreview}
-                prompt={activePost.prompt || ""}
-                createdAt={activePost.createdAt}
-                usermail={usermail}
-                username={activePost.user?.name || ""}
+        <div className="w-full py-10">
+          {activePost?.response &&
+          activePost?.response.includes("data:image") ? (
+            <>
+              <ImageResponseRenderer
+                prompt={activePost.prompt as string}
+                src={activePost?.response}
               />
-            )}
-            <TextToSpeech
-              text={activePost?.response}
-              className="absolute lg:right-8 lg:top-8 right-3 top-2"
-            />
+            </>
+          ) : (
             <MarkdownRenderer summary={activePost?.response} />
-            <PostComments
-              comments={comments}
-              user={user as User}
-              postId={activePost.postId}
-              commentsLength={commentsLength}
-              className="mt-10"
+          )}
+          {activePost.filePreview && (
+            <FilePreview
+              filePreview={activePost.filePreview}
+              prompt={activePost.prompt || ""}
+              createdAt={activePost.createdAt}
+              usermail={usermail}
+              username={activePost.user?.name || ""}
             />
-          </div>
-        )}
+          )}
+          <TextToSpeech
+            text={activePost?.response}
+            className="absolute lg:right-8 lg:top-8 right-3 top-2"
+          />
+
+          <PostComments
+            comments={comments}
+            user={user as User}
+            postId={activePost.postId}
+            commentsLength={commentsLength}
+            className="mt-10"
+          />
+        </div>
       </section>
     </>
   );
