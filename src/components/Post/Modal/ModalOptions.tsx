@@ -7,7 +7,7 @@ const ModalOptions = ({ activePost }: { activePost: Posts | null }) => {
   const [copied, setCopied] = React.useState(false);
   const handleCopyLink = () => {
     navigator.clipboard.writeText(
-      `${window.location.href}post/${activePost?._id}`,
+      `${window.location.origin}/post/${activePost?._id}`,
     );
     setCopied(true);
     setTimeout(() => {
