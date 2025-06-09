@@ -24,7 +24,7 @@ const Modal = ({
           <div className="flex items-center justify-between sticky gap-x-3 top-0 bg-base-300 z-10 w-full p-3 lg:p-5">
             <Heading
               prompt={activePost?.prompt || ""}
-              className="font-bold text-lg text-ellipsis line-clamp-1 flex gap-x-3 text-balance max-w-3xl"
+              className="font-bold text-lg text-ellipsis line-clamp-4 max-w-3xl"
             />
             <ModalHeader activePost={activePost} modalRef={modalRef} />
           </div>

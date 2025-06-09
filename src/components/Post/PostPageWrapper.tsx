@@ -36,7 +36,7 @@ const PostPageWrapper = ({
     <>
       <section
         ref={summaryRef}
-        className="relative !overflow-auto mt-5 p-3 lg:p-5 lg:mt-0 !pt-5 max-w-5xl mx-auto"
+        className="relative !overflow-auto mt-5 p-3 lg:p-5 lg:mt-0 !pt-15 max-w-5xl mx-auto"
       >
         <ResponseHeaderUi
           user={user as User}
@@ -76,7 +76,7 @@ const PostPageWrapper = ({
           )}
           <TextToSpeech
             text={activePost?.response}
-            className="absolute lg:right-8 lg:top-8 right-3 top-2"
+            className="absolute lg:right-8 lg:top-8 right-3 top-5"
           />
 
           <PostComments

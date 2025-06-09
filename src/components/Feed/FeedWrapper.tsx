@@ -89,7 +89,7 @@ const FeedWrapper = ({ data, user }: { data: Data; user: User }) => {
                 <Link href={`/post/${post._id}`}>
                   <Heading
                     prompt={post.prompt || ""}
-                    className={`mb-4 text-xl lg:text-2xl bg-gradient-to-r bg-clip-text font-extrabold text-transparent ${post.responseType === "image" || post.filePreview?.includes("data:image") ? "from-pink-200 to-violet-200" : "from-pink-500 to-violet-500"}`}
+                    className={`mb-4 text-xl lg:text-2xl bg-gradient-to-r bg-clip-text font-extrabold text-transparent line-clamp-2 ${post.responseType === "image" || post.filePreview?.includes("data:image") ? "from-pink-200 to-violet-200" : "from-pink-500 to-violet-500"}`}
                   />
                   <Tags tags={post.tags} />
                   <Description post={post} />

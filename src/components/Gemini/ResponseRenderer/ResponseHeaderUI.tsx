@@ -17,7 +17,7 @@ const ResponseHeaderUi = ({
   return (
     <div className="lg:pt-0 mb-10 lg:mb-0">
       <h2
-        className={`${childClasses.heading} line-clamp-1 lg:line-clamp-none text-ellipsis lg:mr-30`}
+        className={`${childClasses.heading} line-clamp-3 lg:line-clamp-5 text-ellipsis lg:mr-30`}
       >
         {prompt.slice(0, prompt.indexOf("- Generate the entire response in"))}
       </h2>
