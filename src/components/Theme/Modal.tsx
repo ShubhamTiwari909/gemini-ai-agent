@@ -41,7 +41,7 @@ const Modal = () => {
       </button>
       {/* The dialog element. */}
       <dialog ref={modalRef} id="theme-modal" className="modal">
-        <div className="modal-box !h-120 lg:!h-156">
+        <div className="modal-box !h-130 lg:!h-80">
           <div className="flex items-center justify-between mb-5">
             <h3 className="font-bold text-lg">Select a Theme</h3>
             <div className="modal-action mt-0">

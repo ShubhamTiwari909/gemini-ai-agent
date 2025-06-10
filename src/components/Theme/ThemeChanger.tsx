@@ -3,35 +3,15 @@ import React, { useEffect } from "react";
 import { themeChange } from "theme-change";
 
 export const daisyUIThemes = [
-  "light",
+  "business",
   "dark",
-  "cupcake",
-  "bumblebee",
-  "emerald",
-  "corporate",
+  "night",
   "synthwave",
-  "retro",
-  "cyberpunk",
-  "valentine",
   "halloween",
-  "garden",
-  "forest",
   "aqua",
-  "lofi",
-  "pastel",
-  "fantasy",
-  "wireframe",
   "black",
   "luxury",
-  "dracula",
-  "cmyk",
-  "autumn",
-  "business",
-  "acid",
-  "lemonade",
-  "night",
   "coffee",
-  "winter",
 ];
 
 const ThemeChanger = ({ closeModal }: { closeModal: () => void }) => {
