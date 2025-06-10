@@ -1,6 +1,6 @@
 "use client";
 import { useGlobalStore } from "@/store/global-store";
-import React, { useEffect } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import * as motion from "motion/react-client";
 import Modal from "./Modal/Modal";
@@ -8,6 +8,14 @@ import Search from "./Search";
 import { AnimatePresence } from "motion/react";
 import { Posts } from "@/types/response-handlers";
 import Heading from "../Heading";
+import { User } from "next-auth";
+
+type Data = {
+  data: Posts[];
+  currentPage: number;
+  hasMore: boolean;
+  message?: string;
+};
 
 /**
  * A component that displays a list of posts items from the local posts store.
@@ -15,7 +23,21 @@ import Heading from "../Heading";
  * The user can click on each item to open a modal dialog with the prompt and response.
  * The user can also click on the left arrow button to close the list.
  */
-const PostWrapper = ({ posts }: { posts: Posts[] | { message: string } }) => {
+const PostWrapper = ({
+  posts,
+  user,
+  userId,
+}: {
+  posts: Data;
+  user: User | undefined;
+  userId: string | null | undefined;
+}) => {
+  const [history, setHistory] = useState(posts.data);
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(posts.hasMore);
+  const [loading, setLoading] = useState(false);
+  const observerRef = useRef<HTMLLIElement | null>(null);
+
   /**
    * Whether the list of posts items is open or closed.
    * This state is used to control the visibility of the list.
@@ -33,12 +55,6 @@ const PostWrapper = ({ posts }: { posts: Posts[] | { message: string } }) => {
    * This state is used to pass the active posts item to the Modal component.
    */
   const [activePost, setActivePost] = React.useState<Posts | null>(null);
-
-  /**
-   * The local posts store.
-   * This store is used to keep track of the user's posts of prompts and responses.
-   */
-  const localPost = useGlobalStore((state) => state.posts);
 
   /**
    * A function to update the local posts store.
@@ -87,12 +103,53 @@ const PostWrapper = ({ posts }: { posts: Posts[] | { message: string } }) => {
    */
   useEffect(() => {
     if ("message" in posts) {
-      setRateLimitMessage(posts.message);
+      setRateLimitMessage(posts.message as string);
       updateLocalPosts([]);
     } else {
-      updateLocalPosts(posts);
+      updateLocalPosts(posts.data);
     }
   }, [posts]);
+  const handleFetchPost = () => {
+    fetch(`${process.env.NEXT_PUBLIC_EXPRESS_API_URL}/posts/find`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${process.env.NEXT_PUBLIC_API_AUTH_TOKEN}`,
+      },
+      body: JSON.stringify({
+        email: user?.email,
+        userId,
+        limit: 10,
+        page: page + 1,
+      }),
+    })
+      .then((res) => res.json())
+      .then((result) => {
+        console.log(result);
+        setLoading(false);
+        setPage((prevPage) => prevPage + 1);
+        setHistory((prevFeed) => [...prevFeed, ...result.data]);
+        setHasMore(result.hasMore);
+      });
+  };
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && hasMore && !search) {
+          setLoading(true);
+          handleFetchPost();
+        }
+      },
+      { rootMargin: "10px" },
+    );
+
+    if (observerRef.current) {
+      observer.observe(observerRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, [page, hasMore, search]); // Ensure effect runs when page updates
 
   /**
    * Resets the search query to an empty string when the list of posts items is closed.
@@ -168,11 +225,13 @@ const PostWrapper = ({ posts }: { posts: Posts[] | { message: string } }) => {
             ) : null}
 
             <LocalPost
-              localPost={localPost}
               search={search}
               setActivePost={setActivePost}
               openModal={openModal}
               setIsOpen={setIsOpen}
+              history={history}
+              observerRef={observerRef}
+              loading={loading}
             />
           </motion.div>
         </AnimatePresence>
@@ -220,19 +279,23 @@ const ButtonClose = ({
  * The component uses the `motion` library to animate the list items.
  */
 const LocalPost = ({
-  localPost,
   search,
   setActivePost,
   openModal,
   setIsOpen,
+  history,
+  observerRef,
+  loading = false,
 }: {
-  localPost: Posts[];
   search: string;
   setActivePost: (posts: Posts) => void;
   openModal: () => void;
   setIsOpen: (isOpen: boolean) => void;
+  history: Posts[];
+  observerRef?: React.RefObject<HTMLLIElement | null>;
+  loading?: boolean;
 }) => {
-  const filterSearchPosts = localPost.filter((item) =>
+  const filterSearchPosts = history.filter((item) =>
     item.prompt.toLocaleLowerCase().includes(search.toLocaleLowerCase()),
   );
   return (
@@ -250,6 +313,7 @@ const LocalPost = ({
               whileInView={{ opacity: 1 }}
               key={index}
               className="border-b border-solid border-b-base-content pb-2"
+              ref={index === history.length - 1 ? observerRef : null} // Attach ref to last item
             >
               <button
                 className="text-left line-clamp-2 text-ellipsis"
@@ -261,6 +325,7 @@ const LocalPost = ({
               >
                 <Heading prompt={item.prompt || ""} />
               </button>
+              <p className="text-center">{loading && "Loading..."}</p>
             </motion.li>
           );
         })

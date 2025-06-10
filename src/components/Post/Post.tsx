@@ -16,7 +16,7 @@ export const fetchPosts = async (
         "Content-Type": "application/json",
         Authorization: `Bearer ${process.env.API_AUTH_TOKEN}`,
       },
-      body: JSON.stringify({ email, userId, limit }),
+      body: JSON.stringify({ email, userId, limit, page: 1 }),
     });
 
     const data = await response.json();
@@ -35,8 +35,9 @@ const Posts = async () => {
     process.env.EXPRESS_API_URL || "",
     session?.user?.email,
     userId,
+    10,
   );
-  return <PostWrapper posts={posts} />;
+  return <PostWrapper posts={posts} user={session?.user} userId={userId} />;
 };
 
 export default Posts;
