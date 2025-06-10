@@ -231,8 +231,8 @@ const PostWrapper = ({
               setIsOpen={setIsOpen}
               history={history}
               observerRef={observerRef}
-              loading={loading}
             />
+            <p className="text-center">{loading && "Loading..."}</p>
           </motion.div>
         </AnimatePresence>
 
@@ -285,7 +285,6 @@ const LocalPost = ({
   setIsOpen,
   history,
   observerRef,
-  loading = false,
 }: {
   search: string;
   setActivePost: (posts: Posts) => void;
@@ -293,7 +292,6 @@ const LocalPost = ({
   setIsOpen: (isOpen: boolean) => void;
   history: Posts[];
   observerRef?: React.RefObject<HTMLLIElement | null>;
-  loading?: boolean;
 }) => {
   const filterSearchPosts = history.filter((item) =>
     item.prompt.toLocaleLowerCase().includes(search.toLocaleLowerCase()),
@@ -325,7 +323,6 @@ const LocalPost = ({
               >
                 <Heading prompt={item.prompt || ""} />
               </button>
-              <p className="text-center">{loading && "Loading..."}</p>
             </motion.li>
           );
         })
