@@ -11,7 +11,6 @@ import Description from "./Description";
 import CardFooter from "./CardFooter";
 import CardHeader from "./CardHeader";
 import { User } from "next-auth";
-import Image from "next/image";
 
 type Data = {
   data: Posts[];
@@ -105,14 +104,6 @@ const FeedWrapper = ({ data, user }: { data: Data; user: User }) => {
                 user={user}
                 post={post}
               />
-              {post.filePreview && (
-                <Image
-                  src={post.filePreview}
-                  alt={post.prompt || "Post Image"}
-                  fill
-                  className="-z-10 opacity-20"
-                />
-              )}
             </div>
           );
         })}
