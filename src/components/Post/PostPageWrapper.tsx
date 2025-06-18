@@ -3,11 +3,11 @@ import { Comments, Posts } from "@/types/response-handlers";
 import { User } from "next-auth";
 import React, { useEffect, useRef } from "react";
 import ResponseHeaderUi from "../Gemini/ResponseRenderer/ResponseHeaderUI";
-import ImageResponseRenderer from "../Gemini/ResponseRenderer/ImageResponseRenderer";
 import FilePreview from "../Gemini/ResponseRenderer/FilePreview";
 import TextToSpeech from "../TextToSpeech";
 import MarkdownRenderer from "../Gemini/ResponseRenderer/MarkdownRender";
 import PostComments from "./PostComments";
+import ImageResponseRenderer from "../Gemini/ResponseRenderer/ImageResponseRenderer";
 
 const PostPageWrapper = ({
   post,
@@ -55,18 +55,15 @@ const PostPageWrapper = ({
           showLikes={true}
         />
         <div className="w-full py-10">
-          {activePost?.response &&
-          activePost?.response.includes("data:image") ? (
-            <>
-              <ImageResponseRenderer
-                prompt={activePost.prompt as string}
-                src={activePost?.filePreview || ""}
-              />
-            </>
+          {activePost?.responseType === "image" ? (
+            <ImageResponseRenderer
+              prompt={activePost.prompt as string}
+              src={activePost?.filePreview || ""}
+            />
           ) : (
             <MarkdownRenderer summary={activePost?.response} />
           )}
-          {activePost.filePreview && (
+          {activePost.filePreview && activePost?.responseType !== "image" && (
             <FilePreview
               filePreview={activePost.filePreview}
               prompt={activePost.prompt || ""}
