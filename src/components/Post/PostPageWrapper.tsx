@@ -31,6 +31,7 @@ const PostPageWrapper = ({
   }, []);
 
   const { post: activePost, comments, commentsLength } = post;
+  console.log(activePost);
 
   return (
     <>
@@ -59,7 +60,7 @@ const PostPageWrapper = ({
             <>
               <ImageResponseRenderer
                 prompt={activePost.prompt as string}
-                src={activePost?.response}
+                src={activePost?.filePreview || ""}
               />
             </>
           ) : (

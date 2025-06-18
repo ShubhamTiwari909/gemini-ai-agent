@@ -6,9 +6,9 @@ import ImageResponse from "../Gemini/ImageResponse";
 const Description = ({ post }: { post: Posts }) => {
   return (
     <div
-      className={`mb-5 lg:mb-10 ${post.filePreview?.includes("data:image") || post.responseType === "image" ? "text-white" : "text-base-content"}`}
+      className={`mb-5 lg:mb-10 ${post.filePreview || post.responseType === "image" ? "text-white text-shadow-lg text-shadow-black" : "text-base-content"}`}
     >
-      {post.filePreview?.includes("data:image") ? (
+      {post.filePreview ? (
         <>
           <div className="absolute inset-0 -z-10">
             <ImageResponse

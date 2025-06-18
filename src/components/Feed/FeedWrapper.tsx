@@ -11,6 +11,7 @@ import Description from "./Description";
 import CardFooter from "./CardFooter";
 import CardHeader from "./CardHeader";
 import { User } from "next-auth";
+import Image from "next/image";
 
 type Data = {
   data: Posts[];
@@ -82,14 +83,14 @@ const FeedWrapper = ({ data, user }: { data: Data; user: User }) => {
               key={post._id}
               data-id={index === feed.length - 1 ? "Last" : "Not last"}
               ref={index === feed.length - 1 ? observerRef : null} // Attach ref to last item
-              className={`p-5 rounded-xl border border-base-content border-solid flex flex-col justify-between relative overflow-hidden ${post.responseType === "image" || post.filePreview?.includes("data:image") ? "" : "bg-base-300"}`}
+              className={`p-5 rounded-xl border border-base-content border-solid flex flex-col justify-between relative overflow-hidden ${post.responseType === "image" || post.filePreview ? "" : "bg-base-300"}`}
             >
               <div>
                 <CardHeader post={post} />
                 <Link href={`/post/${post._id}`}>
                   <Heading
                     prompt={post.prompt || ""}
-                    className={`mb-4 text-xl lg:text-2xl bg-gradient-to-r bg-clip-text font-extrabold text-transparent line-clamp-2 ${post.responseType === "image" || post.filePreview?.includes("data:image") ? "from-pink-200 to-violet-200" : "from-pink-500 to-violet-500"}`}
+                    className={`mb-4 text-xl lg:text-2xl bg-gradient-to-r bg-clip-text font-extrabold text-transparent line-clamp-2 ${post.responseType === "image" || post.filePreview ? "from-pink-200 to-violet-200" : "from-pink-500 to-violet-500"}`}
                   />
                   <Tags tags={post.tags} />
                   <Description post={post} />
@@ -97,14 +98,21 @@ const FeedWrapper = ({ data, user }: { data: Data; user: User }) => {
               </div>
               <CardFooter
                 className={
-                  post.filePreview?.includes("data:image") ||
-                  post.responseType === "image"
+                  post.filePreview || post.responseType === "image"
                     ? "text-white"
                     : "text-base-content"
                 }
                 user={user}
                 post={post}
               />
+              {post.filePreview && (
+                <Image
+                  src={post.filePreview}
+                  alt={post.prompt || "Post Image"}
+                  fill
+                  className="-z-10 opacity-20"
+                />
+              )}
             </div>
           );
         })}

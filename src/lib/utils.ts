@@ -118,7 +118,7 @@ export const addPostToDb = (addPostToDb: AddPostsToDB) => {
         prompt: input,
         response: data,
         responseType: generateImageTag ? "image" : "text",
-        filePreview: filePreview || "",
+        filePreview: filePreview,
         postId,
         tags,
       }),
