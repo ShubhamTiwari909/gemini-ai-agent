@@ -14,7 +14,7 @@ const PostLikes = ({
   const heartColor = (likes: User[]) => {
     return likes.some((like: User) => like.email === user.email)
       ? "red"
-      : "gray";
+      : "white";
   };
   const [likesCount, setLikesCount] = useState<number>(postLikes.length);
   const [iconColor, setIconColor] = useState<string>(heartColor(postLikes));

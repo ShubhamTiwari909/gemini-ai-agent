@@ -38,7 +38,7 @@ const PostViews = ({
     handleViews();
   }, []);
   return (
-    <p className="flex items-center gap-x-2 text-base-content text-sm">
+    <p className="flex items-center gap-x-2 text-white text-sm">
       <FaEye color="cyan" /> {viewsCount}
     </p>
   );

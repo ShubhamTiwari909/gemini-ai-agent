@@ -32,8 +32,7 @@ const Modal = ({
             ref={summaryRef}
             className="relative !overflow-auto mt-5 p-3 lg:p-5 lg:mt-0 !pt-5"
           >
-            {activePost?.response &&
-            activePost?.response.includes("data:image") ? (
+            {activePost?.responseType === "image" ? (
               <>
                 <ImageResponseRenderer
                   prompt={activePost?.prompt}
@@ -42,15 +41,13 @@ const Modal = ({
               </>
             ) : (
               <div className="w-full px-2.5 py-8 border border-solid border-cyan-300 rounded-lg h-fit">
-                {activePost?.filePreview && (
-                  <FilePreview
-                    filePreview={activePost?.filePreview}
-                    prompt={activePost?.prompt}
-                    createdAt={activePost?.createdAt}
-                    usermail={activePost?.user.email}
-                    username={activePost?.user?.name || ""}
-                  />
-                )}
+                {activePost?.filePreview &&
+                  activePost?.responseType !== "image" && (
+                    <FilePreview
+                      filePreview={activePost?.filePreview}
+                      prompt={activePost?.prompt}
+                    />
+                  )}
                 <TextToSpeech
                   text={activePost?.response as string}
                   className="absolute lg:right-8 lg:top-8 right-3 top-0"

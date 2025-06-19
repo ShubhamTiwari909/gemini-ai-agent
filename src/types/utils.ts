@@ -23,14 +23,12 @@ export type CreateAtAndUserName = {
 export type FilePreviewProps = {
   filePreview: string;
   prompt: string;
-  createdAt?: string | undefined;
-  usermail?: string | undefined | null;
-  username?: string | undefined;
 };
 
 export type ImageResponseRendererProps = {
   prompt: string;
   src: string | undefined;
+  renderImage?: boolean;
 };
 
 export type LoaderProps = {

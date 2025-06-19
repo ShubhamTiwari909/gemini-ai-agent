@@ -172,3 +172,19 @@ export const fetchUserId = async (email: string) => {
     return null;
   }
 };
+
+export async function downloadImage(src: string, prompt?: string) {
+  const response = await fetch(src as string, {
+    mode: "cors",
+  });
+  const blob = await response.blob();
+  const url = URL.createObjectURL(blob);
+
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `${prompt?.slice(0, prompt?.indexOf("- Generate the entire response in"))}.png`;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+}

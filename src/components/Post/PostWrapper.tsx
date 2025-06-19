@@ -32,11 +32,10 @@ const PostWrapper = ({
   user: User | undefined;
   userId: string | null | undefined;
 }) => {
-  const [history, setHistory] = useState(posts.data);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(posts.hasMore);
   const [loading, setLoading] = useState(false);
-  const observerRef = useRef<HTMLLIElement | null>(null);
+  const observerRef = useRef<HTMLButtonElement | null>(null);
 
   /**
    * Whether the list of posts items is open or closed.
@@ -56,6 +55,7 @@ const PostWrapper = ({
    */
   const [activePost, setActivePost] = React.useState<Posts | null>(null);
 
+  const localPosts = useGlobalStore((state) => state.posts);
   /**
    * A function to update the local posts store.
    * This function is used to update the local posts store with new posts items.
@@ -108,7 +108,8 @@ const PostWrapper = ({
     } else {
       updateLocalPosts(posts.data);
     }
-  }, [posts]);
+  }, []);
+
   const handleFetchPost = () => {
     fetch(`${process.env.NEXT_PUBLIC_EXPRESS_API_URL}/posts/find`, {
       method: "POST",
@@ -125,10 +126,9 @@ const PostWrapper = ({
     })
       .then((res) => res.json())
       .then((result) => {
-        console.log(result);
         setLoading(false);
         setPage((prevPage) => prevPage + 1);
-        setHistory((prevFeed) => [...prevFeed, ...result.data]);
+        updateLocalPosts([...localPosts, ...result.data]);
         setHasMore(result.hasMore);
       });
   };
@@ -148,8 +148,10 @@ const PostWrapper = ({
       observer.observe(observerRef.current);
     }
 
-    return () => observer.disconnect();
-  }, [page, hasMore, search]); // Ensure effect runs when page updates
+    return () => {
+      observer.disconnect();
+    };
+  }, [page, hasMore, search, localPosts, observerRef]); // Ensure effect runs when page updates
 
   /**
    * Resets the search query to an empty string when the list of posts items is closed.
@@ -229,7 +231,7 @@ const PostWrapper = ({
               setActivePost={setActivePost}
               openModal={openModal}
               setIsOpen={setIsOpen}
-              history={history}
+              history={localPosts}
               observerRef={observerRef}
             />
             <p className="text-center">{loading && "Loading..."}</p>
@@ -291,43 +293,40 @@ const LocalPost = ({
   openModal: () => void;
   setIsOpen: (isOpen: boolean) => void;
   history: Posts[];
-  observerRef?: React.RefObject<HTMLLIElement | null>;
+  observerRef?: React.RefObject<HTMLButtonElement | null>;
 }) => {
   const filterSearchPosts = history.filter((item) =>
     item.prompt.toLocaleLowerCase().includes(search.toLocaleLowerCase()),
   );
   return (
-    <ul className="h-full py-5 overflow-auto space-y-7">
+    <div className="h-full py-5 overflow-auto space-y-10">
       {filterSearchPosts.length === 0 ? (
         <p>No posts found for the search</p>
       ) : (
         filterSearchPosts.map((item, index) => {
           return (
-            <motion.li
+            <motion.button
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.3, delay: 0.3 }}
               whileInView={{ opacity: 1 }}
               key={index}
-              className="border-b border-solid border-b-base-content pb-2"
+              className="border-b border-solid border-b-base-content pb-3 text-left font-bold line-clamp-1 text-ellipsis cursor-pointer w-full transition-colors duration-200 ease-in-out flex items-center justify-between focus-within:text-white hover:text-white"
               ref={index === history.length - 1 ? observerRef : null} // Attach ref to last item
+              onClick={() => {
+                setIsOpen(false);
+                setActivePost(item);
+                openModal();
+              }}
             >
-              <button
-                className="text-left line-clamp-2 text-ellipsis"
-                onClick={() => {
-                  setIsOpen(false);
-                  setActivePost(item);
-                  openModal();
-                }}
-              >
-                <Heading prompt={item.prompt || ""} />
-              </button>
-            </motion.li>
+              <Heading prompt={item.prompt || ""} />
+              <FaArrowRight className="inline-block ml-2" />
+            </motion.button>
           );
         })
       )}
-    </ul>
+    </div>
   );
 };
 

@@ -31,7 +31,6 @@ const PostPageWrapper = ({
   }, []);
 
   const { post: activePost, comments, commentsLength } = post;
-  console.log(activePost);
 
   return (
     <>
@@ -58,7 +57,7 @@ const PostPageWrapper = ({
           {activePost?.responseType === "image" ? (
             <ImageResponseRenderer
               prompt={activePost.prompt as string}
-              src={activePost?.filePreview || ""}
+              src={activePost?.response || ""}
             />
           ) : (
             <MarkdownRenderer summary={activePost?.response} />
@@ -67,16 +66,12 @@ const PostPageWrapper = ({
             <FilePreview
               filePreview={activePost.filePreview}
               prompt={activePost.prompt || ""}
-              createdAt={activePost.createdAt}
-              usermail={usermail}
-              username={activePost.user?.name || ""}
             />
           )}
           <TextToSpeech
             text={activePost?.response}
             className="absolute lg:right-8 lg:top-8 right-3 top-5"
           />
-
           <PostComments
             comments={comments}
             user={user as User}

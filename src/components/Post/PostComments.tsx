@@ -94,7 +94,7 @@ const PostComments = ({
   };
 
   return (
-    <div className={className}>
+    <div className={className} id="post-comments">
       <h2 className="text-base-content text-2xl font-semibold mb-5">
         Comments
       </h2>
