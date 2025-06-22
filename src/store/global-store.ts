@@ -33,8 +33,6 @@ interface GlobalState {
   setSummary: (summary: string) => void;
   loading: boolean;
   setLoading: (loading: boolean) => void;
-  language: string;
-  setLanguage: (language: string) => void;
 }
 
 export const useGlobalStore = create<GlobalState>()(
@@ -63,7 +61,5 @@ export const useGlobalStore = create<GlobalState>()(
     setSummary: (summary) => set({ summary: summary }),
     loading: false,
     setLoading: (loading) => set({ loading: loading }),
-    language: "english",
-    setLanguage: (language) => set({ language: language }),
   })),
 );

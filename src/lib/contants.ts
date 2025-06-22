@@ -1,21 +1,3 @@
-export const languages = [
-  "English",
-  "Spanish",
-  "French",
-  "German",
-  "Mandarin Chinese",
-  "Hindi",
-  "Arabic",
-  "Portuguese",
-  "Bengali",
-  "Russian",
-  "Japanese",
-  "Italian",
-  "Turkish",
-  "Korean",
-  "Vietnamese",
-].sort((a, b) => a.localeCompare(b));
-
 export const blogTags = [
   // Technology & Development
   "Technology",

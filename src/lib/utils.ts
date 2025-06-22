@@ -71,7 +71,7 @@ export const handleSummarize = (
 export const handleImageResponse = (
   handleImageResponse: HandleImageResponse,
 ) => {
-  const { file, csrfToken, language, base64String } = handleImageResponse;
+  const { file, csrfToken, base64String } = handleImageResponse;
   // Send POST request to the Gemini AI model API with input text
   return fetch("/api/gemini-image", {
     method: "POST",
@@ -80,7 +80,6 @@ export const handleImageResponse = (
       image: base64String,
       mimeType: file?.type,
       csrfToken,
-      language,
     }),
   }).then((response) => {
     return response.json();

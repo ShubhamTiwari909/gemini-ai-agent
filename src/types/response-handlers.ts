@@ -20,7 +20,6 @@ export type HandleSummarize = {
 export type HandleImageResponse = {
   file: File | null;
   csrfToken: string | null;
-  language: string;
   base64String: string;
 };
 

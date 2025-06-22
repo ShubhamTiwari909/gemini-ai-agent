@@ -30,7 +30,7 @@ export async function POST(req: Request): Promise<Response> {
    * Get the prompt from the request body.
    */
   const data = await req.json();
-  const { image, mimeType, csrfToken, language } = data;
+  const { image, mimeType, csrfToken } = data;
 
   // Validate CSRF token
   if (!tokens.verify(secret, csrfToken)) {
@@ -62,7 +62,7 @@ export async function POST(req: Request): Promise<Response> {
         mimeType: mimeType,
       },
     },
-    `${mimeTypePrompt[revampedMimeType as keyof typeof mimeTypePrompt]} - Generate the entire response in ${language} language`,
+    `${mimeTypePrompt[revampedMimeType as keyof typeof mimeTypePrompt]}`,
   ]);
   /**
    * Return the generated content as a JSON response.

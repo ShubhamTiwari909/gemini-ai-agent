@@ -31,10 +31,6 @@ const steps = [
     content: "Select a sample prompt to get started",
   },
   {
-    selector: ".language-dropdown",
-    content: "Select a language to generate the response in that language",
-  },
-  {
     selector: ".generate-button",
     content: "Generate your response based on the prompt or image",
   },
@@ -72,8 +68,6 @@ const GeminiAiWrapper = ({
 
   // Update the loading state in the global store
   const setLoading = useGlobalStore((state) => state.setLoading);
-
-  const language = useGlobalStore((state) => state.language);
 
   // LOCAL STATES
   // State to store the input prompt text
@@ -202,7 +196,6 @@ const GeminiAiWrapper = ({
                   handleImageResponse({
                     file,
                     csrfToken,
-                    language,
                     base64String,
                   }).then((response) => {
                     setSummary(response.summary);

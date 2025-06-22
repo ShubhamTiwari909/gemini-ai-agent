@@ -6,7 +6,7 @@ import ImageUpload from "./ImageUpload";
 import { useGlobalStore } from "@/store/global-store";
 import * as motion from "motion/react-client";
 import { FormControlsProps, GenerateButtonProps } from "@/types/form";
-import { blogTags, languages } from "@/lib/contants";
+import { blogTags } from "@/lib/contants";
 import { useTour } from "@reactour/tour";
 
 const promptsSample = {
@@ -78,11 +78,6 @@ const FormControls = ({
             stopSpeech={stopSpeech}
             {...promptsSample}
           />
-          <LanguageDropdown
-            stopSpeech={stopSpeech}
-            list={languages}
-            btnText="Generate in"
-          />
           <TagsDropdown
             stopSpeech={stopSpeech}
             list={blogTags}
@@ -123,7 +118,6 @@ const GenerateButton = ({
   file,
 }: GenerateButtonProps) => {
   const inputText = useGlobalStore((state) => state.inputText);
-  const language = useGlobalStore((state) => state.language);
   const setFilePreview = useGlobalStore((state) => state.setFilePreview);
   const tags = useGlobalStore((state) => state.tags);
 
@@ -141,9 +135,7 @@ const GenerateButton = ({
           if (file?.name) {
             handleImageResponse();
           } else {
-            handleSummarize(
-              `${inputText} - Generate the entire response in ${language} language`,
-            );
+            handleSummarize(inputText);
           }
         }}
         disabled={(loading || !inputText || tags.length === 0) && !file?.name}
@@ -197,68 +189,6 @@ const Textarea = ({ file }: { file: File | null }) => {
       className="text-pretty textarea textarea-info w-full mb-6 lg:mb-10 textarea-input"
       disabled={loading || !!file}
     />
-  );
-};
-
-const LanguageDropdown = ({
-  stopSpeech,
-  list,
-  btnText,
-}: {
-  stopSpeech?: () => void;
-  list: string[];
-  btnText: string;
-}) => {
-  const language = useGlobalStore((state) => state.language);
-  const setLanguage = useGlobalStore((state) => state.setLanguage);
-  const loading = useGlobalStore((state) => state.loading);
-  const tags = useGlobalStore((state) => state.tags);
-
-  const dropdownContentRef = React.useRef<HTMLUListElement>(null);
-
-  const handleFocus = () => {
-    stopSpeech?.();
-    dropdownContentRef.current?.scrollIntoView({
-      behavior: "smooth",
-      block: "start",
-    });
-  };
-
-  return (
-    <div className="dropdown language-dropdown">
-      <motion.button
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.4, ease: "easeInOut" }}
-        tabIndex={0}
-        role="button"
-        onClick={handleFocus}
-        className={`btn btn-sm lg:btn-md btn-outline m-1 !pointer-events-auto disabled:cursor-not-allowed ${tags.length === 0 ? "btn-ghost" : "btn-primary"}`}
-        disabled={loading || tags.length === 0}
-      >
-        {btnText} {language.toLocaleUpperCase()}
-      </motion.button>
-      <ul
-        ref={dropdownContentRef}
-        tabIndex={0}
-        className="dropdown-content scroll-mt-20 menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow max-h-62 flex-col overflow-auto flex-nowrap"
-      >
-        {list.map((item) => (
-          <li key={item}>
-            <button
-              className={
-                language.toLocaleUpperCase() === item.toLocaleUpperCase()
-                  ? "border border-solid border-primary"
-                  : ""
-              }
-              onClick={() => setLanguage(item.toLocaleLowerCase())}
-            >
-              {item.toLocaleUpperCase()}
-            </button>
-          </li>
-        ))}
-      </ul>
-    </div>
   );
 };
 
