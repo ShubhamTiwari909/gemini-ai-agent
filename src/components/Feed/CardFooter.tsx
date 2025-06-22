@@ -1,11 +1,11 @@
-import { downloadImage, formatDate } from "@/lib/utils";
+import { formatDate } from "@/lib/utils";
 import { User } from "next-auth";
 import React from "react";
 import PostViews from "../Post/PostViews";
 import { Posts } from "@/types/response-handlers";
 import PostLikes from "../Post/PostLikes";
 import ViewComments from "../Post/ViewComments";
-import { LuDownload } from "react-icons/lu";
+import ViewDownload from "../Post/ViewDownload";
 
 const CardFooter = ({
   className,
@@ -34,14 +34,12 @@ const CardFooter = ({
         />
         <ViewComments commentsLength={post.comments.length} postId={post._id} />
         {post.responseType === "image" ? (
-          <button
-            className="text-white text-md cursor-pointer"
-            onClick={() =>
-              downloadImage(post.response as string, post.prompt as string)
-            }
-          >
-            <LuDownload />
-          </button>
+          <ViewDownload
+            response={post.response}
+            prompt={post.prompt}
+            postId={post?.postId as string}
+            downloads={post.downloads}
+          />
         ) : null}
       </div>
     </div>

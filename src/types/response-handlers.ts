@@ -63,4 +63,5 @@ export type Posts = {
   likes: User[];
   views: User[];
   comments: Comments[];
+  downloads?: number;
 };
