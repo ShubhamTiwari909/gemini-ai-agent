@@ -72,6 +72,15 @@ const FormControls = ({
       </div>
       <div className="flex flex-wrap gap-5 items-center justify-between lg:gap-10">
         <div className="flex flex-wrap items-center gap-5">
+          <motion.button
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.4, ease: "easeInOut", times: 1 }}
+            className="btn btn-success btn-outline"
+            onClick={() => setIsOpen(true)}
+          >
+            Start Guide
+          </motion.button>
           <SampleDropdown
             onClick={handleSummarize}
             loading={loading}
@@ -83,15 +92,6 @@ const FormControls = ({
             list={blogTags}
             btnText="Select a Tag first"
           />
-          <motion.button
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.4, ease: "easeInOut", times: 1 }}
-            className="btn"
-            onClick={() => setIsOpen(true)}
-          >
-            Start Guide
-          </motion.button>
         </div>
         <div className="flex justify-center w-full lg:w-fit">
           <GenerateButton
@@ -185,8 +185,7 @@ const Textarea = ({ file }: { file: File | null }) => {
       value={inputText}
       onChange={(e) => setInputText(e.target.value)}
       placeholder="Paste your prompt here..."
-      rows={12}
-      className="text-pretty textarea textarea-info w-full mb-6 lg:mb-10 textarea-input"
+      className="text-pretty textarea textarea-info pb-14 lg:pb-0 w-full mb-6 lg:mb-10 textarea-input min-h-36 field-sizing-content"
       disabled={loading || !!file}
     />
   );
@@ -272,7 +271,7 @@ const GenerateImageBtn = () => {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.4, ease: "easeInOut", times: 1 }}
-      className="btn btn-sm lg:btn-md btn-primary w-36 absolute bottom-10 left-2 lg:left-[unset] lg:bottom-14 lg:right-2"
+      className="btn btn-sm lg:btn-md btn-outline btn-primary w-36 absolute bottom-10 left-2 lg:left-[unset] lg:bottom-14 lg:right-2"
       onClick={() => {
         setGenerateImageTag(!generateImageTag);
         setInputText("Generate image: ");

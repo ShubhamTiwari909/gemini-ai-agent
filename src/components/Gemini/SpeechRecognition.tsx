@@ -23,7 +23,7 @@ const SpeechRecognitionUI = ({
 
   return (
     <div
-      className={`flex items-center gap-x-5 absolute z-10 right-3 bottom-8 lg:bottom-[unset] lg:right-5 lg:top-5 bg-base-300 p-2.5 rounded-2xl ${className}`}
+      className={`flex items-center gap-x-5 absolute z-10 right-3 bottom-8 lg:bottom-[unset] lg:right-5 lg:top-5 bg-base-300 py-2.5 px-4 rounded-2xl ${className}`}
     >
       <button
         className="cursor-pointer disabled:cursor-not-allowed"
@@ -34,9 +34,9 @@ const SpeechRecognitionUI = ({
         disabled={loading}
       >
         {listening ? (
-          <FaMicrophone color="lime" size="1.4rem" />
+          <FaMicrophone color="lime" size="1rem" />
         ) : (
-          <FaMicrophone color="grey" size="1.4rem" />
+          <FaMicrophone color="grey" size="1rem" />
         )}
       </button>
 
@@ -48,7 +48,7 @@ const SpeechRecognitionUI = ({
         }}
         disabled={loading}
       >
-        <FaMicrophoneSlash color="red" size="1.4rem" />
+        <FaMicrophoneSlash color="red" size="1rem" />
       </button>
     </div>
   );

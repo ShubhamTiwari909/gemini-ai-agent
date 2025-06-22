@@ -56,10 +56,10 @@ const Dropdown = ({
       <ul
         ref={dropdownContentRef}
         tabIndex={0}
-        className="snap-y dropdown-content menu bg-slate-100 text-slate-900 mt-5 rounded-box z-[1] w-80 p-2 shadow h-80 overflow-scroll flex-nowrap"
+        className="snap-y dropdown-content menu gap-y-2 bg-slate-100 text-slate-900 mt-5 rounded-box z-[1] w-full min-w-80 p-2 shadow h-80 overflow-scroll flex-nowrap"
       >
         {itemsList.map((item) => (
-          <li key={item}>
+          <li key={item} className="w-full">
             <button
               onClick={() => {
                 setInputText?.(item);
@@ -67,6 +67,7 @@ const Dropdown = ({
                 setFilePreview?.(null);
               }}
               disabled={loading}
+              className="w-full hover:bg-slate-800 hover:text-slate-100"
             >
               {item}
             </button>

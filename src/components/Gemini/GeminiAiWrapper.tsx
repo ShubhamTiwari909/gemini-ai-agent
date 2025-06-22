@@ -236,11 +236,11 @@ const GeminiAiWrapper = ({
           handleSummarize={handleSummarizeFromAi}
           file={file}
           handleImageResponse={handleImageResponseFromAi}
-          className="lg:mb-20"
+          className="lg:mb-10"
         />
         <section
           ref={summaryRef}
-          className="relative !overflow-auto mt-5 max-w-7xl mx-auto"
+          className="relative !overflow-auto max-w-7xl mx-auto"
         >
           <Loader loading={loading} summary={summary as string} />
           <ResponseHeaderUi
