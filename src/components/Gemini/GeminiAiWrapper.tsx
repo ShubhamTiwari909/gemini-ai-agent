@@ -250,8 +250,10 @@ const GeminiAiWrapper = ({
               summary,
               prompt,
               filePreview,
+              user: {
+                userId: userId || "",
+              },
             }}
-            usermail={undefined}
           />
           {summary && summary.includes("data:image") ? (
             <>

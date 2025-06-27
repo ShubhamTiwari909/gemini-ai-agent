@@ -1,11 +1,10 @@
 import React from "react";
 import { auth } from "@/app/api/auth/nextAuth";
-import { fetchUserId } from "@/lib/utils";
+import { fetchUserByEmail } from "@/lib/utils";
 import PostWrapper from "./PostWrapper";
 
 export const fetchPosts = async (
   expressUrl: string,
-  email: string | null | undefined,
   userId: string | null | undefined,
   limit?: number,
 ) => {
@@ -16,7 +15,7 @@ export const fetchPosts = async (
         "Content-Type": "application/json",
         Authorization: `Bearer ${process.env.API_AUTH_TOKEN}`,
       },
-      body: JSON.stringify({ email, userId, limit, page: 1 }),
+      body: JSON.stringify({ userId, limit, page: 1 }),
     });
 
     const data = await response.json();
@@ -29,15 +28,14 @@ export const fetchPosts = async (
 
 const Posts = async () => {
   const session = await auth();
-  const userId = await fetchUserId(session?.user?.email || "");
+  const user = await fetchUserByEmail(session?.user?.email || "");
 
   const posts = await fetchPosts(
     process.env.EXPRESS_API_URL || "",
-    session?.user?.email,
-    userId,
+    user.userId,
     10,
   );
-  return <PostWrapper posts={posts} user={session?.user} userId={userId} />;
+  return <PostWrapper posts={posts} userId={user.userId} />;
 };
 
 export default Posts;

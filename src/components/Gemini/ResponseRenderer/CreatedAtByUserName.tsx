@@ -6,7 +6,7 @@ import React from "react";
 const CreatedAtByUsername = ({
   createdAt,
   username,
-  usermail,
+  userId,
 }: CreateAtAndUserName) => {
   return (
     createdAt && (
@@ -14,7 +14,7 @@ const CreatedAtByUsername = ({
         Created - {formatDate(createdAt || "")} {username ? "by " : ""}
         {username ? (
           <Link
-            href={`/users/${usermail}`}
+            href={`/users/${userId}`}
             className="mt-4 lg:mt-0 inline-block font-bold py-2 px-4 rounded-full bg-base-content text-base-100 lg:ml-2"
           >
             {username}

@@ -3,7 +3,7 @@ import {
   HandleImageResponse,
   HandleSummarize,
 } from "@/types/response-handlers";
-import { decrypt } from "./hybrid-encryption";
+import { notFound } from "next/navigation";
 
 export const formatDate = (dateString: string) => {
   const timestamp = Date.parse(dateString); // Returns milliseconds since epoch
@@ -105,6 +105,16 @@ export const addPostToDb = (addPostToDb: AddPostsToDB) => {
 
     // Generate a unique post ID from input and summary
     const postId = `${input.split(" ").join("-").slice(0, 10)}-${data.split(" ").join("-").slice(0, 10)}-${user?.email}/${Date.now()}`;
+
+    const postBody = {
+      user: { ...user, userId },
+      prompt: input,
+      response: data,
+      responseType: generateImageTag ? "image" : "text",
+      filePreview: filePreview,
+      postId,
+      tags,
+    };
     // Save the prompt and its response to the server-side post
     fetch(`${expressUrl}/posts/add`, {
       method: "POST",
@@ -112,15 +122,7 @@ export const addPostToDb = (addPostToDb: AddPostsToDB) => {
         "Content-Type": "application/json",
         Authorization: `Bearer ${apiAuthToken}`,
       },
-      body: JSON.stringify({
-        user: { ...user, userId },
-        prompt: input,
-        response: data,
-        responseType: generateImageTag ? "image" : "text",
-        filePreview: filePreview,
-        postId,
-        tags,
-      }),
+      body: JSON.stringify(postBody),
     })
       .then((response) => {
         return response.json();
@@ -151,10 +153,34 @@ export const addPostToDb = (addPostToDb: AddPostsToDB) => {
   }
 };
 
-export const fetchUserId = async (email: string) => {
+export const fetchUserId = async (userId: string) => {
   try {
     const response = await fetch(
       `${process.env.EXPRESS_API_URL}/users/findById`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${process.env.API_AUTH_TOKEN}`,
+        },
+        body: JSON.stringify({ userId }),
+      },
+    );
+    const data = await response.json();
+    if (data.error) {
+      notFound();
+    }
+    return data;
+  } catch (error) {
+    console.error("Error fetching user ID:", error);
+    return null;
+  }
+};
+
+export const fetchUserByEmail = async (email: string) => {
+  try {
+    const response = await fetch(
+      `${process.env.EXPRESS_API_URL}/users/findUserByEmail`,
       {
         method: "POST",
         headers: {
@@ -165,7 +191,10 @@ export const fetchUserId = async (email: string) => {
       },
     );
     const data = await response.json();
-    return decrypt(data.uid);
+    if (data.error) {
+      notFound();
+    }
+    return data;
   } catch (error) {
     console.error("Error fetching user ID:", error);
     return null;

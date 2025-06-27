@@ -11,7 +11,6 @@ import ImageResponseRenderer from "../Gemini/ResponseRenderer/ImageResponseRende
 
 const PostPageWrapper = ({
   post,
-  usermail,
   user,
 }: {
   post: {
@@ -19,7 +18,6 @@ const PostPageWrapper = ({
     comments: Comments[];
     commentsLength: number;
   };
-  usermail: string | undefined | null;
   user: User;
 }) => {
   const summaryRef = useRef<HTMLDivElement>(null);
@@ -49,7 +47,6 @@ const PostPageWrapper = ({
             postId: activePost?.postId || "",
             likes: activePost?.likes || 0,
           }}
-          usermail={usermail}
           showViews={true}
           showLikes={true}
         />

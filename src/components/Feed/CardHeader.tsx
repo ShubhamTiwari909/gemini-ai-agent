@@ -6,7 +6,7 @@ import React from "react";
 const CardHeader = ({ post }: { post: Posts }) => {
   return (
     <Link
-      href={`/users/${post.user.email}`}
+      href={`/users/${post.user.userId}`}
       className="pb-4 rounded-full text-sm flex items-center gap-4 w-fit"
     >
       <Image

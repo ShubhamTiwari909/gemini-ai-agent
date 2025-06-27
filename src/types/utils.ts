@@ -2,7 +2,7 @@ import { Session, User } from "next-auth";
 import { Comments } from "./response-handlers";
 
 export type Post = {
-  user?: User;
+  user?: User & { userId?: string };
   filePreview?: string | null;
   prompt?: string;
   summary?: string;
@@ -17,7 +17,7 @@ export type Post = {
 export type CreateAtAndUserName = {
   createdAt: string | undefined;
   username: string | undefined | null;
-  usermail: string | undefined | null;
+  userId: string | undefined | null;
 };
 
 export type FilePreviewProps = {
@@ -39,7 +39,6 @@ export type LoaderProps = {
 export type ResponseHeaderProps = {
   prompt: string;
   post: Post;
-  usermail: string | undefined | null;
   user: User;
   showViews?: boolean;
   showLikes?: boolean;

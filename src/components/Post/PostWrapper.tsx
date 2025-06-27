@@ -8,7 +8,6 @@ import Search from "./Search";
 import { AnimatePresence } from "motion/react";
 import { Posts } from "@/types/response-handlers";
 import Heading from "../Heading";
-import { User } from "next-auth";
 
 type Data = {
   data: Posts[];
@@ -25,11 +24,9 @@ type Data = {
  */
 const PostWrapper = ({
   posts,
-  user,
   userId,
 }: {
   posts: Data;
-  user: User | undefined;
   userId: string | null | undefined;
 }) => {
   const [page, setPage] = useState(1);
@@ -118,7 +115,6 @@ const PostWrapper = ({
         Authorization: `Bearer ${process.env.NEXT_PUBLIC_API_AUTH_TOKEN}`,
       },
       body: JSON.stringify({
-        email: user?.email,
         userId,
         limit: 10,
         page: page + 1,

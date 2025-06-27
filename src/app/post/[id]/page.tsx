@@ -46,13 +46,7 @@ const page = async ({ params }: { params: Promise<{ id: string }> }) => {
     notFound();
   }
 
-  return (
-    <PostPageWrapper
-      user={session?.user as User}
-      usermail={session?.user?.email}
-      post={post}
-    />
-  );
+  return <PostPageWrapper user={session?.user as User} post={post} />;
 };
 
 export default page;

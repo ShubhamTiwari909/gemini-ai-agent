@@ -9,7 +9,6 @@ import PostLikes from "@/components/Post/PostLikes";
 const ResponseHeaderUi = ({
   prompt,
   post,
-  usermail,
   user,
   showViews,
   showLikes,
@@ -34,9 +33,9 @@ const ResponseHeaderUi = ({
         </ul>
       )}
       <div className="flex flex-wrap justify-between items-center gap-3">
-        {usermail && (
+        {post?.user?.userId && (
           <CreatedAtByUsername
-            usermail={usermail}
+            userId={post?.user?.userId}
             createdAt={post.createdAt}
             username={post?.user?.name}
           />

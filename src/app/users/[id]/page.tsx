@@ -4,42 +4,13 @@ import { fetchUserId, formatDate } from "@/lib/utils";
 import { Posts } from "@/types/response-handlers";
 import Image from "next/image";
 import Link from "next/link";
-import { notFound, redirect } from "next/navigation";
+import { redirect } from "next/navigation";
 import React from "react";
-
-const fetchUser = async (
-  expressUrl: string,
-  email: string,
-  userId: string | null | undefined,
-) => {
-  try {
-    const response = await fetch(`${expressUrl}/users/find`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${process.env.API_AUTH_TOKEN}`,
-      },
-      body: JSON.stringify({ email, userId }),
-    });
-
-    const data = await response.json();
-
-    if (data.error) {
-      notFound();
-    }
-
-    return data;
-  } catch (error) {
-    console.error("Error fetching user:", error);
-    notFound();
-  }
-};
 
 const page = async ({ params }: { params: Promise<{ id: string }> }) => {
   const { id } = await params;
   const expressUrl = process.env.EXPRESS_API_URL || "";
-  const email = id.replace("%40", "@");
-  const userId = await fetchUserId(email || "");
+  const user = await fetchUserId(id || "");
   const session = await auth();
 
   if (!session?.user) {
@@ -47,15 +18,12 @@ const page = async ({ params }: { params: Promise<{ id: string }> }) => {
     redirect("/login");
   }
 
-  const [data, post] = await Promise.all([
-    fetchUser(expressUrl, email, userId),
-    fetchPosts(expressUrl, email, userId, 10),
-  ]);
+  const [post] = await Promise.all([fetchPosts(expressUrl, user?.userId, 10)]);
 
-  if (data.message || post.message) {
+  if (user.message || post.message) {
     return (
       <div className="w-full h-screen grid place-items-center text-4xl">
-        {data.message || post.message}
+        {user.message || post.message}
       </div>
     );
   }
@@ -71,15 +39,15 @@ const page = async ({ params }: { params: Promise<{ id: string }> }) => {
       />
       <div className="p-5 flex flex-col items-center text-center lg:sticky lg:top-31 h-fit mb-10 lg:mb-0 lg:col-span-3 bg-base-content text-base-100 rounded-3xl">
         <Image
-          src={data.image.replace("s96", "s400")}
-          alt={data.name}
+          src={user.image.replace("s96", "s400")}
+          alt={user.name}
           width={200}
           height={200}
           className="rounded-full mb-5 border-4 border-base-100"
         />
-        <h2 className="mb-2 text-2xl">{data.name}</h2>
+        <h2 className="mb-2 text-2xl">{user.name}</h2>
         <p className="break-words lg:max-xl:max-w-40 lg:max-w-full">
-          {data.email}
+          {user.email}
         </p>
       </div>
       <div className="w-full px-5 lg:col-span-9">
@@ -91,7 +59,7 @@ const page = async ({ params }: { params: Promise<{ id: string }> }) => {
           {post.length === 0 ? (
             <p>No searches found for the user</p>
           ) : (
-            post.map((item: Posts) => (
+            post.data.map((item: Posts) => (
               <div
                 key={item._id}
                 className="mb-5 lg:w-80 bg-base-100 rounded-2xl p-3 border border-base-content"
