@@ -217,15 +217,9 @@ export async function downloadImage(src: string, prompt?: string) {
   URL.revokeObjectURL(url);
 }
 
-export const compactNumberFormat = (
-  number:
-    | {
-        $numberDecimal: number;
-      }
-    | number,
-) => {
+export const compactNumberFormat = (number: number) => {
   return new Intl.NumberFormat("en-US", {
     notation: "compact",
     compactDisplay: "short",
-  }).format(typeof number === "number" ? number : number.$numberDecimal);
+  }).format(number);
 };

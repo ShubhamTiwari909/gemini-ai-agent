@@ -72,8 +72,6 @@ const FeedWrapper = ({ data, user }: { data: Data; user: User }) => {
     return <NoPostFound />;
   }
 
-  console.log(feed);
-
   return (
     <section className="min-h-screen px-5 py-16 mx-auto max-w-7xl lg:px-0 lg:py-10">
       <Search className="mb-10" />
