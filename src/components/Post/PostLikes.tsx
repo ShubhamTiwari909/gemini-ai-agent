@@ -1,3 +1,4 @@
+import { compactNumberFormat } from "@/lib/utils";
 import { User } from "next-auth";
 import React, { useState } from "react";
 import { FaHeart } from "react-icons/fa";
@@ -45,7 +46,7 @@ const PostLikes = ({
         className="flex items-center gap-x-2 cursor-pointer text-sm"
         onClick={handleLikes}
       >
-        <FaHeart color={iconColor} /> {likesCount}
+        <FaHeart color={iconColor} /> {compactNumberFormat(likesCount)}
       </button>
     </div>
   );

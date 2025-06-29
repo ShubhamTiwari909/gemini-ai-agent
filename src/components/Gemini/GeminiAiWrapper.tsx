@@ -2,16 +2,22 @@
 import React, { useRef } from "react";
 import FormControls from "./FormControls";
 import { useGlobalStore } from "@/store/global-store";
-import { addPostToDb, handleImageResponse, handleSummarize } from "@/lib/utils";
+import {
+  addPostToDb,
+  downloadImage,
+  handleImageResponse,
+  handleSummarize,
+} from "@/lib/utils";
 import { TourProvider } from "@reactour/tour";
 import { GeminiAiWrapperProps } from "@/types/utils";
 import Loader from "./ResponseRenderer/Loader";
 import ResponseHeaderUi from "./ResponseRenderer/ResponseHeaderUI";
 import { User } from "next-auth";
-import ImageResponseRenderer from "./ResponseRenderer/ImageResponseRenderer";
 import FilePreview from "./ResponseRenderer/FilePreview";
 import TextToSpeech from "../TextToSpeech";
 import MarkdownRenderer from "./ResponseRenderer/MarkdownRender";
+import { LuDownload } from "react-icons/lu";
+import ImageResponse from "./ImageResponse";
 
 const steps = [
   {
@@ -256,9 +262,24 @@ const GeminiAiWrapper = ({
             }}
           />
           {summary && summary.includes("data:image") ? (
-            <>
-              <ImageResponseRenderer prompt={prompt as string} src={summary} />
-            </>
+            <div className="flex items-center w-full">
+              <div className="w-fit relative">
+                <ImageResponse
+                  src={summary || ""}
+                  alt={prompt || ""}
+                  width={500}
+                  className="object-cover object-top"
+                />
+                <button
+                  onClick={() =>
+                    downloadImage(summary || "", prompt || "image")
+                  }
+                  className="absolute top-5 right-5 lg:right-3 lg:top-3 p-3 rounded-full bg-base-content cursor-pointer"
+                >
+                  <LuDownload className="text-base-100" />
+                </button>
+              </div>
+            </div>
           ) : (
             <div
               className={`${loading ? "select-none" : ""} relative w-full px-2.5 py-8 border border-solid border-cyan-300 rounded-lg h-fit`}

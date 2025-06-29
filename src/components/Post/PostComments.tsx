@@ -2,6 +2,7 @@ import { Comments } from "@/types/response-handlers";
 import { User } from "next-auth";
 import React, { useState } from "react";
 import Comment from "./Comment";
+import { compactNumberFormat } from "@/lib/utils";
 
 const PostComments = ({
   user,
@@ -96,7 +97,7 @@ const PostComments = ({
   return (
     <div className={className} id="post-comments">
       <h2 className="text-base-content text-2xl font-semibold mb-5">
-        Comments
+        {compactNumberFormat(commentsLength)} Comments
       </h2>
       <div className="mb-8 flex items-center gap-5">
         <input
@@ -107,7 +108,7 @@ const PostComments = ({
           placeholder="Add a comment..."
         />
         <button className="btn btn-primary" onClick={handleComment}>
-          comment
+          Comment
         </button>
       </div>
       <ul className="space-y-5">

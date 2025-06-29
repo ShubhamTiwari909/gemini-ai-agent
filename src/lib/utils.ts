@@ -210,9 +210,22 @@ export async function downloadImage(src: string, prompt?: string) {
 
   const a = document.createElement("a");
   a.href = url;
-  a.download = `${prompt?.slice(0, prompt?.indexOf("- Generate the entire response in"))}.png`;
+  a.download = `${prompt}.png`;
   document.body.appendChild(a);
   a.click();
   a.remove();
   URL.revokeObjectURL(url);
 }
+
+export const compactNumberFormat = (
+  number:
+    | {
+        $numberDecimal: number;
+      }
+    | number,
+) => {
+  return new Intl.NumberFormat("en-US", {
+    notation: "compact",
+    compactDisplay: "short",
+  }).format(typeof number === "number" ? number : number.$numberDecimal);
+};

@@ -1,3 +1,4 @@
+import { compactNumberFormat } from "@/lib/utils";
 import { User } from "next-auth";
 import React, { useEffect, useState } from "react";
 import { FaEye } from "react-icons/fa";
@@ -39,7 +40,7 @@ const PostViews = ({
   }, []);
   return (
     <p className="flex items-center gap-x-2 text-white text-sm">
-      <FaEye color="cyan" /> {viewsCount}
+      <FaEye color="cyan" /> {compactNumberFormat(viewsCount)}
     </p>
   );
 };

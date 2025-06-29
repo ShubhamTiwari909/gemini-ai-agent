@@ -32,7 +32,6 @@ const page = async ({ params }: { params: Promise<{ id: string }> }) => {
     // If the user is not logged in, redirect to the login page.
     redirect("/login");
   }
-
   const post = await fetchPostById(process.env.EXPRESS_API_URL || "", id);
 
   if (post.message) {

@@ -4,6 +4,9 @@ import React, { useState } from "react";
 import PostReplies from "./PostReplies";
 import { User } from "next-auth";
 import { FaHeart } from "react-icons/fa";
+import Link from "next/link";
+import { LuReplyAll } from "react-icons/lu";
+import { compactNumberFormat } from "@/lib/utils";
 
 const Comment = ({
   comment,
@@ -73,7 +76,10 @@ const Comment = ({
   return (
     <li>
       <div className="mb-2 p-3.5 border border-base-content rounded-xl">
-        <div className="flex flex-wrap items-center gap-2">
+        <Link
+          href={`/users/${comment?.user.userId}`}
+          className="flex flex-wrap items-center gap-2"
+        >
           <Image
             src={comment?.user.image || ""}
             alt={comment?.user.name || ""}
@@ -84,26 +90,30 @@ const Comment = ({
           <p className="text-sm font-semibold bg-clip-text text-transparent bg-gradient-to-r from-pink-500 to-violet-500">
             {comment?.user.name}
           </p>
-        </div>
+        </Link>
         <p className="text-sm text-balance font-semibold text-slate-300 ml-10">
           {comment?.text}
         </p>
       </div>
       <div>
         <div className="reply-box">
-          <div className="flex flex-wrap items-center gap-3 ml-2">
-            <button
-              className="cursor-pointer text-xs text-base-content"
-              onClick={() => setShowReply(!showReply)}
-            >
-              Reply
-            </button>
+          <div className="ml-2 flex flex-wrap items-center gap-5">
+            <div className="flex flex-wrap items-center gap-2">
+              <button
+                className="cursor-pointer text-xs text-base-content flex flex-wrap items-center gap-2"
+                onClick={() => setShowReply(!showReply)}
+              >
+                Replies
+                <LuReplyAll size="1rem" className="text-slate-100" />
+                {compactNumberFormat(comment?.replies?.length || 0)}
+              </button>
+            </div>
             <button
               className="cursor-pointer text-xs text-base-content flex items-center gap-1"
               onClick={handleCommentLikes}
             >
               <FaHeart className="mt-0.5" color="red" />
-              {comment?.likes?.length || 0}
+              {compactNumberFormat(comment?.likes?.length || 0)}
             </button>
           </div>
           <PostReplies
@@ -121,7 +131,10 @@ const Comment = ({
                 return (
                   <li key={reply.id}>
                     <div className="mb-2 p-3.5 border border-base-content rounded-xl">
-                      <div className="flex flex-wrap items-center gap-2 mb-2">
+                      <Link
+                        href={`/users/${reply.user.userId}`}
+                        className="flex flex-wrap items-center gap-2 mb-2"
+                      >
                         <Image
                           src={reply.user.image || ""}
                           alt={reply.user.name || ""}
@@ -132,7 +145,7 @@ const Comment = ({
                         <p className="text-sm font-semibold bg-clip-text text-transparent bg-gradient-to-r from-blue-300 to-sky-400">
                           {reply.user.name}
                         </p>
-                      </div>
+                      </Link>
                       <p className="text-sm font-semibold text-balance text-base-content mb-2 ml-10">
                         {reply?.text}
                       </p>

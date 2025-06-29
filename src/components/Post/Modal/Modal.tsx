@@ -37,6 +37,8 @@ const Modal = ({
                 <ImageResponseRenderer
                   prompt={activePost?.prompt}
                   src={activePost?.response}
+                  postId={activePost.postId}
+                  downloads={activePost.downloads || 0}
                 />
               </>
             ) : (

@@ -10,9 +10,7 @@ const ImageResponse = ({
   height = 400,
   className = "",
 }: ImageResponseProps) => {
-  const filteredAltText = alt
-    .slice(0, alt?.indexOf(" - Generate the entire response in"))
-    .replace("Generate image: ", "");
+  const filteredAltText = alt.replace("Generate image: ", "");
   return (
     <Image
       src={src}

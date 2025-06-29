@@ -2,16 +2,16 @@ import React from "react";
 import Image from "next/image";
 import { User } from "next-auth";
 
-const Profile = async ({ user }: { user: User | undefined }) => {
+const ProfileUser = async ({ user }: { user: User | undefined }) => {
   return (
-    <div className="flex flex-col bg-white shadow-sm border border-slate-200 rounded-lg w-full lg:w-96">
+    <div className="flex flex-col bg-white shadow-sm border border-slate-200 rounded-lg w-full lg:w-96 lg:sticky lg:top-22">
       <div className="m-2.5 overflow-hidden rounded-md h-80 flex justify-center items-center">
         <Image
           className="w-full h-full object-cover"
           src={user?.image?.replace("s96", "s400") || ""}
           alt="profile-picture"
-          width={500}
-          height={500}
+          width={400}
+          height={400}
         />
       </div>
       <div className="p-6 text-center">
@@ -26,4 +26,4 @@ const Profile = async ({ user }: { user: User | undefined }) => {
   );
 };
 
-export default Profile;
+export default ProfileUser;

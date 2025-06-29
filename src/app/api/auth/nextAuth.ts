@@ -1,3 +1,4 @@
+import { fetchUserByEmail } from "@/lib/utils";
 import NextAuth, { User } from "next-auth";
 import GitHub from "next-auth/providers/github";
 import Google from "next-auth/providers/google";
@@ -27,6 +28,11 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
     async signIn({ user }) {
       await addUsingUserToDb(user);
       return true;
+    },
+    session: async ({ session }) => {
+      const user = await fetchUserByEmail(session?.user?.email as string);
+      session.user.userId = user.userId;
+      return session;
     },
   },
   trustHost: true,

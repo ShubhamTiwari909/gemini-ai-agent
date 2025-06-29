@@ -29,6 +29,8 @@ export type ImageResponseRendererProps = {
   prompt: string;
   src: string | undefined;
   renderImage?: boolean;
+  postId: string;
+  downloads: number | undefined;
 };
 
 export type LoaderProps = {

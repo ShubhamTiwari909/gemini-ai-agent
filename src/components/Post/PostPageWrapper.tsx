@@ -55,6 +55,8 @@ const PostPageWrapper = ({
             <ImageResponseRenderer
               prompt={activePost.prompt as string}
               src={activePost?.response || ""}
+              postId={activePost.postId}
+              downloads={activePost.downloads || 0}
             />
           ) : (
             <MarkdownRenderer summary={activePost?.response} />

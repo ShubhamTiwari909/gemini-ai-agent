@@ -18,7 +18,7 @@ const ResponseHeaderUi = ({
       <h2
         className={`${childClasses.heading} line-clamp-3 lg:line-clamp-5 text-ellipsis lg:mr-30`}
       >
-        {prompt.slice(0, prompt.indexOf("- Generate the entire response in"))}
+        {prompt}
       </h2>
       {post.tags && (
         <ul className="mb-8 flex flex-wrap gap-5">

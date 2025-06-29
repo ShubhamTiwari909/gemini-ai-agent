@@ -1,4 +1,4 @@
-import { downloadImage } from "@/lib/utils";
+import { compactNumberFormat, downloadImage } from "@/lib/utils";
 import React from "react";
 import { LuDownload } from "react-icons/lu";
 
@@ -7,11 +7,13 @@ const ViewDownload = ({
   prompt,
   postId,
   downloads,
+  className,
 }: {
   response: string;
   prompt: string;
   postId: string;
   downloads: number | undefined;
+  className?: string;
 }) => {
   const [downloadCount, setDownloadsCount] = React.useState(downloads);
   const handleDownloads = () => {
@@ -34,15 +36,17 @@ const ViewDownload = ({
       });
   };
   return (
-    <button
-      className="text-white text-md cursor-pointer text-sm flex items-center gap-2"
-      onClick={() => {
-        downloadImage(response as string, prompt as string);
-        handleDownloads();
-      }}
-    >
-      <LuDownload /> {downloadCount}
-    </button>
+    <div className={className}>
+      <button
+        className="text-white text-md cursor-pointer text-sm flex items-center gap-1"
+        onClick={() => {
+          downloadImage(response as string, prompt as string);
+          handleDownloads();
+        }}
+      >
+        <LuDownload /> {compactNumberFormat(downloadCount || 0)}
+      </button>
+    </div>
   );
 };
 
