@@ -75,14 +75,14 @@ const FeedWrapper = ({ data, user }: { data: Data; user: User }) => {
   return (
     <section className="min-h-screen px-5 py-16 mx-auto max-w-7xl lg:px-0 lg:py-10">
       <Search className="mb-10" />
-      <div className="grid grid-cols-1 lg:grid-cols-3 text-white gap-12 lg:gap-10">
+      <div className="grid grid-cols-1 text-white gap-12 lg:gap-10">
         {feed.map((post: Posts, index) => {
           return (
             <div
               key={post._id}
               data-id={index === feed.length - 1 ? "Last" : "Not last"}
               ref={index === feed.length - 1 ? observerRef : null} // Attach ref to last item
-              className={`p-5 rounded-xl border border-base-content border-solid flex flex-col justify-between relative overflow-hidden ${post.responseType === "image" || post.filePreview ? "" : "bg-base-300"}`}
+              className={`h-full p-5 rounded-xl border border-base-content border-solid flex flex-col justify-between relative overflow-hidden ${post.responseType === "image" || post.filePreview ? "" : "bg-base-300"}`}
             >
               <div>
                 <CardHeader post={post} />

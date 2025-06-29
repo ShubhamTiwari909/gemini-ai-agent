@@ -5,25 +5,22 @@ import ImageResponse from "../Gemini/ImageResponse";
 
 const ImageOverlay = ({ src, alt }: { src: string; alt: string }) => {
   return (
-    <>
-      <div className="absolute inset-0 -z-10">
-        <ImageResponse
-          width={500}
-          height={500}
-          alt={alt}
-          src={src}
-          className="w-full h-full object-cover object-top"
-        />
-      </div>
-      <div className="absolute inset-0 -z-10 bg-black/70"></div>
-    </>
+    <div className="flex justify-center">
+      <ImageResponse
+        width={400}
+        height={400}
+        alt={alt}
+        src={src}
+        className="object-cover object-top"
+      />
+    </div>
   );
 };
 
 const Description = ({ post }: { post: Posts }) => {
   return (
     <div
-      className={`mb-5 lg:mb-10 ${post.filePreview || post.responseType === "image" ? "text-white text-shadow-lg text-shadow-black" : "text-base-content"}`}
+      className={`mb-5 lg:mb-10 ${post.filePreview || post.responseType === "image" ? "text-white text-shadow-lg text-shadow-black" : "text-base-content overflow-hidden max-h-60 md:max-h-90"}`}
     >
       {/* Show the file preview if the image is uploaded by the user */}
       {post.filePreview &&
@@ -36,7 +33,7 @@ const Description = ({ post }: { post: Posts }) => {
         <ImageOverlay src={post.response || ""} alt={post.prompt} />
       ) : (
         // Show the text response if the image is not there
-        `${post.response.slice(0, 200)}...`
+        `${post.response}`
       )}
     </div>
   );

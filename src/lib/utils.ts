@@ -223,3 +223,7 @@ export const compactNumberFormat = (number: number) => {
     compactDisplay: "short",
   }).format(number);
 };
+
+export const copyLinkToClipboard = (link: string) => {
+  navigator.clipboard.writeText(link);
+};

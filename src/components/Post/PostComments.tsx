@@ -24,6 +24,8 @@ const PostComments = ({
   const [localComments, setLocalComments] = useState<Comments[] | undefined>(
     [],
   );
+  const [commentsLengthState, setCommentsLengthState] =
+    useState<number>(commentsLength);
 
   const generateCommentId = () => {
     const timestamp = Date.now().toString();
@@ -88,6 +90,7 @@ const PostComments = ({
             setComment((prev) => [...new Set([...result.comment!, ...prev!])]);
             setHasMore(result?.commentsLength < 21 ? false : true);
             setLocalComments((prev) => [...prev!, ...result.comment!]);
+            setCommentsLengthState(result.commentsLength);
           }
           setCommentText("");
         },
@@ -97,7 +100,7 @@ const PostComments = ({
   return (
     <div className={className} id="post-comments">
       <h2 className="text-base-content text-2xl font-semibold mb-5">
-        {compactNumberFormat(commentsLength)} Comments
+        {compactNumberFormat(commentsLengthState)} Comments
       </h2>
       <div className="mb-8 flex items-center gap-5">
         <input
