@@ -13,13 +13,13 @@ const profile = async () => {
   }
   const expressUrl = process.env.EXPRESS_API_URL || "";
 
-  const posts = await fetchPosts(expressUrl, session?.user.userId);
+  const posts = await fetchPosts(expressUrl, session?.user.userId, 20, 1);
 
   return (
     <section className="grid min-h-[calc(100vh-64px)] place-items-center px-5 pt-10">
       <div className="flex flex-wrap lg:flex-nowrap items-start justify-between gap-10">
         <ProfileUser user={session?.user} />
-        <ProfilePosts posts={posts} />
+        <ProfilePosts posts={posts} userId={session?.user.userId} />
       </div>
     </section>
   );

@@ -7,6 +7,7 @@ export const fetchPosts = async (
   expressUrl: string,
   userId: string | null | undefined,
   limit?: number,
+  page: number = 1,
 ) => {
   try {
     const response = await fetch(`${expressUrl}/posts/find`, {
@@ -15,7 +16,7 @@ export const fetchPosts = async (
         "Content-Type": "application/json",
         Authorization: `Bearer ${process.env.API_AUTH_TOKEN}`,
       },
-      body: JSON.stringify({ userId, limit, page: 1 }),
+      body: JSON.stringify({ userId, limit, page }),
     });
 
     const data = await response.json();

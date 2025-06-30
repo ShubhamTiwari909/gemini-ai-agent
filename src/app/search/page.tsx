@@ -2,6 +2,7 @@ import FeedWrapper from "@/components/Feed/FeedWrapper";
 import React from "react";
 import { auth } from "../api/auth/nextAuth";
 import { redirect } from "next/navigation";
+import Search from "@/components/Feed/Search";
 
 type Props = {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
@@ -40,9 +41,10 @@ const page = async ({ searchParams }: Props) => {
     // If the user is not logged in, redirect to the login page.
     redirect("/login");
   }
-  const data = await fetchFeed(3, 1, currSearchParams.search);
+  const data = await fetchFeed(1, 1, currSearchParams.search);
   return (
     <div>
+      <Search className="mb-10 pt-16 mx-auto max-w-7xl lg:px-0 lg:pt-10" />
       <FeedWrapper data={data} user={session?.user} />
     </div>
   );

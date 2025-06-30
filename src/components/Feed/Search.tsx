@@ -1,27 +1,31 @@
-"use client";
-import Link from "next/link";
-import React, { useState } from "react";
+import { redirect } from "next/navigation";
+import React from "react";
 
-const Search = ({ className }: { className?: string }) => {
-  const [search, setSearch] = useState("");
+const Search = async ({ className }: { className?: string }) => {
+  const handleSubmit = async (formData: FormData) => {
+    "use server";
+    const searchQuery = formData.get("search") as string;
+    const searchParams = new URLSearchParams();
+    searchParams.set("search", searchQuery);
+    // You can revalidate a dynamic route or fixed path
+    redirect(`/search?search=${searchParams.get("search")}`); // 'page' ensures it revalidates the route
+  };
 
-  // Update the search state when the input changes
   return (
-    <div className={`flex gap-5 items-center w-full ${className}`}>
+    <form
+      action={handleSubmit}
+      className={`flex gap-5 items-center w-full ${className}`}
+    >
       <input
         className="input input-bordered w-full"
         type="text"
-        value={search}
+        name="search"
         placeholder="Search"
-        onChange={(e) => setSearch(e.target.value)}
       />
-      <Link
-        href={`/search?search=${search}`}
-        className="btn btn-primary btn-bordered xl:w-40"
-      >
+      <button type="submit" className="btn btn-primary btn-bordered xl:w-40">
         Search
-      </Link>
-    </div>
+      </button>
+    </form>
   );
 };
 
