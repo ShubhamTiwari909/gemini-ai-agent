@@ -12,10 +12,15 @@ const CardFooter = ({
   className = "",
   user,
   post,
+  toggle,
 }: {
   className?: string;
   user: User;
   post: Posts;
+  toggle: {
+    comments: boolean;
+    downloads?: boolean;
+  };
 }) => {
   return (
     <div
@@ -33,13 +38,14 @@ const CardFooter = ({
           user={user}
           views={post.views as User[]}
         />
-        {post.toggle.comments ? (
+        {toggle.comments ? (
           <ViewComments
             commentsLength={post.comments.length}
             postId={post._id}
           />
         ) : null}
-        {post.responseType === "image" ? (
+
+        {post.responseType === "image" && toggle.downloads ? (
           <ViewDownload
             response={post.response}
             prompt={post.prompt}

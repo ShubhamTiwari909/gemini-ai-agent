@@ -75,6 +75,10 @@ const FeedWrapper = ({ data, user }: { data: Data; user: User }) => {
                 }
                 user={user}
                 post={post}
+                toggle={{
+                  comments: post.toggle?.comments,
+                  downloads: post.toggle?.downloads,
+                }}
               />
             </div>
           );

@@ -57,6 +57,7 @@ const PostPageWrapper = ({
               src={activePost?.response || ""}
               postId={activePost.postId}
               downloads={activePost.downloads || 0}
+              showDownload={activePost.toggle.downloads}
             />
           ) : (
             <MarkdownRenderer summary={activePost?.response} />

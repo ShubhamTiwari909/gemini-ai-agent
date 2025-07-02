@@ -9,6 +9,7 @@ const ImageResponseRenderer = ({
   renderImage = true,
   postId,
   downloads,
+  showDownload = true,
 }: ImageResponseRendererProps) => {
   return (
     <div className="flex items-center w-full">
@@ -21,13 +22,15 @@ const ImageResponseRenderer = ({
             className="object-cover object-top"
           />
         ) : null}
-        <ViewDownload
-          response={src || ""}
-          prompt={prompt}
-          postId={postId}
-          downloads={downloads}
-          className="absolute top-5 right-5 lg:right-3 lg:top-3 p-3 rounded-full bg-base-300 cursor-pointer"
-        />
+        {showDownload ? (
+          <ViewDownload
+            response={src || ""}
+            prompt={prompt}
+            postId={postId}
+            downloads={downloads}
+            className="absolute top-5 right-5 lg:right-3 lg:top-3 p-3 rounded-full bg-base-300 cursor-pointer"
+          />
+        ) : null}
       </div>
     </div>
   );

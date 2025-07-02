@@ -6,6 +6,7 @@ import React, { useState } from "react";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import CardFooter from "../Feed/CardFooter";
 import { User } from "next-auth";
+import FeatureToggle from "./FeatureToggle";
 
 const ProfileCard = ({
   item,
@@ -21,21 +22,8 @@ const ProfileCard = ({
   user: User;
 }) => {
   const [showComments, setShowComments] = useState(item.toggle.comments);
+  const [showDownloads, setShowDownloads] = useState(item.toggle.downloads);
 
-  const handleToggleComments = (postId: string, commentToggle: boolean) => {
-    fetch(`${process.env.NEXT_PUBLIC_EXPRESS_API_URL}/posts/toggle/comments`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${process.env.NEXT_PUBLIC_API_AUTH_TOKEN}`,
-      },
-      body: JSON.stringify({ postId, value: commentToggle }), // Use the passed commentToggle value
-    }).then((res) => {
-      if (res.ok) {
-        setShowComments(commentToggle);
-      }
-    });
-  };
   return (
     <div
       key={item._id}
@@ -51,7 +39,11 @@ const ProfileCard = ({
             {item.prompt}
           </span>
         </Link>
-        <CardFooter user={user} post={item} />
+        <CardFooter
+          user={user}
+          post={item}
+          toggle={{ comments: showComments, downloads: showDownloads }}
+        />
       </div>
       {item.responseType === "image" ? (
         <Image
@@ -72,17 +64,21 @@ const ProfileCard = ({
           </div>
           <ul
             tabIndex={0}
-            className="dropdown-content menu bg-white text-base-300 rounded-box z-1 w-52 p-2 shadow-sm"
+            className="dropdown-content menu max-h-75 overflow-auto bg-white text-base-300 rounded-box z-1 w-52 p-4 shadow-sm"
           >
-            <li>
-              <button
-                onClick={() =>
-                  handleToggleComments(item.postId, !item.toggle.comments)
-                }
-              >
-                {showComments ? "Hide Comments" : "Show Comments"}
-              </button>
-            </li>
+            <FeatureToggle
+              show={showComments}
+              setShow={setShowComments}
+              postId={item.postId}
+              feature="comments"
+            />
+            <hr className="border-t border-base-300 my-2 ml-2" />
+            <FeatureToggle
+              show={showDownloads}
+              setShow={setShowDownloads}
+              postId={item.postId}
+              feature="downloads"
+            />
           </ul>
         </div>
       </div>

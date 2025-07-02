@@ -66,5 +66,6 @@ export type Posts = {
   downloads?: number;
   toggle: {
     comments: boolean;
+    downloads: boolean;
   };
 };

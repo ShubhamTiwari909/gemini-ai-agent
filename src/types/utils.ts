@@ -31,6 +31,7 @@ export type ImageResponseRendererProps = {
   renderImage?: boolean;
   postId: string;
   downloads: number | undefined;
+  showDownload?: boolean;
 };
 
 export type LoaderProps = {

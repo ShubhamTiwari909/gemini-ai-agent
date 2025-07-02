@@ -114,6 +114,10 @@ export const addPostToDb = (addPostToDb: AddPostsToDB) => {
       filePreview: filePreview,
       postId,
       tags,
+      toggle: {
+        comments: true,
+        downloads: true,
+      },
     };
     // Save the prompt and its response to the server-side post
     fetch(`${expressUrl}/posts/add`, {
@@ -144,6 +148,7 @@ export const addPostToDb = (addPostToDb: AddPostsToDB) => {
             comments: response.newPost.comments,
             toggle: {
               comments: false,
+              downloads: false,
             },
           },
           ...localPosts,
