@@ -61,5 +61,6 @@ export const useGlobalStore = create<GlobalState>()(
     setSummary: (summary) => set({ summary: summary }),
     loading: false,
     setLoading: (loading) => set({ loading: loading }),
+    showCommentsGlobal: false,
   })),
 );

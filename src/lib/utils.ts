@@ -142,6 +142,9 @@ export const addPostToDb = (addPostToDb: AddPostsToDB) => {
             likes: response.newPost.likes,
             views: response.newPost.views,
             comments: response.newPost.comments,
+            toggle: {
+              comments: false,
+            },
           },
           ...localPosts,
         ]);

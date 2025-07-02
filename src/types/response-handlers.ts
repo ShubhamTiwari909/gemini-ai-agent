@@ -64,4 +64,7 @@ export type Posts = {
   views: User[];
   comments: Comments[];
   downloads?: number;
+  toggle: {
+    comments: boolean;
+  };
 };

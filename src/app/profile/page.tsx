@@ -19,7 +19,11 @@ const profile = async () => {
     <section className="grid min-h-[calc(100vh-64px)] place-items-center px-5 pt-10">
       <div className="flex flex-wrap lg:flex-nowrap items-start justify-between gap-10">
         <ProfileUser user={session?.user} />
-        <ProfilePosts posts={posts} userId={session?.user.userId} />
+        <ProfilePosts
+          posts={posts}
+          userId={session?.user.userId}
+          user={session?.user}
+        />
       </div>
     </section>
   );

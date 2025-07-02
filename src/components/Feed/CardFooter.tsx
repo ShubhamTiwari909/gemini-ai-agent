@@ -1,4 +1,4 @@
-import { copyLinkToClipboard, formatDate } from "@/lib/utils";
+import { formatDate } from "@/lib/utils";
 import { User } from "next-auth";
 import React from "react";
 import PostViews from "../Post/PostViews";
@@ -6,10 +6,10 @@ import { Posts } from "@/types/response-handlers";
 import PostLikes from "../Post/PostLikes";
 import ViewComments from "../Post/ViewComments";
 import ViewDownload from "../Post/ViewDownload";
-import { FaCopy, FaRegCopy } from "react-icons/fa";
+import CopyLink from "./CopyLink";
 
 const CardFooter = ({
-  className,
+  className = "",
   user,
   post,
 }: {
@@ -17,7 +17,6 @@ const CardFooter = ({
   user: User;
   post: Posts;
 }) => {
-  const [copy, setCopy] = React.useState<boolean>(false);
   return (
     <div
       className={`space-y-5 font-bold py-3 px-4 bg-slate-900 rounded-2xl border border-base-content ${className}`}
@@ -34,7 +33,12 @@ const CardFooter = ({
           user={user}
           views={post.views as User[]}
         />
-        <ViewComments commentsLength={post.comments.length} postId={post._id} />
+        {post.toggle.comments ? (
+          <ViewComments
+            commentsLength={post.comments.length}
+            postId={post._id}
+          />
+        ) : null}
         {post.responseType === "image" ? (
           <ViewDownload
             response={post.response}
@@ -43,29 +47,7 @@ const CardFooter = ({
             downloads={post.downloads}
           />
         ) : null}
-        <button
-          className="ml-auto cursor-pointer relative"
-          onClick={() => {
-            setCopy(true);
-            copyLinkToClipboard(
-              `${process.env.NEXT_PUBLIC_DOMAIN_URL}/post/${post._id}`,
-            );
-            setTimeout(() => {
-              setCopy(false);
-            }, 2000);
-          }}
-        >
-          {copy ? (
-            <span className="text-xs text-white inline-block absolute -top-10 right-0">
-              Link Copied!
-            </span>
-          ) : null}
-          {copy ? (
-            <FaCopy size="0.9rem" color="#ffffff" />
-          ) : (
-            <FaRegCopy size="0.9rem" color="#ffffff" />
-          )}
-        </button>
+        <CopyLink id={post._id} />
       </div>
     </div>
   );

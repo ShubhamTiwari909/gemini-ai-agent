@@ -71,13 +71,21 @@ const PostPageWrapper = ({
             text={activePost?.response}
             className="absolute lg:right-8 lg:top-8 right-3 top-5"
           />
-          <PostComments
-            comments={comments}
-            user={user as User}
-            postId={activePost.postId}
-            commentsLength={commentsLength}
-            className="mt-10"
-          />
+          {activePost.toggle.comments ? (
+            <PostComments
+              comments={comments}
+              user={user as User}
+              postId={activePost.postId}
+              commentsLength={commentsLength}
+              className="mt-10"
+            />
+          ) : (
+            <div className="mt-20 text-center bg-gray-100 rounded-xl p-5">
+              <h2 className="text-red-400 text-xl md:text-2xl font-semibold">
+                Comments are disabled on this post!!
+              </h2>
+            </div>
+          )}
         </div>
       </section>
     </>
