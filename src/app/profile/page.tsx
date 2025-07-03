@@ -16,7 +16,9 @@ const profile = async () => {
   const posts = await fetchPosts(expressUrl, session?.user.userId, 20, 1);
 
   return (
-    <section className="grid min-h-[calc(100vh-64px)] place-items-center px-5 pt-10">
+    <section
+      className={`grid min-h-[calc(100vh-64px)] px-5 pt-10 ${posts.length === 0 ? "place-items-center" : ""}`}
+    >
       <div className="flex flex-wrap lg:flex-nowrap items-start justify-between gap-10">
         <ProfileUser user={session?.user} />
         <ProfilePosts

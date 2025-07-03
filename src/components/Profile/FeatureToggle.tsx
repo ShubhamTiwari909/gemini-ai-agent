@@ -37,7 +37,7 @@ const FeatureToggle = ({
     <li>
       <button
         onClick={() => handleToggleFeature(postId, !show)}
-        className="p-2 rounded-lg text-base-300 font-semibold hover:bg-base-300 hover:text-white transition-colors duration-200"
+        className="p-2 text-xs rounded-lg text-base-300 font-semibold hover:bg-base-300 hover:text-white transition-colors duration-200"
       >
         {show ? (
           <>

@@ -64,7 +64,7 @@ const ProfileCard = ({
           </div>
           <ul
             tabIndex={0}
-            className="dropdown-content menu max-h-75 overflow-auto bg-white text-base-300 rounded-box z-1 w-52 p-4 shadow-sm"
+            className="dropdown-content menu max-h-75 overflow-auto bg-white text-base-300 rounded-box z-1 w-52 p-2 shadow-sm"
           >
             <FeatureToggle
               show={showComments}
@@ -72,13 +72,18 @@ const ProfileCard = ({
               postId={item.postId}
               feature="comments"
             />
-            <hr className="border-t border-base-300 my-2 ml-2" />
-            <FeatureToggle
-              show={showDownloads}
-              setShow={setShowDownloads}
-              postId={item.postId}
-              feature="downloads"
-            />
+
+            {item.responseType === "image" ? (
+              <>
+                <hr className="border-t border-base-300 my-2 ml-2" />
+                <FeatureToggle
+                  show={showDownloads}
+                  setShow={setShowDownloads}
+                  postId={item.postId}
+                  feature="downloads"
+                />
+              </>
+            ) : null}
           </ul>
         </div>
       </div>
