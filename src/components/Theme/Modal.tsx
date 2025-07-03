@@ -34,26 +34,12 @@ const Modal = () => {
     }
   };
   return (
-    <div className="flex justify-center">
+    <div className="flex gap-5 md:gap-10 flex-wrap items-center">
       {/* A button to open the dialog. */}
-      <button className="btn w-full lg:w-fit" onClick={openModal}>
-        Themes
-      </button>
-      {/* The dialog element. */}
-      <dialog ref={modalRef} id="theme-modal" className="modal">
-        <div className="modal-box !h-130 lg:!h-80">
-          <div className="flex items-center justify-between mb-5">
-            <h3 className="font-bold text-lg">Select a Theme</h3>
-            <div className="modal-action mt-0">
-              <form method="dialog">
-                <button className="btn btn-error btn-sm">Close</button>
-              </form>
-            </div>
-          </div>
-          {/* The form with the list of themes. */}
-          <ThemeChanger closeModal={closeModal} />
-        </div>
-      </dialog>
+      <h2 className="cursor-pointer text-lg mb-1" onClick={openModal}>
+        Themes:
+      </h2>
+      <ThemeChanger closeModal={closeModal} />
     </div>
   );
 };

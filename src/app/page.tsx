@@ -40,7 +40,7 @@ const page = async () => {
   const data = await fetchFeed(1, 1);
   return (
     <>
-      <Search className="mb-10 pt-16 mx-auto max-w-7xl lg:px-0 lg:pt-10" />
+      <Search className="mb-10 pt-16 mx-auto max-w-7xl lg:px-0 lg:pt-10 px-5" />
       <FeedWrapper data={data} user={session?.user} />
     </>
   );

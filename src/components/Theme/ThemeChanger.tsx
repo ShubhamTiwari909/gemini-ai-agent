@@ -22,11 +22,11 @@ const ThemeChanger = ({ closeModal }: { closeModal: () => void }) => {
     // 👆 false parameter is required for react project
   }, []);
   return (
-    <section className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <section className="flex flex-wrap items-center gap-6">
       {daisyUIThemes.map((theme) => (
         <div key={theme}>
-          <label className="flex justify-between label cursor-pointer">
-            <span className="label-text">{theme}</span>
+          <label className="flex gap-4 justify-between label cursor-pointer">
+            <span className="label-text uppercase">{theme}</span>
             <input
               type="radio"
               name="theme-radios"

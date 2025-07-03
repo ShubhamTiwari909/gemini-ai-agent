@@ -42,10 +42,14 @@ const HeaderWrapper = ({ children }: { children: React.ReactNode }) => {
     document.addEventListener("mousedown", handleClickOutside, {
       signal: controller.signal,
     });
+    const body = document.querySelector("body");
+    if (body) {
+      body.style.overflow = isOpen ? "hidden" : "auto";
+    }
     return () => {
       controller.abort();
     };
-  }, []);
+  }, [isOpen]);
 
   return (
     <header
@@ -73,7 +77,7 @@ const HeaderWrapper = ({ children }: { children: React.ReactNode }) => {
         </button>
       </div>
       <div
-        className={`absolute lg:static lg:h-fit lg:py-5 lg:pr-16 lg:bg-transparent top-0 z-40 bg-base-300 flex flex-col lg:flex-row lg:justify-end gap-5 h-0 w-full overflow-hidden transition-all duration-100 ease-linear ${isOpen ? "pt-28 pb-14 px-10 h-screen overflow-auto" : ""}`}
+        className={`absolute lg:static lg:h-fit lg:py-5 lg:pr-16 lg:bg-transparent top-0 z-40 bg-base-300 flex flex-col lg:flex-row lg:justify-end lg:items-center overflow-hidden lg:overflow-visible gap-5 h-0 w-full transition-all duration-100 ease-linear ${isOpen ? "pt-28 pb-14 px-10 h-screen overflow-auto" : ""}`}
       >
         {children}
       </div>
