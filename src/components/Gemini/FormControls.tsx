@@ -203,59 +203,91 @@ const TagsDropdown = ({
   const tags = useGlobalStore((state) => state.tags);
   const setTags = useGlobalStore((state) => state.setTags);
   const loading = useGlobalStore((state) => state.loading);
+  const [isOpen, setIsOpen] = React.useState(false);
 
-  const removeSelectedTags = list.filter((item) => !tags.includes(item));
+  const canAddMoreTags = tags.length < 5;
+  const removeSelectedTags = canAddMoreTags
+    ? list.filter((item) => !tags.includes(item))
+    : [];
 
   const allTags = [...tags, ...removeSelectedTags];
 
   const dropdownContentRef = React.useRef<HTMLUListElement>(null);
 
-  const handleFocus = () => {
+  const handleToggle = () => {
     stopSpeech?.();
-    dropdownContentRef.current?.scrollIntoView({
-      behavior: "smooth",
-      block: "start",
-    });
+    setIsOpen(!isOpen);
+
+    setTimeout(() => {
+      dropdownContentRef.current?.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    }, 100);
   };
 
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        dropdownContentRef.current &&
+        !dropdownContentRef.current.contains(event.target as Node)
+      ) {
+        setIsOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   return (
-    <div className="dropdown">
+    <div className="relative inline-block">
       <motion.button
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.4, ease: "easeInOut", times: 1 }}
-        tabIndex={0}
-        role="button"
+        type="button"
         className="btn btn-primary btn-sm lg:btn-md btn-outline m-1 !pointer-events-auto tags-dropdown"
         disabled={loading}
-        onClick={handleFocus}
+        onClick={handleToggle}
       >
         {btnText}
       </motion.button>
-      <ul
-        ref={dropdownContentRef}
-        tabIndex={0}
-        className="dropdown-content scroll-mt-20 menu bg-base-100 border border-solid border-white mt-5 rounded-box z-[1] w-60 p-2 shadow max-h-62 flex-col gap-y-4 overflow-auto flex-nowrap"
-      >
-        {allTags.map((item) => (
-          <li key={item}>
-            <button
-              className={
-                tags.includes(item) ? "border border-solid border-primary" : ""
-              }
-              onClick={() => {
-                if (tags.includes(item)) {
-                  setTags(tags.filter((tag) => tag !== item));
-                } else {
-                  setTags([...tags, item]);
-                }
-              }}
-            >
-              {item.toLocaleUpperCase()}
-            </button>
+
+      {isOpen && (
+        <ul
+          ref={dropdownContentRef}
+          className="absolute left-0 mt-2 w-60 z-10 p-2 shadow bg-base-100 border border-white rounded-box max-h-62 overflow-auto flex flex-col gap-y-4"
+        >
+          <li className="sticky top-0 bg-base-content text-base-300 rounded-md py-1">
+            <p className="px-2 text-sm font-semibold">
+              Select any 5 tags - {tags.length}
+            </p>
           </li>
-        ))}
-      </ul>
+          {allTags.map((item) => (
+            <li key={item}>
+              <button
+                className={`w-full cursor-pointer text-left px-2 py-1 rounded ${
+                  tags.includes(item)
+                    ? "border border-primary"
+                    : "hover:bg-base-200"
+                }`}
+                onClick={() => {
+                  if (tags.includes(item)) {
+                    setTags(tags.filter((tag) => tag !== item));
+                  } else if (canAddMoreTags) {
+                    setTags([...tags, item]);
+                  }
+                }}
+              >
+                {item.toLocaleUpperCase()}
+              </button>
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   );
 };

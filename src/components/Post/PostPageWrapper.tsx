@@ -66,6 +66,9 @@ const PostPageWrapper = ({
             <FilePreview
               filePreview={activePost.filePreview}
               prompt={activePost.prompt || ""}
+              showDownload={activePost.toggle.downloads}
+              postId={activePost.postId}
+              downloads={activePost.downloads || 0}
             />
           )}
           <TextToSpeech

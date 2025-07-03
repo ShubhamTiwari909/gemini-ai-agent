@@ -23,6 +23,9 @@ export type CreateAtAndUserName = {
 export type FilePreviewProps = {
   filePreview: string;
   prompt: string;
+  showDownload?: boolean;
+  postId?: string;
+  downloads?: number;
 };
 
 export type ImageResponseRendererProps = {

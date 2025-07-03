@@ -11,7 +11,7 @@ const ViewDownload = ({
 }: {
   response: string;
   prompt: string;
-  postId: string;
+  postId: string | undefined;
   downloads: number | undefined;
   className?: string;
 }) => {

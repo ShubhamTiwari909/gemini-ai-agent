@@ -76,7 +76,7 @@ const ProfileCard = ({
               feature="comments"
             />
 
-            {item.responseType === "image" ? (
+            {item.responseType === "image" || item.filePreview ? (
               <>
                 <hr className="border-t border-base-300 my-2 ml-2" />
                 <FeatureToggle
