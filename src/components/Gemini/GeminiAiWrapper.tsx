@@ -258,6 +258,7 @@ const GeminiAiWrapper = ({
               filePreview,
               user: {
                 userId: userId || "",
+                createdAt: user?.createdAt || new Date(),
               },
             }}
           />

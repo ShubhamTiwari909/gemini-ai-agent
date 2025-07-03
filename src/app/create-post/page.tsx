@@ -18,7 +18,7 @@ const page = async () => {
     redirect("/login");
   }
   const user = await fetchUserByEmail(session?.user?.email || "");
-  const userId = user?.userId || "";
+  const userId: string = user?.userId || "";
   const apiAuthToken = process.env.API_AUTH_TOKEN;
   return (
     <section className="min-h-screen px-5 py-0 mx-auto max-w-7xl lg:px-0 pt-10">

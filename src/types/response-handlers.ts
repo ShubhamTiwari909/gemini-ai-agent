@@ -52,6 +52,7 @@ export type Posts = {
     name?: string | null;
     email?: string | null;
     image?: string | null;
+    createdAt: Date;
   };
   postId: string;
   prompt: string;

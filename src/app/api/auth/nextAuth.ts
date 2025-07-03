@@ -32,6 +32,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
     session: async ({ session }) => {
       const user = await fetchUserByEmail(session?.user?.email as string);
       session.user.userId = user.userId;
+      session.user.createdAt = user.createdAt;
       return session;
     },
   },

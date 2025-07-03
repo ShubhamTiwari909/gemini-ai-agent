@@ -17,7 +17,7 @@ const profile = async () => {
 
   return (
     <section
-      className={`grid min-h-[calc(100vh-64px)] px-5 pt-10 ${posts.length === 0 ? "place-items-center" : ""}`}
+      className={`grid min-h-[calc(100vh-64px)] px-5 pt-10 ${posts.length === 0 ? "place-items-start" : "place-items-center"}`}
     >
       <div className="flex flex-wrap lg:flex-nowrap items-start justify-between gap-10">
         <ProfileUser user={session?.user} />

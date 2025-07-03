@@ -2,7 +2,7 @@ import { Session, User } from "next-auth";
 import { Comments } from "./response-handlers";
 
 export type Post = {
-  user?: User & { userId?: string };
+  user?: User;
   filePreview?: string | null;
   prompt?: string;
   summary?: string;

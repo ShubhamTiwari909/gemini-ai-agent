@@ -45,7 +45,8 @@ const CardFooter = ({
           />
         ) : null}
 
-        {post.responseType === "image" && toggle.downloads ? (
+        {(post.responseType === "image" || post.filePreview) &&
+        toggle.downloads ? (
           <ViewDownload
             response={post.response}
             prompt={post.prompt}

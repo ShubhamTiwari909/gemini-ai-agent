@@ -7,7 +7,6 @@ import Modal from "@/components/Settings/Modal";
 const page = async () => {
   const session = await auth();
   const userId = session?.user?.userId;
-  console.log(session?.user?.userId);
 
   if (session === null || !session?.user?.email) {
     redirect("/login");

@@ -1,6 +1,7 @@
 import React from "react";
 import Image from "next/image";
 import { User } from "next-auth";
+import { formatDate } from "@/lib/utils";
 
 const ProfileUser = async ({ user }: { user: User | undefined }) => {
   return (
@@ -14,12 +15,16 @@ const ProfileUser = async ({ user }: { user: User | undefined }) => {
           height={400}
         />
       </div>
-      <div className="p-6 text-center">
-        <h4 className="mb-1 text-xl font-semibold text-slate-800">
-          {user?.name}
-        </h4>
+      <div className="p-6 text-center space-y-3">
+        <h4 className="text-xl font-semibold text-slate-800">{user?.name}</h4>
         <p className="text-sm font-semibold text-slate-500 uppercase">
           {user?.email}
+        </p>
+        <p className="text-sm font-semibold text-slate-500">
+          Joined at{" "}
+          <span className="font-semibold">
+            {formatDate(user?.createdAt.toString() || "")}
+          </span>
         </p>
       </div>
     </div>

@@ -23,7 +23,6 @@ const ProfileCard = ({
 }) => {
   const [showComments, setShowComments] = useState(item.toggle.comments);
   const [showDownloads, setShowDownloads] = useState(item.toggle.downloads);
-
   return (
     <div
       key={item._id}
@@ -45,9 +44,13 @@ const ProfileCard = ({
           toggle={{ comments: showComments, downloads: showDownloads }}
         />
       </div>
-      {item.responseType === "image" ? (
+      {item.responseType === "image" || item.filePreview ? (
         <Image
-          src={item.response}
+          src={
+            item.responseType === "image"
+              ? item.response
+              : item.filePreview || ""
+          }
           alt={item.prompt}
           fill
           className="z-0 opacity-40 rounded-2xl object-cover"
