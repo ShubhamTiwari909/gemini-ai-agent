@@ -7,6 +7,7 @@ import { BsThreeDotsVertical } from "react-icons/bs";
 import CardFooter from "../Feed/CardFooter";
 import { User } from "next-auth";
 import FeatureToggle from "./FeatureToggle";
+import DeletePost from "./DeletePost";
 
 const ProfileCard = ({
   item,
@@ -14,12 +15,14 @@ const ProfileCard = ({
   observerRef,
   feedLength,
   user,
+  setProfilePosts,
 }: {
   item: Posts;
   index: number;
   observerRef?: React.RefObject<HTMLDivElement | null>;
   feedLength: number;
   user: User;
+  setProfilePosts: React.Dispatch<React.SetStateAction<Posts[]>>;
 }) => {
   const [showComments, setShowComments] = useState(item.toggle.comments);
   const [showDownloads, setShowDownloads] = useState(item.toggle.downloads);
@@ -87,6 +90,13 @@ const ProfileCard = ({
                 />
               </>
             ) : null}
+            <hr className="border-t border-base-300 my-2 ml-2" />
+            <li>
+              <DeletePost
+                setProfilePosts={setProfilePosts}
+                postId={item.postId}
+              />
+            </li>
           </ul>
         </div>
       </div>

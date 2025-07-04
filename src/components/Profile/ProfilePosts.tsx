@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import { Posts } from "@/types/response-handlers";
 import NoPostFound from "../Feed/NoPostFound";
 import { useInfiniteScrollingPost } from "@/lib/hooks/useInfiniteScrolling";
@@ -28,6 +28,8 @@ const ProfilePosts = ({
     posts,
   );
 
+  const [profilePosts, setProfilePosts] = useState<Posts[]>(feed);
+
   if (posts.data.length === 0) {
     return <NoPostFound />;
   }
@@ -35,16 +37,17 @@ const ProfilePosts = ({
   return (
     <div>
       <div className="grid grid-cols-1 w-full lg:w-fit xl:grid-cols-2 gap-5 lg:gap-8">
-        {feed.length === 0 ? (
+        {profilePosts.length === 0 ? (
           <p>No searches found for the user</p>
         ) : (
-          feed.map((item: Posts, index) => (
+          profilePosts.map((item: Posts, index) => (
             <ProfileCard
               user={user}
               item={item}
               index={index}
-              feedLength={feed.length}
+              feedLength={profilePosts.length}
               observerRef={observerRef}
+              setProfilePosts={setProfilePosts}
               key={index}
             />
           ))
