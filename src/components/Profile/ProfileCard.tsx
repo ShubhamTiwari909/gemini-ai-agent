@@ -8,6 +8,7 @@ import CardFooter from "../Feed/CardFooter";
 import { User } from "next-auth";
 import FeatureToggle from "./FeatureToggle";
 import DeletePost from "./DeletePost";
+import UpdatePostPrompt from "./UpdatePostPrompt";
 
 const ProfileCard = ({
   item,
@@ -26,6 +27,7 @@ const ProfileCard = ({
 }) => {
   const [showComments, setShowComments] = useState(item.toggle.comments);
   const [showDownloads, setShowDownloads] = useState(item.toggle.downloads);
+  const [prompt, setPrompt] = useState(item.prompt);
   return (
     <div
       key={item._id}
@@ -38,7 +40,7 @@ const ProfileCard = ({
           className="flex flex-col justify-between mb-2 lg:max-w-80 line-clamp-1 text-ellipsis relative"
         >
           <span className="inline-block mb-4 font-semibold w-fit">
-            {item.prompt}
+            {prompt}
           </span>
         </Link>
         <CardFooter
@@ -90,6 +92,14 @@ const ProfileCard = ({
                 />
               </>
             ) : null}
+            <hr className="border-t border-base-300 my-2 ml-2" />
+            <li className="relative">
+              <UpdatePostPrompt
+                prompt={item.prompt}
+                setPrompt={setPrompt}
+                postId={item.postId}
+              />
+            </li>
             <hr className="border-t border-base-300 my-2 ml-2" />
             <li>
               <DeletePost
