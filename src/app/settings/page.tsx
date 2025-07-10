@@ -1,8 +1,9 @@
 import React from "react";
 import ThemeModal from "../../components/Theme/Modal";
 import { redirect } from "next/navigation";
-import { auth, signOut } from "../api/auth/nextAuth";
-import Modal from "@/components/Settings/Modal";
+import { auth } from "../api/auth/nextAuth";
+import DeleteAccount from "@/components/Settings/DeleteAccount";
+import DeleteAllPosts from "@/components/Settings/DeleteAllPosts";
 
 const page = async () => {
   const session = await auth();
@@ -20,31 +21,17 @@ const page = async () => {
 
       <div className="space-y-5">
         <ThemeModal />
-        <Modal>
-          <form
-            action={async () => {
-              "use server";
-              const response = await fetch(
-                `${process.env.EXPRESS_API_URL}/users/deleteAccount`,
-                {
-                  method: "DELETE",
-                  headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${process.env.API_AUTH_TOKEN}`,
-                  },
-                  body: JSON.stringify({ userId }),
-                },
-              );
-              if (response.ok) {
-                await signOut();
-              }
-            }}
-          >
-            <button className="btn btn-error" type="submit">
-              Delete Account
-            </button>
-          </form>
-        </Modal>
+        <div className="flex items-center gap-5">
+          <DeleteAccount
+            userId={userId || ""}
+            email={session?.user?.email || ""}
+          />
+          <DeleteAllPosts
+            userId={userId || ""}
+            apiAuthToken={process.env.API_AUTH_TOKEN || ""}
+            expressUrl={process.env.EXPRESS_API_URL || ""}
+          />
+        </div>
       </div>
     </section>
   );
