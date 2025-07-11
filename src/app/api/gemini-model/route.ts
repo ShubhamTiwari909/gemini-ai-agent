@@ -7,6 +7,16 @@ const genAI = new GoogleGenAI({ apiKey: process.env.GOOGLE_GEMINI_API || "" });
 const tokens = new csrf();
 const secret = process.env.CSRF_SECRET || tokens.secretSync();
 
+// Define the grounding tool
+const groundingTool = {
+  googleSearch: {},
+};
+
+// Configure generation settings
+const config = {
+  tools: [groundingTool],
+};
+
 /**
  * API route for generating content using Gemini AI model.
  */
@@ -27,8 +37,9 @@ export async function POST(req: Request): Promise<Response> {
    * Use the Gemini AI model to generate content from the prompt.
    */
   const result = await genAI.models.generateContent({
-    model: "gemini-2.0-flash",
+    model: "gemini-2.5-flash",
     contents: prompt,
+    config,
   });
 
   /**

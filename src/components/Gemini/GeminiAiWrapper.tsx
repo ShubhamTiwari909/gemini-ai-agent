@@ -297,6 +297,14 @@ const GeminiAiWrapper = ({
           )}
         </section>
       </TourProvider>
+      {loading && (
+        <>
+          <div className="absolute inset-0 bg-slate-900/50 z-100"></div>
+          <p className="absolute top-1/2 left-1/2 -translate-1/2 bg-slate-900/50 z-110">
+            Generating...
+          </p>
+        </>
+      )}
     </div>
   );
 };
