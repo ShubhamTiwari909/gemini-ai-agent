@@ -22,7 +22,7 @@
     "canvas": "^3.1.0",
     "csrf": "^3.1.0",
     "daisyui": "^5.0.0-beta.2",
-    "motion": "^12.0.3",
+    "motion": "^12.4.10",
     "next": "15.1.4",
     "next-auth": "^5.0.0-beta.25",
     "pdfjs-dist": "^3.11.174",
