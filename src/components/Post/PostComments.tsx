@@ -1,3 +1,4 @@
+"use client";
 import { Comments } from "@/types/response-handlers";
 import { User } from "next-auth";
 import React, { useState } from "react";
@@ -123,6 +124,7 @@ const PostComments = ({
               user={user}
               postId={postId}
               setComment={setComment}
+              setCommentsLengthState={setCommentsLengthState}
               limit={limit}
             />
           );

@@ -1,3 +1,4 @@
+"use client";
 import { Comments } from "@/types/response-handlers";
 import { User } from "next-auth";
 import React, { useEffect, useState } from "react";
@@ -27,29 +28,31 @@ const PostReplies = ({
     return `${timestamp}-${randomString}-${postId}`;
   };
 
-  const handleComment = () => {
-    fetch(
-      `${process.env.NEXT_PUBLIC_EXPRESS_API_URL as string}/posts/updateReplies`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${process.env.NEXT_PUBLIC_API_AUTH_TOKEN}`,
+  const handleReply = async () => {
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_EXPRESS_API_URL as string}/posts/updateReplies`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${process.env.NEXT_PUBLIC_API_AUTH_TOKEN}`,
+          },
+          body: JSON.stringify({
+            postId,
+            commentId,
+            replyId: generateReplyId(),
+            replyText,
+            user,
+          }),
         },
-        body: JSON.stringify({
-          postId,
-          commentId,
-          replyId: generateReplyId(),
-          replyText,
-          user,
-        }),
-      },
-    )
-      .then((res) => res.json())
-      .then((result) => {
-        setComment(result.comments);
-        setReplyText("");
-      });
+      );
+      const result = await response.json();
+      setComment(result.comments);
+      setReplyText("");
+    } catch (error) {
+      console.error("Error adding reply:", error);
+    }
   };
 
   useEffect(() => {
@@ -82,7 +85,7 @@ const PostReplies = ({
             onChange={(e) => setReplyText(e.target.value)}
             placeholder="Add a reply..."
           />
-          <button className="btn btn-primary" onClick={handleComment}>
+          <button className="btn btn-primary" onClick={handleReply}>
             reply
           </button>
         </div>
